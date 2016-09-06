@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.IO;
 using System.Collections;
 
 namespace Completed
@@ -8,6 +9,7 @@ namespace Completed
 
     public class GameManager : MonoBehaviour
     {
+
         public float levelStartDelay = 2f;                      
         public float turnDelay = 0.1f;                          
         public int playerGoldPoints = 100;                      
@@ -22,7 +24,8 @@ namespace Completed
         private int level = 1;                                  
         private List<Enemy> enemies;                          
         private bool enemiesMoving;                             
-        private bool doingSetup = true;                         
+        private bool doingSetup = true;     
+                            
 
 
         /// <summary>
@@ -33,7 +36,6 @@ namespace Completed
             if (instance == null)
 
                 instance = this;
-
             else if (instance != this)
 
                 Destroy(gameObject);
@@ -58,17 +60,26 @@ namespace Completed
 		/// </summary>
         void InitGame()
         {
+            //Retrieve encounters
+            string[] files = null;
+
+            files = Directory.GetFiles("\\");
+            foreach (string fileName in files)
+            {
+                Debug.Log(fileName);
+            }
+
             doingSetup = true;
 
-           levelImage = GameObject.Find("LevelImage");
+            levelImage = GameObject.Find("LevelImage");
 
-           levelText = GameObject.Find("LevelText").GetComponent<Text>();
+            levelText = GameObject.Find("LevelText").GetComponent<Text>();
 
-           levelText.text = "Day " + level;
+            levelText.text = "Day " + level;
 
-           levelImage.SetActive(true);
+            levelImage.SetActive(true);
 
-           Invoke("HideLevelImage", levelStartDelay);
+            Invoke("HideLevelImage", levelStartDelay);
 
             enemies.Clear();
 
