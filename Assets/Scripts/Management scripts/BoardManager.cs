@@ -79,12 +79,14 @@ public class BoardManager : MonoBehaviour {
             for (int y = -1; y < rows + 1; y++)
             {
                 GameObject toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)];
-                boardMap[x, y] = 0;
+                
                 if (x == -1 || x == columns || y == -1 || y == rows)
                 {
                     toInstantiate = outerWallTiles[Random.Range(0, outerWallTiles.Length)];
-                    boardMap[x, y] = 1;
+                    //boardMap[x, y] = 1;
                 }
+				else
+					boardMap[x, y] = 0;
                 GameObject instance = Instantiate(toInstantiate, new Vector2(x, y), Quaternion.identity) as GameObject;
                 instance.transform.SetParent(boardHolder);
             }
