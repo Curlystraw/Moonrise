@@ -49,9 +49,9 @@ public class EncounterPractice
     	z.setLayout(null);
     	z.setVisible(true);
     }
-
-	public static void main(String args[])
-	{
-		new EncounterPractice();
-	}
+//
+//	public static void main(String args[])
+//	{
+//		new EncounterPractice();
+//	}
 }
