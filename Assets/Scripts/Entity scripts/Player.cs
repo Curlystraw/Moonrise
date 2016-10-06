@@ -8,14 +8,15 @@ namespace Completed
 
     public class Player : MovingObject
     {
+		public GameManager game = GameManager.instance;
 		
         public int wallDamage = 1;
         public int pointsPerGold = 10;
         public float restartLevelDelay = 1f;
         public Text goldText;
+		public Text timeLeft;
 
         private Animator animator;
-        private int gold;
 
         // Use this for initialization
         protected override void Start()
@@ -24,14 +25,11 @@ namespace Completed
 		
             animator = GetComponent<Animator>();
 
-            gold = GameManager.instance.playerGoldPoints;
-
             base.Start();
         }
 
         private void OnDisable()
         {
-            GameManager.instance.playerGoldPoints = gold;
         }
 
         // Update is called once per frame
@@ -57,8 +55,8 @@ namespace Completed
         protected override void AttemptMove<T>(int xDir, int yDir)
         {
 
-            gold--;
-            goldText.text = "Gold: " + gold;
+			GameManager.instance.timeLeft--;
+			timeLeft.text = "TimeLeft: " + GameManager.instance.timeLeft;
 
             base.AttemptMove<T>(xDir, yDir);
 
@@ -95,6 +93,11 @@ namespace Completed
         {
             Application.LoadLevel(Application.loadedLevel);
         }
+
+		public void LoseHp(int loss)
+		{
+			GameManager.instance
+		}
 
         public void LoseGold(int loss)
         {
