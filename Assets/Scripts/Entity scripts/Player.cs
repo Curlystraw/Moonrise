@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.UI;
 using System;
@@ -6,7 +7,7 @@ using System;
 namespace Completed
 {
 
-    public class Player : MovingObject
+	public class Player : Character
     {
 		
         public int wallDamage = 1;
@@ -17,9 +18,11 @@ namespace Completed
         private Animator animator;
         private int gold;
 
+
         // Use this for initialization
         protected override void Start()
         {
+
 			speed = 1;
 		
             animator = GetComponent<Animator>();
@@ -93,7 +96,8 @@ namespace Completed
 
         private void Restart()
         {
-            Application.LoadLevel(Application.loadedLevel);
+           Application.LoadLevel(Application.loadedLevel);
+			//SceneManager.LoadScene(SceneManager.GetActiveScene);
         }
 
         public void LoseGold(int loss)

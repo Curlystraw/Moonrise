@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Completed
 {
-    public class Enemy : MovingObject
+	public class Enemy : Character
     {
 
         public int playerDamage;
@@ -21,6 +21,7 @@ namespace Completed
             target = GameObject.FindGameObjectWithTag("Player").transform;
 
             base.Start();
+
         }
 
         /*protected override void AttemptMove<T>(int xDir, int yDir)
@@ -62,11 +63,6 @@ namespace Completed
 
 
 
-        protected override void OnCantMove<T>(T component)
-        {
-            Player hitPlayer = component as Player;
-
-            hitPlayer.LoseGold(playerDamage);
-        }
+        
     }
 }
