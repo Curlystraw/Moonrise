@@ -8,13 +8,14 @@ namespace Completed
 
     public class Player : MovingObject
     {
-		public GameManager game = GameManager.instance;
-		
-        public int wallDamage = 1;
+	    public int wallDamage = 1;
         public int pointsPerGold = 10;
         public float restartLevelDelay = 1f;
-        public Text goldText;
-		public Text timeLeft;
+
+		public Text displayText;
+		public String timeLeft;
+		public String goldText;
+		public String hpText;
 
         private Animator animator;
 
@@ -22,6 +23,11 @@ namespace Completed
         protected override void Start()
         {
 			speed = 1;
+
+			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
+			goldText = "Gold: " + GameManager.instance.playerGoldPoints;
+			hpText = "HP: " + GameManager.instance.playerHp;
+			UpdateText ();
 		
             animator = GetComponent<Animator>();
 
@@ -31,6 +37,14 @@ namespace Completed
         private void OnDisable()
         {
         }
+
+		public void UpdateText(String message = "")
+		{
+			displayText.text = timeLeft + " | " + goldText + " | " + hpText;
+			if (message != "") {
+				displayText.text += " | " + message;
+			}
+		}
 
         // Update is called once per frame
         void Update()
@@ -56,7 +70,8 @@ namespace Completed
         {
 
 			GameManager.instance.timeLeft--;
-			timeLeft.text = "TimeLeft: " + GameManager.instance.timeLeft;
+			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
+			UpdateText ();
 
             base.AttemptMove<T>(xDir, yDir);
 
@@ -77,8 +92,9 @@ namespace Completed
             }
             else if (other.tag == "Gold")
             {
-                gold += pointsPerGold;
-                goldText.text = "+" + pointsPerGold + " Gold";
+				GameManager.instance.playerGoldPoints += pointsPerGold;
+				goldText = "Gold: " + GameManager.instance.playerGoldPoints;
+				String message = "+" + pointsPerGold + " Gold";
                 other.gameObject.SetActive(false);
             }
         }
@@ -96,19 +112,24 @@ namespace Completed
 
 		public void LoseHp(int loss)
 		{
-			GameManager.instance
+			GameManager.instance.playerHp -= loss;
+			String message = "-" + loss + " HP";
+			hpText = "HP: " + GameManager.instance.playerHp;
+			UpdateText ();
+			CheckIfGameOver();
 		}
 
         public void LoseGold(int loss)
         {
-            gold -= loss;
-            goldText.text = "-" + loss + " Gold";
-            CheckIfGameOver();
+			GameManager.instance.playerGoldPoints -= loss;
+			String message = "-" + loss + " Gold";
+			goldText = "Gold: " + GameManager.instance.playerGoldPoints;
+			UpdateText (message);
         }
 
         private void CheckIfGameOver()
         {
-            if (gold <= 0)
+			if (GameManager.instance.playerGoldPoints <= 0 || GameManager.instance.playerHp <= 0)
             {
                 GameManager.instance.GameOver();
             }
