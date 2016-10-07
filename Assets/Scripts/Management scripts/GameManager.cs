@@ -63,7 +63,7 @@ namespace Completed
             //Retrieve encounters
             string[] files = null;
 
-			files = Directory.GetFiles(Directory.GetCurrentDirectory());
+            files = Directory.GetFiles("\\");
             foreach (string fileName in files)
             {
                 Debug.Log(fileName);

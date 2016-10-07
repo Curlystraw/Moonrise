@@ -69,6 +69,8 @@ namespace Completed
             GameManager.instance.playersTurn = false;
         }
 
+        //pick up an item. If nothing on square does nothing.
+
         private void OnTriggerEnter2D(Collider2D other)
         {
 			//Debug.Log("#TRIGGERED");
@@ -77,7 +79,7 @@ namespace Completed
                 Invoke("Restart", restartLevelDelay);
                 enabled = false;
             }
-            else if (other.tag == "Gold")
+            else if (other.tag == "Item")
             {
                 gold += pointsPerGold;
                 goldText.text = "+" + pointsPerGold + " Gold";
