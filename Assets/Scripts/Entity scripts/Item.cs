@@ -2,9 +2,22 @@
 
 namespace ItemSpace
 {
-	public interface Item
+	public abstract class Item
 	{
-		String GetDescription();
+		protected String name, description;
+
+		public String Name {
+			get {
+				return name;
+			}
+		}
+
+		public String Description {
+			get {
+				return description;
+			}
+		}
+
 		// void PickUp();
 	}
 }

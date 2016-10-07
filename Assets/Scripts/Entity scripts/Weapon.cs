@@ -2,14 +2,21 @@
 
 namespace ItemSpace
 {
-	public abstract class Weapon : Item
+	public abstract class Weapon : EquipItem
 	{
 		protected int power, range;
 
-		public abstract int GetPower();
-		public abstract int GetRange();
+		public int Power {
+			get {
+				return power;
+			}
+		}
 
-		public abstract String GetDescription();
+		public int Range {
+			get {
+				return range;
+			}
+		}
 	}
 }
 

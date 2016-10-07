@@ -8,11 +8,7 @@ namespace ItemSpace
 		{
 			this.defense = 5;
 			this.vision = 10;
-		}
-
-		public override String GetDescription()
-		{
-			return "This is a leather helmet.";
+			this.description = "This is a leather helmet.";
 		}
 	}
 }

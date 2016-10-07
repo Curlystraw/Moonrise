@@ -2,7 +2,7 @@
 
 namespace ItemSpace
 {
-	public abstract class Armor : EquipItem
+	public abstract class Potion : ConsumeItem
 	{
 		
 	}

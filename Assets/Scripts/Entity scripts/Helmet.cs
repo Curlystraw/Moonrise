@@ -6,17 +6,11 @@ namespace ItemSpace
 	{
 		protected int vision;
 
-		public int GetVision()
-		{
-			return vision;
+		public int Vision {
+			get {
+				return vision;
+			}
 		}
-
-		public override int GetDefense()
-		{
-			return defense;
-		}
-
-		public override abstract String GetDescription();
 	}
 }
 

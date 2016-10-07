@@ -8,21 +8,7 @@ namespace ItemSpace
 		{
 			this.power = 5;
 			this.range = 5;
-		}
-
-		public override int GetPower()
-		{
-			return power;
-		}
-
-		public override int GetRange()
-		{
-			return range;
-		}
-
-		public override String GetDescription()
-		{
-			return "This is a crossbow.";
+			this.description = "This is a crossbow.";
 		}
 	}
 }
