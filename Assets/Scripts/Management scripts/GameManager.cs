@@ -157,6 +157,21 @@ namespace Completed
 
             enemiesMoving = false;
         }
+
+		/// <summary>
+		/// Gets enemy at position pos
+		/// </summary>
+		/// <returns>The enemy.</returns>
+		/// <param name="pos">Position.</param>
+		public GameObject getEnemy(Vector2 pos){
+			foreach(Enemy e in enemies){
+				Transform t = e.transform;
+				if(new Vector2(t.position.x,t.position.y).Equals(pos)){
+					return t.gameObject;
+				}
+			}
+			return null;
+		}
     }
 }
 

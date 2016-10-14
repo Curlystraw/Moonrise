@@ -48,7 +48,6 @@ public class BoardManager : MonoBehaviour {
 
     private Transform boardHolder;                              //Holds the parent transform of the board   
     private List<Vector2> gridPositions = new List<Vector2>();  //A list of grid coordinates, [0,0] to [columns,rows]
-	private List<Transform> enemies = new List<Transform>();	//A list of enemies placed on the grid
     /// <summary>
     /// Creates a list of grid coordinates, [0,0] to [columns,rows]
     /// </summary>
@@ -115,7 +114,7 @@ public class BoardManager : MonoBehaviour {
     /// <param name="tileArray">Array of tiles to select from</param>
     /// <param name="minimum">Minimum number of tiles to place</param>
     /// <param name="maximum">Maximum number of tiles to place</param>
-	void LayoutObjectAtRandom(GameObject[] tileArray, int minimum, int maximum, List<Transform> storage)
+	void LayoutObjectAtRandom(GameObject[] tileArray, int minimum, int maximum)
     {
         int objectCount = Random.Range(minimum, maximum + 1);
 
@@ -125,8 +124,6 @@ public class BoardManager : MonoBehaviour {
 			boardMap[(int)randomPosition.x,(int)randomPosition.y] = 1;
             GameObject tileChoice = tileArray[Random.Range(0, tileArray.Length)];
 			GameObject ob = (GameObject)Instantiate(tileChoice, randomPosition, Quaternion.identity);
-			if(storage != null)
-				storage.Add(ob.transform);
         }
     }
 
@@ -135,27 +132,15 @@ public class BoardManager : MonoBehaviour {
     {
         BoardSetup();           //Initialize board with floor/outer wall tiles
         InitializeList();       //Create the list of board positions
-        LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum, null);      //Place wall tiles
-        LayoutObjectAtRandom(goldTiles, goldCount.minimum, goldCount.maximum, null);      //Place gold tiles
+        LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);      //Place wall tiles
+        LayoutObjectAtRandom(goldTiles, goldCount.minimum, goldCount.maximum);      //Place gold tiles
         int enemyCount = 2;//(int)Mathf.Log(level, 2f);
-        LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount, enemies);                   //Place enemies
+        LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);                   //Place enemies
         Instantiate(door1, new Vector2(columns - 1, rows - 1), Quaternion.identity);//Create the floor exit
 
     }
 
-	/// <summary>
-	/// Gets enemy at position pos
-	/// </summary>
-	/// <returns>The enemy.</returns>
-	/// <param name="pos">Position.</param>
-	public GameObject getEnemy(Vector2 pos){
-		foreach(Transform t in enemies){
-			if(new Vector2(t.position.x,t.position.y).Equals(pos)){
-				return t.gameObject;
-			}
-		}
-		return null;
-	}
+
 
 	/// <summary>
 	/// Finds a path between startLoc and target locations, using A*. Path is returned in the path list
