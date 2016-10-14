@@ -18,6 +18,11 @@ namespace ItemSpace
 			portions -= 1;
 			return calories;
 		}
+
+		public override ItemClass GetItemClass ()
+		{
+			return ItemClass.Food;
+		}
 	}
 }
 

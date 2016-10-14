@@ -23,6 +23,8 @@ namespace ItemSpace
 				return health;
 			}
 		}
+
+		public abstract override ItemClass GetItemClass();
 	}
 }
 

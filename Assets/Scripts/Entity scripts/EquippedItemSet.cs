@@ -1,23 +1,51 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ItemSpace
 {
 	public class EquippedItemSet
 	{
-		private Helmet helmet;
-		private Armor armor;
-		private Weapon weapon;
+		/* An item can only be equipped if the no item of the same type is currently equipped.
+		 */
+
+		private Dictionary<ItemClass, EquipItem> items;
 
 		public EquippedItemSet()
 		{
-			
+			items = new Dictionary<ItemClass, EquipItem>();
 		}
 
-		public Helmet EquipHelmet(Helmet newHelmet)
+		/// <summary>
+		/// Equip the specified item.
+		/// Fails if there is already an equipped item of the same item class, 
+		/// or if the item class is not included in this instance.
+		/// </summary>
+		/// <param name="item">Item.</param>
+		/// <returns>Whether the item was successfully equipped.</returns>
+		public bool Equip(EquipItem item)
 		{
-			Helmet oldHelmet = helmet;
-			helmet = newHelmet;
-			return oldHelmet;
+			ItemClass ic = item.GetItemClass();
+			if (items.ContainsKey (ic) && items [ic] == null) {
+				items [ic] = item;
+				return true;
+			}
+			return false;
+		}
+
+		/// <summary>
+		/// Unequip the specified item.
+		/// Fails if the item was not equipped to begin with.
+		/// </summary>
+		/// <param name="item">Item.</param>
+		/// <returns>Whether the item was successfully unequipped.</returns>
+		public bool Unequip(EquipItem item)
+		{
+			ItemClass ic = item.GetItemClass();
+			if (items.ContainsKey (ic) && items [ic] == item) {
+				items [ic] = null;
+				return true;
+			}
+			return false;
 		}
 	}
 }

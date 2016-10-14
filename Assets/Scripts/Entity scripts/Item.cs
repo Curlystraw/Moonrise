@@ -4,19 +4,21 @@ namespace ItemSpace
 {
 	public abstract class Item
 	{
-		protected String name, description;
+		protected string name, description, type;
 
-		public String Name {
+		public string Name {
 			get {
 				return name;
 			}
 		}
 
-		public String Description {
+		public string Description {
 			get {
 				return description;
 			}
 		}
+
+		public abstract ItemClass GetItemClass();
 
 		// void PickUp();
 	}

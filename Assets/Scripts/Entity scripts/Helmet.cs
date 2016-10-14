@@ -11,6 +11,11 @@ namespace ItemSpace
 				return vision;
 			}
 		}
+
+		public override ItemClass GetItemClass ()
+		{
+			return ItemClass.Helmet;
+		}
 	}
 }
 

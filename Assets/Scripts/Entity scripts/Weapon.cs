@@ -17,6 +17,11 @@ namespace ItemSpace
 				return range;
 			}
 		}
+
+		public override ItemClass GetItemClass()
+		{
+			return ItemClass.Weapon;
+		}
 	}
 }
 
