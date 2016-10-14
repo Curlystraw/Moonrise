@@ -12,13 +12,16 @@ namespace Completed
         public int wallDamage = 1;
         public int pointsPerGold = 10;
         public float restartLevelDelay = 1f;
-        public Text goldText;
 		public float sightRange = 12f;
 		public GameObject indicator;
 
+		public Text displayText;
+		public String timeLeft;
+		public String goldText;
+		public String hpText;
+
 		private BoxCollider2D hitbox;	//hitbox for the object - used for raycast tests?
         private Animator animator;
-        private int gold;
 		public LayerMask sightBlocks, fogLayer;
 		private ArrayList revealed;
 
@@ -26,11 +29,15 @@ namespace Completed
         protected override void Start()
         {
 			speed = 1;
+
+			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
+			goldText = "Gold: " + GameManager.instance.playerGoldPoints;
+			hpText = "HP: " + GameManager.instance.playerHp;
+			UpdateText ();
 		
 			animator = GetComponent<Animator>();
 			hitbox = GetComponent<BoxCollider2D>();
 
-            gold = GameManager.instance.playerGoldPoints;
 
 			//sightBlocks = LayerMask.NameToLayer("BlockingLayer");
 			//fogLayer = LayerMask.NameToLayer("Fog");
@@ -42,8 +49,15 @@ namespace Completed
 
         private void OnDisable()
         {
-            GameManager.instance.playerGoldPoints = gold;
         }
+
+		public void UpdateText(String message = "")
+		{
+			displayText.text = timeLeft + " | " + goldText + " | " + hpText;
+			if (message != "") {
+				displayText.text += " | " + message;
+			}
+		}
 
         // Update is called once per frame
         void Update()
@@ -69,8 +83,9 @@ namespace Completed
 		protected override void AttemptMove<T>(int xDir, int yDir)
         {
 
-            gold--;
-            goldText.text = "Gold: " + gold;
+			GameManager.instance.timeLeft--;
+			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
+			UpdateText ();
 
             base.AttemptMove<T>(xDir, yDir);
 
@@ -91,8 +106,9 @@ namespace Completed
             }
             else if (other.tag == "Gold")
             {
-                gold += pointsPerGold;
-                goldText.text = "+" + pointsPerGold + " Gold";
+				GameManager.instance.playerGoldPoints += pointsPerGold;
+				goldText = "Gold: " + GameManager.instance.playerGoldPoints;
+				String message = "+" + pointsPerGold + " Gold";
                 other.gameObject.SetActive(false);
             }
         }
@@ -108,16 +124,26 @@ namespace Completed
             Application.LoadLevel(Application.loadedLevel);
         }
 
+		public void LoseHp(int loss)
+		{
+			GameManager.instance.playerHp -= loss;
+			String message = "-" + loss + " HP";
+			hpText = "HP: " + GameManager.instance.playerHp;
+			UpdateText ();
+			CheckIfGameOver();
+		}
+
         public void LoseGold(int loss)
         {
-            gold -= loss;
-            goldText.text = "-" + loss + " Gold";
-            CheckIfGameOver();
+			GameManager.instance.playerGoldPoints -= loss;
+			String message = "-" + loss + " Gold";
+			goldText = "Gold: " + GameManager.instance.playerGoldPoints;
+			UpdateText (message);
         }
 
         private void CheckIfGameOver()
         {
-            if (gold <= 0)
+			if (GameManager.instance.playerGoldPoints <= 0 || GameManager.instance.playerHp <= 0)
             {
                 GameManager.instance.GameOver();
             }

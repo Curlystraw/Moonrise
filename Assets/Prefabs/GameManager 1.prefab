@@ -1,0 +1,91 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &105876
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 419904}
+  - 114: {fileID: 11475412}
+  - 114: {fileID: 11480766}
+  m_Layer: 0
+  m_Name: GameManager 1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &419904
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 105876}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.7615523, y: 0.016821418, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!114 &11475412
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 105876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1517ef1d55b1d0d4bb1cf67573cc4a9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  columns: 8
+  rows: 8
+  wallCount:
+    minimum: 3
+    maximum: 9
+  goldCount:
+    minimum: 2
+    maximum: 8
+  door1: {fileID: 166078, guid: 82394ce74612ab245aebfb3f6781624f, type: 2}
+  player: {fileID: 146232, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
+  floorTiles:
+  - {fileID: 170992, guid: b021cef5c367b884387065f8bae5ef1e, type: 2}
+  wallTiles:
+  - {fileID: 141938, guid: 65923a9620d79894d8a5cbd1ecaceba7, type: 2}
+  goldTiles:
+  - {fileID: 159468, guid: adcb95610e951554485c508205f418d6, type: 2}
+  enemyTiles:
+  - {fileID: 122792, guid: e1b9107774ed5c54792cd249c95bedc4, type: 2}
+  outerWallTiles:
+  - {fileID: 109970, guid: 613875cbea9433f4a999e6cb714a11d1, type: 2}
+--- !u!114 &11480766
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 105876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90eae884846c3a1479aa23105f439d19, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeLeft: 4320
+  levelStartDelay: 2
+  turnDelay: 0.1
+  playerGoldPoints: 100
+  playerHp: 100
+  playersTurn: 1
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 105876}
+  m_IsPrefabParent: 1

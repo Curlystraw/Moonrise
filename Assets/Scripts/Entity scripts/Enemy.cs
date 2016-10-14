@@ -152,7 +152,7 @@ namespace Completed
         {
             Player hitPlayer = component as Player;
 
-            hitPlayer.LoseGold(playerDamage);
+            hitPlayer.LoseHp(playerDamage);
         }
 
 		protected override void OnFinishMove ()
