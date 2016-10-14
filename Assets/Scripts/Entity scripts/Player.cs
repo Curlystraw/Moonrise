@@ -13,6 +13,9 @@ namespace Completed
         public int pointsPerGold = 10;
         public float restartLevelDelay = 1f;
 		public float sightRange = 12f;
+		public Sprite werewolfSprite;
+		public Sprite humanSprite;
+		public Color original;
 		public GameObject indicator;
 
 		public Text displayText;
@@ -29,7 +32,7 @@ namespace Completed
         protected override void Start()
         {
 			speed = 1;
-
+			original = this.gameObject.GetComponent<SpriteRenderer> ().color;
 			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
 			goldText = "Gold: " + GameManager.instance.playerGoldPoints;
 			hpText = "HP: " + GameManager.instance.playerHp;
@@ -64,6 +67,14 @@ namespace Completed
         {
             if (!GameManager.instance.playersTurn) return;
 
+			if (Input.GetKeyDown (KeyCode.T)) {
+				switchForm ();
+				GameManager.instance.playersTurn = false;
+				GameManager.instance.timeLeft--;
+				timeLeft = "Time Left: " + GameManager.instance.timeLeft;
+				UpdateText ();
+				return;
+			}
             int horizontal = 0;
             int vertical = 0;
 
@@ -198,5 +209,26 @@ namespace Completed
 
 			revealed = fog;
 		}
+
+
+		//Switchs form (human or werewolf); updates hp and sprite
+		private void switchForm () {
+			GameManager.instance.isWerewolf = !GameManager.instance.isWerewolf;
+			if (GameManager.instance.isWerewolf) {
+				GameManager.instance.playerHp *= 2;
+				hpText = "HP: " + GameManager.instance.playerHp;
+				UpdateText ();
+				this.gameObject.GetComponent<SpriteRenderer> ().sprite = werewolfSprite;
+				this.gameObject.GetComponent<SpriteRenderer> ().color = Color.gray;
+			} else {
+				GameManager.instance.playerHp /= 2;
+				hpText = "HP: " + GameManager.instance.playerHp;
+				UpdateText ();
+				this.gameObject.GetComponent<SpriteRenderer> ().sprite = humanSprite;
+				this.gameObject.GetComponent<SpriteRenderer> ().color = original;
+			}
+				
+		}
     }
+
 }
