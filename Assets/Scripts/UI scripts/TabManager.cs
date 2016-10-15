@@ -20,6 +20,7 @@ public class TabManager : MonoBehaviour {
     private int uiTab;
     public GameObject[] tabs = new GameObject[4]; //This is best modified in the Manager Panel instead of here. Easier and simpler.
     public GameObject expander;
+    public Sprite spr;
     private GameObject expandedTab;
 
     private bool currentExpansion = false;
