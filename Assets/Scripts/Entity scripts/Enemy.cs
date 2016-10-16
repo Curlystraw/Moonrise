@@ -6,7 +6,7 @@ namespace Completed
 	/// <summary>
 	/// Generic enemy class, contains a melee attack and line-of-sight based aggression.
 	/// </summary>
-    public class Enemy : MovingObject
+	public class Enemy : Character
     {
 
         public int playerDamage;
@@ -145,7 +145,6 @@ namespace Completed
 			//Return true if the enemy can move again
 			return (AP >= 1);
         }
-
 
 
         protected override void OnCantMove<T>(T component)

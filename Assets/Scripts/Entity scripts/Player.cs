@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.UI;
 using System;
@@ -6,7 +7,7 @@ using System;
 namespace Completed
 {
 
-    public class Player : MovingObject
+	public class Player : Character
     {
 		public int sneak = 4;
         public int wallDamage = 1;
@@ -28,9 +29,11 @@ namespace Completed
 		public LayerMask sightBlocks, fogLayer;
 		private ArrayList revealed;
 
+
         // Use this for initialization
         protected override void Start()
         {
+
 			speed = 1;
 			original = this.gameObject.GetComponent<SpriteRenderer> ().color;
 			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
@@ -132,7 +135,8 @@ namespace Completed
 
         private void Restart()
         {
-            Application.LoadLevel(Application.loadedLevel);
+           Application.LoadLevel(Application.loadedLevel);
+			//SceneManager.LoadScene(SceneManager.GetActiveScene);
         }
 
 		public void LoseHp(int loss)
