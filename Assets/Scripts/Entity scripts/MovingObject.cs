@@ -56,6 +56,8 @@ namespace Completed
                 sqrRemainingDistance = (transform.position - end).sqrMagnitude;
                 yield return null;
             }
+
+			OnFinishMove();
         }
 
 		//Similar to move, but if a move fails due to a unit, strike the unit.
@@ -78,6 +80,7 @@ namespace Completed
         }
 
         protected abstract void OnCantMove<T>(T component) where T : Component;
+		protected abstract void OnFinishMove();
 
     }
 }

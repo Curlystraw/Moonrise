@@ -72,9 +72,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90eae884846c3a1479aa23105f439d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeLeft: 4320
   levelStartDelay: 2
   turnDelay: 0.1
   playerGoldPoints: 100
+  playerHp: 100
   playersTurn: 1
 --- !u!1001 &100100000
 Prefab:
