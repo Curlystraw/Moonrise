@@ -13,6 +13,8 @@ namespace Completed
         public float restartLevelDelay = 1f;
 
 		public Text displayText;
+		public Text actionText;
+
 		public String timeLeft;
 		public String goldText;
 		public String hpText;
@@ -54,32 +56,51 @@ namespace Completed
             int horizontal = 0;
             int vertical = 0;
 
-            horizontal = (int)Input.GetAxisRaw("Horizontal");
-            vertical = (int)Input.GetAxisRaw("Vertical");
+			if (Input.GetMouseButtonDown(0)) {
+				if (GameManager.instance.enemyClicked) {
+					RangedAttack ();
+				}
 
-            if (horizontal != 0)
-                vertical = 0;
+				// Add other things like "interact" or "talk" here
+			} else {
+				horizontal = (int)Input.GetAxisRaw ("Horizontal");
+				vertical = (int)Input.GetAxisRaw ("Vertical");
 
-            if (horizontal != 0 || vertical != 0)
-            {
-                AttemptMove<Wall>(horizontal, vertical);
-            }
+				if (horizontal != 0)
+					vertical = 0;
+
+				if (horizontal != 0 || vertical != 0) {
+					AttemptMove<Wall> (horizontal, vertical);
+				}
+			}
         }
 
-        protected override void AttemptMove<T>(int xDir, int yDir)
-        {
+		protected void RangedAttack()
+		{
+			actionText.text = "You attacked an enemy!";
+			GameManager.instance.enemyClicked = false;
 
+			EndTurn ();
+		}
+
+		protected void EndTurn()
+		{
 			GameManager.instance.timeLeft--;
 			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
 			UpdateText ();
 
-            base.AttemptMove<T>(xDir, yDir);
+			CheckIfGameOver();
+
+			GameManager.instance.playersTurn = false;
+		}
+
+        protected override void AttemptMove<T>(int xDir, int yDir)
+        {
+			base.AttemptMove<T>(xDir, yDir);
 
             RaycastHit2D hit;
 
-            CheckIfGameOver();
-
-            GameManager.instance.playersTurn = false;
+			EndTurn ();
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -110,7 +131,7 @@ namespace Completed
             Application.LoadLevel(Application.loadedLevel);
         }
 
-		public void LoseHp(int loss)
+		public override void LoseHp(int loss)
 		{
 			GameManager.instance.playerHp -= loss;
 			String message = "-" + loss + " HP";
@@ -134,5 +155,10 @@ namespace Completed
                 GameManager.instance.GameOver();
             }
         }
+			
+		protected override void KillObject()
+		{
+			return;
+		}
     }
 }

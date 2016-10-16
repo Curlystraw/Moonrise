@@ -14,6 +14,8 @@ namespace Completed
 
         protected override void Start()
         {
+			hp = 100;
+
             GameManager.instance.AddEnemyToList(this);
 
             animator = GetComponent<Animator>();
@@ -60,7 +62,15 @@ namespace Completed
 			return (AP >= 1);
         }
 
+		void OnMouseDown() {
 
+			if (GameManager.instance.playersTurn) {
+				GameManager.instance.enemyClicked = true;
+
+				LoseHp (5);
+			}
+
+		}
 
         protected override void OnCantMove<T>(T component)
         {
@@ -68,5 +78,11 @@ namespace Completed
 
             hitPlayer.LoseHp(playerDamage);
         }
+
+		protected override void KillObject()
+		{
+			GameManager.instance.RemoveEnemyFromList (this);
+			Destroy (gameObject);
+		}
     }
 }

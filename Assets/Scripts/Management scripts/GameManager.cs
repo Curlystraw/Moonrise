@@ -18,7 +18,8 @@ namespace Completed
 		public int playerHp = 100;
         public static GameManager instance = null;              
         [HideInInspector]
-        public bool playersTurn = true;       
+        public bool playersTurn = true;      
+		public bool enemyClicked = false;
 
 
         private Text levelText;                                 
@@ -100,6 +101,8 @@ namespace Completed
 
         void Update()
         {
+
+
             if (playersTurn || enemiesMoving || doingSetup)
 
                 return;
@@ -111,6 +114,11 @@ namespace Completed
         {
             enemies.Add(script);
         }
+
+		public void RemoveEnemyFromList(Enemy script)
+		{
+			enemies.Remove(script);
+		}
 
 
         public void GameOver()
@@ -149,7 +157,9 @@ namespace Completed
 					
 					
 				}
-				yield return new WaitForSeconds(enemies[0].moveTime+0.05f);
+				if (enemies.Count > 0) {
+					yield return new WaitForSeconds(enemies[0].moveTime+0.05f);
+				}
 				init = false;		//Make sure the enemies don't get speed added each time
 			}
 			
