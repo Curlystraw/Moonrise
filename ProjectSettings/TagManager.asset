@@ -17,7 +17,7 @@ TagManager:
   - 
   - 
   - BlockingLayer
-  - Fog
+  - 
   - 
   - 
   - 
@@ -55,7 +55,4 @@ TagManager:
     locked: 0
   - name: Item
     uniqueID: 333357509
-    locked: 0
-  - name: Fog
-    uniqueID: 576780967
     locked: 0

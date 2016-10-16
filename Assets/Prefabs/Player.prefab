@@ -85,6 +85,9 @@ MonoBehaviour:
   pointsPerGold: 10
   restartLevelDelay: 1
   sightRange: 6
+  werewolfSprite: {fileID: 21300000, guid: 4a40d8d8070c90c46a565a280ae537a1, type: 3}
+  humanSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  original: {r: 0, g: 0, b: 0, a: 0}
   indicator: {fileID: 0}
   displayText: {fileID: 0}
   timeLeft: 

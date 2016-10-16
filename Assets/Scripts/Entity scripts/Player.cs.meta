@@ -1,10 +1,14 @@
 fileFormatVersion: 2
 guid: 868c397765c159d488aa02b8d72391ec
-timeCreated: 1470256638
+timeCreated: 1476643507
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - werewolfSprite: {fileID: 21300000, guid: 4a40d8d8070c90c46a565a280ae537a1, type: 3}
+  - humanSprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+  - indicator: {instanceID: 0}
+  - displayText: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
