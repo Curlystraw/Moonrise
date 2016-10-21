@@ -8,6 +8,7 @@ import javax.swing.*;
 
 public class DialogueBox //extends JPanel
 {
+	//The below statement is kinda true but not exactly
 	//THIS IS MY INTIAL WORK. THE REST IS ME EDITING ENCOUNTERPRACTICE.JAVA SO THAT IT IS IN THE RIGHT PACKAGE.
 //	int index;
 //	String[] flags;
@@ -28,6 +29,7 @@ public class DialogueBox //extends JPanel
 //		this();
 //		this.location = location;
 //	}
+	
 	JTextArea title, introText, option1, option2;
 	String[] flagsb1, flagsb2, flagsc1, flagsc2;
 	JComboBox flagb1, flagb2, flagc1, flagc2;
@@ -35,7 +37,7 @@ public class DialogueBox //extends JPanel
 	Component[] stuff = {title, introText, option1, option2, flagb1, flagb2, flagc1, flagc2, a1};
 	String boxName;
 	String[] nullValues = {"null","null", "null"};
-	String[] boxTexts= {"","","","","","","","","",""};
+	String[] boxTexts = {"","","","","","","",""};
 	//JFrame z; This setup works, but doesn't apply to the OG program.
 	
 	
