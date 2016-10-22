@@ -15,7 +15,8 @@ public class MapLoader : MonoBehaviour
 
     public Canvas canvas; //No idea how important this is. Probably only important for automated UI Movements
     RectTransform rtf;
-    public Sprite spr;
+    public GameObject gameManager;
+
 
     private Texture2D mapTex;
     private Sprite mapSprite;
@@ -32,7 +33,7 @@ public class MapLoader : MonoBehaviour
     private void Center() //Private because nothing outside this script should be using this.
     {
         rtf = gameObject.GetComponent<RectTransform>();
-
+        
         int width = (int)rtf.rect.width;
         int height = (int)rtf.rect.height;
         float x = (Screen.width) / 2; //Anchor of Panel SHOULD be centered. No need to worry.
@@ -43,16 +44,31 @@ public class MapLoader : MonoBehaviour
 
     private void loadMap()
     {
-        mapTex = new Texture2D(16, 16, TextureFormat.ARGB32, false);
-        for(int i = 0; i > mapTex.width;i++)
+        var board = (BoardManager)gameManager.GetComponent(typeof(BoardManager));
+        int[,] curBoard = board.getBoard(); //Code gymnastics is fun.
+
+        mapTex = new Texture2D(curBoard.GetLength(0)+2, curBoard.GetLength(1)+2, TextureFormat.ARGB32, false);
+        mapTex.filterMode = FilterMode.Point;
+
+        for (int i = 0; i < mapTex.width ; i++)
         {
-            for(int j = 0; j > mapTex.height;j++)
+            for (int j = 0; j < mapTex.height; j++)
             {
-                    mapTex.SetPixel(i, j, Color.blue);
+                mapTex.SetPixel(i, j, Color.black);
+            }
+        }
+
+        for (int i = 1; i < mapTex.width-1;i++)
+        {
+            for(int j = 1; j < mapTex.height-1;j++)
+            {
+                if (curBoard[i-1, j-1] == 0)
+                    mapTex.SetPixel(i, j, Color.white);
             }
         }
         mapTex.Apply();
         mapSprite = Sprite.Create(mapTex, new Rect(0, 0, mapTex.width, mapTex.height), new Vector2(0.5f, 0.5f),16.0f);
+        gameObject.transform.FindChild("MapStore").gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(curBoard.GetLength(0)*10,curBoard.GetLength(1)*10);
         gameObject.transform.FindChild("MapStore").gameObject.GetComponent<Image>().sprite = mapSprite;
     }
 
