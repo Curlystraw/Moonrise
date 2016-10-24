@@ -32,7 +32,7 @@ class DialogSet
 	int[] numReactReqs;
 	String[] reqs = {"HasItem", "Currency", "Health", "Time", "Speech", "Growl", "Werewolf-ness", "dayTime"}; //THIS IS AN ATTEMPT TO MAKE ACTUAL REQS
 	String[] listofDDReqs = {"Speech", "Growl", "Werewolf-ness", "dayTime"}; //names should explain this pretty well
-	String[] listofBinaries = {"Werewofl-ness", "dayTime"}; 
+	String[] listofBinaries = {"Werewolf-ness", "dayTime"}; 
 	int reqDivide;
 	String[][] reactReqs; 
 	String designation; //This is so DialogSets can be called by name in Three

@@ -12,8 +12,18 @@ class Three extends JFrame
 	//Alright this is version three. It is basically two but better and it works with arrays and events.
 	
 	//I've done some math (counting) and we need 40 frames.
-	//That means (at 
+	//That means (at my calculations) we need like 683 separate parts of the xml file.
+	//Even so, it still works.
 	
+	/* ...........___________..._________.....__...___............__...___......__......___.........________......
+	 * ........../____  ____/../___  ___/..../  \./   \........../  \./   \.....\  \.../  /......../  ____  \.....
+	 * ............../ /........../ /......./ /\ V /\  |......../ /\ V /\  |.....\  \./  /......../  /..../  |....
+	 * ............./ /........../ /......./ /..\ /..| |......./ /..\ /..| |......\  V  /......../  /____/  /.....
+	 * ............/ /........../ /......./ /....V...| |....../ /....V...| |.......|  ,/......../  ________/......
+	 * .....__..../ /........../ /......./ /........./ /...../ /........./ /....../  /........./  /...............
+	 * .....\ \__/ /.......___/ /___..../ /........./ /...../ /........./ /....../  /........./  /....__..........
+	 * ......\____/......./________/.../_/........./_/...../_/........./_/....../__/........./__/..../_/..........
+	 */
 	
 	//This is every piece of the JFrame, including the DialogSets
 	JTextField name = new JTextField("Name the encounter.");
@@ -22,8 +32,10 @@ class Three extends JFrame
 	JButton crEnc = new JButton("Create Encounter");
 	JButton quit = new JButton("Quit");
 	
-	//This is a button to be used for weird navigation until the tree is done, as a proof that the multiple frames work.
-	JButton lever = new JButton("Increment Frame");
+	//These are buttons to be used for navigation until the tree is done, as a proof that the multiple frames work and in case the tree is awkward or the last thing we do.
+	JButton buttonUp = new JButton("Increment Frame");
+	JButton buttonDown = new JButton("Decrement Frame");
+	int activeFrame;
 	
 	//Max DialogSets is 24 I think, but I haven't looked into dynamically changing that
 	DialogSet[] frames;
@@ -44,6 +56,7 @@ class Three extends JFrame
 		{
 			parts[i] = "";
 		}
+		activeFrame = 0;
 		frames = new DialogSet[40]; //I've done the math
 		for (int i = 0; i < frames.length; i ++)
 		{
@@ -74,23 +87,34 @@ class Three extends JFrame
 		});
 		
 		//In the final version, this functionality shouldn't exist
-		drop(600, 1500, 200, 50, true, lever);
-		lever.addActionListener((ActionEvent event)->{
-			for (int i = frames.length - 1; i >= 0; i--)
+		drop(600, 1500, 200, 50, true, buttonUp);
+		buttonUp.addActionListener((ActionEvent event)->{
+			if (activeFrame < 39)
 			{
-				if (frames[i].design.isVisible())
-				{
-					if (i == 23)
-					{
-						changeSets(frames[i], frames[0]);
-					}
-					else
-					{
-						changeSets(frames[i], frames[i+1]);
-					}
-				}
+				changeSets(frames[activeFrame], frames[activeFrame + 1]);
+				activeFrame = activeFrame + 1;
+			}
+			else
+			{
+				changeSets(frames[activeFrame], frames[0]);
+				activeFrame = 0;
 			}
 		});
+		
+		drop(900, 1500, 200, 50, true, buttonDown);
+		buttonDown.addActionListener((ActionEvent event)->{
+			if (activeFrame > 0)
+			{
+				changeSets(frames[activeFrame], frames[activeFrame - 1]);
+				activeFrame = activeFrame - 1;
+			}
+			else
+			{
+				changeSets(frames[activeFrame], frames[39]);
+				activeFrame = 39;
+			}
+		});
+		
 		
 		
 		//for some reason adding a useless label really helps it all come together.
