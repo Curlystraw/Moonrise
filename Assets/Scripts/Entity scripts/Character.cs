@@ -1,4 +1,5 @@
 ﻿using System;
+using ItemSpace;
 
 namespace Completed
 {
@@ -16,18 +17,11 @@ namespace Completed
 
 		private int currentHP;
 
+		private EquippedItemSet equippedItems;
+		private Inventory inventory;
 
-
-		public Character ()
+		public Character () : this(7, 2, 3)
 		{
-			baseHP = 7;
-			baseArmor = 2;
-			baseAttack = 3;
-
-			totalHP = 7;
-			totalArmor = 2;
-			totalAttack = 3;
-
 			currentHP = 6;
 		}
 
@@ -38,6 +32,62 @@ namespace Completed
 			baseAttack = attack;
 
 			currentHP = baseHP;
+
+			totalHP = baseHP;
+			totalArmor = baseArmor;
+			totalAttack = baseAttack;
+
+			equippedItems = new EquippedItemSet ();
+			inventory = new Inventory ();
+		}
+
+		/// <summary>
+		/// Add the item to the inventory.
+		/// </summary>
+		/// <param name="item">Item.</param>
+		public void AddItem(Item item)
+		{
+			inventory.AddItem (item);
+		}
+
+		/// <summary>
+		/// Equip the selected item from the inventory, 
+		/// and remove the item from the inventory.
+		/// If an item of the same type is already equipped, unequip it.
+		/// </summary>
+		/// <param name="item">Item.</param>
+		public void EquipItem(Item item)
+		{
+			EquipItem equippable;
+			if (item is EquipItem) {
+				equippable = (EquipItem)item;
+				if (RemoveItem (equippable)) {
+					Item unequipped = equippedItems.Unequip (equippable.GetItemClass ());
+					if (equippable != null)
+						inventory.AddItem (unequipped);
+					equippedItems.Equip (equippable);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Unequip the item and add it to the inventory.
+		/// </summary>
+		/// <param name="ic">Item class.</param>
+		public void UnequipItem(ItemClass ic)
+		{
+			Item unequipped = equippedItems.Unequip (ic);
+			AddItem (unequipped);
+		}
+
+		/// <summary>
+		/// Remove the item from the inventory.
+		/// </summary>
+		/// <returns><c>true</c>, if item was removed, <c>false</c> otherwise.</returns>
+		/// <param name="item">Item.</param>
+		public bool RemoveItem(Item item)
+		{
+			return inventory.RemoveItem (item);
 		}
 			
 		public int BaseHP {
@@ -100,6 +150,21 @@ namespace Completed
 			}
 			set {
 				currentHP = value;
+			}
+		}
+
+		public EquippedItemSet EquippedItems {
+			get {
+				return equippedItems;
+			}
+		}
+
+		public Inventory Inventory {
+			get {
+				return inventory;
+			}
+			set {
+				inventory = value;
 			}
 		}
 
