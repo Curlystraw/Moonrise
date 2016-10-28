@@ -13,6 +13,8 @@ namespace ItemSpace
 		public EquippedItemSet()
 		{
 			items = new Dictionary<ItemClass, EquipItem>();
+			items.Add (ItemClass.Helmet, null);
+			items.Add (ItemClass.Weapon, null);
 		}
 
 		/// <summary>
@@ -33,19 +35,24 @@ namespace ItemSpace
 		}
 
 		/// <summary>
-		/// Unequip the specified item.
-		/// Fails if the item was not equipped to begin with.
+		/// Unequip the item of the specified item class.
 		/// </summary>
-		/// <param name="item">Item.</param>
-		/// <returns>Whether the item was successfully unequipped.</returns>
-		public bool Unequip(EquipItem item)
+		/// <param name="ic">Item class.</param>
+		/// <returns>The unequipped item.</returns>
+		public Item Unequip(ItemClass ic)
 		{
-			ItemClass ic = item.GetItemClass();
-			if (items.ContainsKey (ic) && items [ic] == item) {
+			if (items.ContainsKey (ic)) {
+				Item item = items [ic];
 				items [ic] = null;
-				return true;
+				return item;
 			}
-			return false;
+			return null;
+		}
+
+		public Dictionary<ItemClass, EquipItem> Items {
+			get {
+				return items;
+			}
 		}
 	}
 }
