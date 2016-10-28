@@ -8,12 +8,10 @@ namespace Completed
 
     public class Player : MovingObject
     {
-		
         public int wallDamage = 1;
         public int pointsPerGold = 10;
         public float restartLevelDelay = 1f;
         public Text goldText;
-
         private Animator animator;
         private int gold;
 
@@ -85,6 +83,11 @@ namespace Completed
                 goldText.text = "+" + pointsPerGold + " Gold";
                 other.gameObject.SetActive(false);
             }
+        }
+
+        private void interact()
+        {
+
         }
 
         protected override void OnCantMove<T>(T component)
