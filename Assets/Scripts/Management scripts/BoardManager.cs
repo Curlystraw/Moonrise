@@ -38,6 +38,8 @@ public class BoardManager : MonoBehaviour {
     public GameObject[] enemyTiles;
     public GameObject[] outerWallTiles;
 
+    public GameObject[,] fogTiles;
+
     
     
     /// <summary>
@@ -72,6 +74,8 @@ public class BoardManager : MonoBehaviour {
     {
         boardMap = new int[columns, rows];
 
+        fogTiles = new GameObject[columns+2, rows+2];
+
         boardHolder = new GameObject("Board").transform;
 
         //Loops through entire board, creating floor tiles and outer wall tiles
@@ -89,9 +93,9 @@ public class BoardManager : MonoBehaviour {
 				else
 					boardMap[x, y] = 0;
                 GameObject instance = Instantiate(toInstantiate, new Vector2(x, y), Quaternion.identity) as GameObject;
-				Instantiate(fog, new Vector2(x,y), Quaternion.identity);
+                fogTiles[x+1, y+1] = (GameObject)Instantiate(fog, new Vector2(x, y), Quaternion.identity);
 
-				instance.transform.SetParent(boardHolder);
+                instance.transform.SetParent(boardHolder);
             }
         }
     }
@@ -104,6 +108,29 @@ public class BoardManager : MonoBehaviour {
     {
         int[,] returnBoard = (int[,])boardMap.Clone(); //To ensure nothing is changed in the array by accident.
         return returnBoard;
+    }
+    /// <summary>
+    /// Grabs all fog tiles for mapping purposes
+    /// </summary>
+    /// <returns></returns>
+    public GameObject[,] getFogTiles()
+    {
+        GameObject[,] returnBoard = (GameObject[,])fogTiles.Clone();
+        return returnBoard;
+    }
+    /// <summary>
+    /// Grabs the positions of all enemies
+    /// </summary>
+    /// <returns></returns>
+    public List<Vector2> GetEnemyPositions()
+    {
+        List<Vector2> returnList = new List<Vector2>();
+        foreach (Transform t in enemies)
+        {
+            Vector2 pos = new Vector2(t.position.x, t.position.y);
+            returnList.Add(pos);
+        }
+        return returnList;
     }
 
     /// <summary>
@@ -125,14 +152,14 @@ public class BoardManager : MonoBehaviour {
     /// <param name="tileArray">Array of tiles to select from</param>
     /// <param name="minimum">Minimum number of tiles to place</param>
     /// <param name="maximum">Maximum number of tiles to place</param>
-	void LayoutObjectAtRandom(GameObject[] tileArray, int minimum, int maximum, List<Transform> storage)
+	void LayoutObjectAtRandom(GameObject[] tileArray, int minimum, int maximum, List<Transform> storage, int tileType)
     {
         int objectCount = Random.Range(minimum, maximum + 1);
 
         for (int i = 0; i < objectCount; i++)
         {
             Vector2 randomPosition = RandomPosition();
-			boardMap[(int)randomPosition.x,(int)randomPosition.y] = 1;
+			boardMap[(int)randomPosition.x,(int)randomPosition.y] = tileType;
             GameObject tileChoice = tileArray[Random.Range(0, tileArray.Length)];
 			GameObject ob = (GameObject)Instantiate(tileChoice, randomPosition, Quaternion.identity);
 			if(storage != null)
@@ -145,10 +172,10 @@ public class BoardManager : MonoBehaviour {
     {
         BoardSetup();           //Initialize board with floor/outer wall tiles
         InitializeList();       //Create the list of board positions
-        LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum, null);      //Place wall tiles
-        LayoutObjectAtRandom(goldTiles, goldCount.minimum, goldCount.maximum, null);      //Place gold tiles
+        LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum, null,1);      //Place wall tiles
+        LayoutObjectAtRandom(goldTiles, goldCount.minimum, goldCount.maximum, null,99);      //Place gold tiles
         int enemyCount = 2;//(int)Mathf.Log(level, 2f);
-        LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount, enemies);                   //Place enemies
+        LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount, enemies,0);                   //Place enemies
         Instantiate(door1, new Vector2(columns - 1, rows - 1), Quaternion.identity);//Create the floor exit
 
     }
