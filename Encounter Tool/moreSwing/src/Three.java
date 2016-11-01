@@ -11,6 +11,12 @@ class Three extends JFrame
 {
 	//Alright this is version three. It is basically two but better and it works with arrays and events.
 	
+	//VERSION HISTORY:
+	//	10/13/16	Version Three	3.0
+	//	10/22/16	Version 3.1		3.1
+	//	10/25/16	Version 3.2		3.2
+	//	10/26/16	Version 3.3		3.3
+	
 	//I've done some math (counting) and we need 40 frames.
 	//That means (at my calculations) we need like 683 separate parts of the xml file.
 	//Even so, it still works.
@@ -184,6 +190,8 @@ class Three extends JFrame
 		for (int i = 0; i < frames.length; i++) //goes through all the frames
 		{			
 			//String designation = (i) + ".0"; //gives the designation a number (there was an intent here but it's kinda stupid)
+			//This is a super long method that gives the actual designations a writer can understand. And it's long because I was lazy, 
+			//but it's also long because I'm dumb and it's complicated.
 			String designation = "";
 			if (i == 0)
 			{
@@ -532,6 +540,10 @@ class Three extends JFrame
 					set.initializeReactTXT[0].setVisible(true);
 					set.initializeReactDD[0].setVisible(false);
 				}
+				if (set.reqs[set.initializeDD[0].getSelectedIndex()].equals("none"))
+				{
+					set.initializeReactTXT[0].setVisible(false);
+				}
 			});
 				set.initializeReactTXT[0].addActionListener((ActionEvent event) ->{
 					parts[3 + (set.IDNum * 17) + 5] = "Frame " + set.designation + "Option 1 requirement qualifier: " + set.initializeReactTXT[0].getText();
@@ -575,6 +587,10 @@ class Three extends JFrame
 					set.initializeReactTXT[1].setVisible(true);
 					set.initializeReactDD[1].setVisible(false);
 				}
+				if (set.reqs[set.initializeDD[1].getSelectedIndex()].equals("none"))
+				{
+					set.initializeReactTXT[1].setVisible(false);
+				}
 			});
 				set.initializeReactTXT[1].addActionListener((ActionEvent event) ->{
 					parts[3 + (set.IDNum * 17) + 10] = "Frame " + set.designation + "Option 2 requirement qualifier: " + set.initializeReactTXT[1].getText();
@@ -617,6 +633,10 @@ class Three extends JFrame
 				{
 					set.initializeReactTXT[2].setVisible(true);
 					set.initializeReactDD[2].setVisible(false);
+				}
+				if (set.reqs[set.initializeDD[2].getSelectedIndex()].equals("none"))
+				{
+					set.initializeReactTXT[2].setVisible(false);
 				}
 			});
 				set.initializeReactTXT[2].addActionListener((ActionEvent event) ->{

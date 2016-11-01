@@ -19,6 +19,7 @@ class DialogSet
 	JToggleButton y1, y2, y3;
 	
 	//TXT means text, and DD means "drop down" or combo box. These arrays will be used to initialize everything
+	//Also, this is an easy way to group things together for easier initialization
 	JTextField[] initializeTXT;
 	JComboBox[] initializeDD;
 	JTextField[] initializeReactTXT;
@@ -30,20 +31,22 @@ class DialogSet
 	String numbers;
 	int numReqs;
 	int[] numReactReqs;
-	String[] reqs = {"HasItem", "Currency", "Health", "Time", "Speech", "Growl", "Werewolf-ness", "dayTime"}; //THIS IS AN ATTEMPT TO MAKE ACTUAL REQS
-	String[] listofDDReqs = {"Speech", "Growl", "Werewolf-ness", "dayTime"}; //names should explain this pretty well
-	String[] listofBinaries = {"Werewolf-ness", "dayTime"}; 
-	int reqDivide;
+	String[] reqs = {"HasItem", "Currency", "Health", "Time", "Speech", "Growl", "Werewolf-ness", "dayTime", "none"}; //THIS IS AN ATTEMPT TO MAKE ACTUAL REQS
+	
+		//So far the next two arrays don't really work with the method used in the constructor below
+	String[] listofDDReqs = {"Speech", "Growl", "Werewolf-ness", "dayTime"}; //This helps differentiate which Combo Box choices make any combo boxes
+	String[] listofBinaries = {"Werewolf-ness", "dayTime"}; //This helps differentiate which Combo Box choices make small combo boxes
+		//int reqDivide;
 	String[][] reactReqs; 
 	String designation; //This is so DialogSets can be called by name in Three
-	int[] reqDD = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+		//int[] reqDD = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 	
 	//The default constructor shouldn't be used except for helping other constructors (especially the name one)
 	DialogSet()
 	{
 		//utility initialization
 		designation = "null";
-		reqDivide = 1;
+			//reqDivide = 1;
 		//part initialization
 		name = new JTextField("Dialog name");
 		description = new JTextField("Describe the Dialog");
