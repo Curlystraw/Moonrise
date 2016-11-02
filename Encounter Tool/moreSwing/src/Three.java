@@ -31,10 +31,18 @@ class Three extends JFrame
 	 * ......\____/......./________/.../_/........./_/...../_/........./_/....../__/........./__/..../_/..........
 	 */
 	
+	//List of flags to be triggered
+	String[] flagList = {"Werewolfness", "Speech", "Growl", "Health", "Gold", "HasItem", "Location", "TimeOfDay", "Awareness", "EnemiesKilled", "Bounds", "Time", "Hostility",
+			"PreviousEncounter"};
+	JToggleButton[] flagToggles;
+	
+	//Font stuff
+	Font myFont = new Font("Helvetica", 1, 25);
+	
 	//This is every piece of the JFrame, including the DialogSets
 	JTextField name = new JTextField("Name the encounter.");  //Encounter naming text field
 	JTree tree = new JTree(); //Tree for navigation (does not contribute to final string)
-	JList list = new JList(); //List of flags for the entire encounter (contributes a list as part no. 3 of the xml **Not yet implemented**)
+	JList list; //List of flags for the entire encounter (contributes a list as part no. 3 of the xml **Not yet implemented**)
 	JButton crEnc = new JButton("Create Encounter"); //Button to "create the encounter" that actually just puts all the things together in a string and displays it
 	JButton quit = new JButton("Quit"); //Button to leave
 	
@@ -68,6 +76,16 @@ class Three extends JFrame
 		{
 			frames[i] = new DialogSet(i);
 		}
+		
+		//pre-initialization for the List
+		flagToggles = new JToggleButton[flagList.length];
+		for (int i = 0; i < flagList.length; i++)
+		{
+			flagToggles[i] = new JToggleButton(flagList[i]);
+		}
+		list = new JList(flagToggles);
+		
+		
 		//Initializing Window
 		setSize(3600, 2100); //This size doesn't work all the time but it works for me and its size is what everything's locations are based off of.
 		setTitle("Encounter Tool"); //Makes sense.
@@ -182,6 +200,9 @@ class Three extends JFrame
 		//drop(1000, 50, 400, 300, true, list);
 		//make a list and put it in here (I think this one works now but at first I hadn't fixed the method so it wouldn't work)
 	}
+	
+		//Methods that pertain to the List will be tabbed.
+		
 	
 	void initializeFrames()
 	{
@@ -473,6 +494,7 @@ class Three extends JFrame
 		comp.setLocation(x, y); //hated having to do this all the time
 		comp.setSize(w, h); //same
 		comp.setVisible(in); //lol me too
+		comp.setFont(myFont); //let's hope this works
 		add(comp); //this method sucks a bunch but for some reason it works so well
 	}
 	
