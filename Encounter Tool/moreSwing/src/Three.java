@@ -16,6 +16,7 @@ class Three extends JFrame
 	//	10/22/16	Version 3.1		3.1
 	//	10/25/16	Version 3.2		3.2
 	//	10/26/16	Version 3.3		3.3
+	//  11/02/16	Version 3.4		3.4
 	
 	//I've done some math (counting) and we need 40 frames.
 	//That means (at my calculations) we need like 683 separate parts of the xml file.
@@ -41,6 +42,8 @@ class Three extends JFrame
 	
 	//This is every piece of the JFrame, including the DialogSets
 	JTextField name = new JTextField("Name the encounter.");  //Encounter naming text field
+	JLabel flagLabel = new JLabel("List the zone(s) in which the encounter can occur. Please separate multiples with a comma.");
+	JTextField flags = new JTextField();
 	JTree tree = new JTree(); //Tree for navigation (does not contribute to final string)
 	JList list; //List of flags for the entire encounter (contributes a list as part no. 3 of the xml **Not yet implemented**)
 	JButton crEnc = new JButton("Create Encounter"); //Button to "create the encounter" that actually just puts all the things together in a string and displays it
@@ -101,9 +104,9 @@ class Three extends JFrame
 	void initializeStuff()
 	{
 		//drop method is defined waaay below
-		drop(100, 100, 200, 50, true, name); //Name box placement/creation
-		drop(100, 1500, 100, 50, true, quit); //Quit button placement/creation
-		drop(300, 1500, 200, 50, true, crEnc); //create encounter button placement/creation
+		drop(100, 100, 300, 50, true, name); //Name box placement/creation
+		drop(100, 1500, 200, 50, true, quit); //Quit button placement/creation
+		drop(350, 1500, 300, 50, true, crEnc); //create encounter button placement/creation
 		name.addActionListener((ActionEvent waitForClick) -> {parts[0] = "Encounter name: " + name.getText();}); //changes the first string to whatever's in the name box
 		quit.addActionListener((ActionEvent event)-> {System.exit(0);}); //quits
 		//runs the create-a-string algorithm
@@ -113,7 +116,7 @@ class Three extends JFrame
 		});
 		
 		//In the final version, this functionality can exist but shouldn't be the only way to navigate
-		drop(600, 1500, 200, 50, true, buttonUp); //next frame button placement/creation
+		drop(700, 1500, 300, 50, true, buttonUp); //next frame button placement/creation
 		buttonUp.addActionListener((ActionEvent event)->{
 			if (activeFrame < 39) //check if current frame is last frame
 			{
@@ -127,7 +130,7 @@ class Three extends JFrame
 			}
 		});
 		
-		drop(900, 1500, 200, 50, true, buttonDown); //previous frame button placement/creation
+		drop(1050, 1500, 300, 50, true, buttonDown); //previous frame button placement/creation
 		buttonDown.addActionListener((ActionEvent event)->{
 			if (activeFrame > 0) //check if current frame is first frame
 			{
@@ -169,6 +172,7 @@ class Three extends JFrame
 	
 	void initializeNav() //Both of these are far from done
 	{
+		
 		add(tree);
 		tree.setLocation(3000, 1000);
 		tree.setSize(400, 800);
@@ -186,10 +190,16 @@ class Three extends JFrame
 	
 	void initializeFlags() //Both of these are far from done
 	{
-		add(list);
-		list.setLocation(3000, 50);
-		list.setSize(400, 800);
-		list.setVisible(true);
+//		add(list);
+//		list.setLocation(3000, 50);
+//		list.setSize(400, 800);
+//		list.setVisible(true);
+	
+		drop(2250, 150, 1200, 50, true, flagLabel);
+		drop(2650, 250, 400, 50, true, flags);
+		flags.addActionListener((ActionEvent event)->{
+			parts[3] = "Flags for the encounter: " + flags.getText();
+		});
 		
 		//for some reason adding a useless label really helps it all come together.
 		JLabel x = new JLabel();
@@ -201,8 +211,6 @@ class Three extends JFrame
 		//make a list and put it in here (I think this one works now but at first I hadn't fixed the method so it wouldn't work)
 	}
 	
-		//Methods that pertain to the List will be tabbed.
-		
 	
 	void initializeFrames()
 	{
@@ -440,7 +448,7 @@ class Three extends JFrame
 		void dropFrame(DialogSet set, boolean bool) //holy shit this method is really cool- i didn't think it was gonna work but it did
 		{
 			drop(200, 200, 200, 50, bool, set.initializeTXT[0]); //this
-			drop(200, 300, 500, 100, bool, set.initializeTXT[1]); //literally
+			drop(200, 300, 1500, 50, bool, set.initializeTXT[1]); //literally
 			drop(250, 450, 200, 50, bool, set.initializeTXT[2]); //puts
 			drop(250, 550, 200, 50, bool, set.initializeTXT[3]); //in
 			drop(250, 650, 200, 50, bool, set.initializeTXT[4]); //the 
@@ -449,7 +457,7 @@ class Three extends JFrame
 			drop(500, 650, 200, 50, bool, set.initializeDD[2]); //single
 			drop(750, 450, 200, 50, bool, set.initializeReactDD[0]); //teensy
 			drop(750, 550, 200, 50, bool, set.initializeReactDD[1]); //weensy
-			drop(750, 650, 200, 50, bool, set.initializeReactDD[2]); //tiny
+			drop(750, 650, 200, 50, bool, set.initializeReactDD[2]); //teeny
 			drop(750, 450, 200, 50, bool, set.initializeReactTXT[0]); //itsy
 			drop(750, 550, 200, 50, bool, set.initializeReactTXT[1]); //bitsy
 			drop(750, 650, 200, 50, bool, set.initializeReactTXT[2]); //specific
@@ -476,6 +484,14 @@ class Three extends JFrame
 			for (JToggleButton n : set.initializeToggle) //the three toggles
 			{
 				n.setVisible(bool);
+			}
+			for (JComboBox n : set.initializeReactDD)
+			{
+				n.setVisible(false);
+			}
+			for (JTextField n : set.initializeReactTXT)
+			{
+				n.setVisible(false);
 			}
 			set.design.setVisible(bool); //the label of the frame
 		}
