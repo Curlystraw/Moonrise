@@ -20,8 +20,6 @@ namespace Completed
 		public GameObject indicator;
 
 		public Text displayText;
-		public Text actionText;
-
 		public String timeLeft;
 		public String goldText;
 		public String hpText;
@@ -83,53 +81,33 @@ namespace Completed
             int horizontal = 0;
             int vertical = 0;
 
-			if (Input.GetMouseButtonDown(0)) {
-				if (GameManager.instance.enemyClicked) {
-					RangedAttack ();
-				}
+            horizontal = (int)Input.GetAxisRaw("Horizontal");
+            vertical = (int)Input.GetAxisRaw("Vertical");
+			bool spacebar = Input.GetKeyUp(KeyCode.Space);
 
-				// Add other things like "interact" or "talk" here
-			} else {
-				horizontal = (int)Input.GetAxisRaw ("Horizontal");
-				vertical = (int)Input.GetAxisRaw ("Vertical");
-				bool spacebar = Input.GetKeyUp(KeyCode.Space);
+            if (horizontal != 0)
+                vertical = 0;
 
-				if (horizontal != 0)
-					vertical = 0;
-
-				if (horizontal != 0 || vertical != 0) {
-					AttemptMove<Wall> (horizontal, vertical);
-				}
-			}
+            if (horizontal != 0 || vertical != 0 || spacebar)
+            {
+                AttemptMove<Wall>(horizontal, vertical);
+            }
         }
 
-		protected void RangedAttack()
-		{
-			actionText.text = "You attacked an enemy!";
-			GameManager.instance.enemyClicked = false;
+		protected override void AttemptMove<T>(int xDir, int yDir)
+        {
 
-			EndTurn ();
-		}
-      
-
-		protected void EndTurn()
-		{
 			GameManager.instance.timeLeft--;
 			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
 			UpdateText ();
 
-			CheckIfGameOver();
-
-			GameManager.instance.playersTurn = false;
-		}
-
-        protected override void AttemptMove<T>(int xDir, int yDir)
-        {
-			base.AttemptMove<T>(xDir, yDir);
+            base.AttemptMove<T>(xDir, yDir);
 
             RaycastHit2D hit;
 
-			EndTurn ();
+            CheckIfGameOver();
+
+            GameManager.instance.playersTurn = false;
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -161,7 +139,7 @@ namespace Completed
 			//SceneManager.LoadScene(SceneManager.GetActiveScene);
         }
 
-		public override void LoseHp(int loss)
+		public void LoseHp(int loss)
 		{
 			GameManager.instance.playerHp -= loss;
 			String message = "-" + loss + " HP";
@@ -185,11 +163,6 @@ namespace Completed
                 GameManager.instance.GameOver();
             }
         }
-			
-		protected override void KillObject()
-		{
-			return;
-		}
 
 		protected override void OnFinishMove ()
 		{
