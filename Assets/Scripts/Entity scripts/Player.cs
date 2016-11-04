@@ -198,7 +198,7 @@ namespace Completed
 		}
 
 		//Casts 17 rays, then casts a line along that detected ray to identify which squares are visible.
-		protected void FogCheck(){
+		public void FogCheck(){
 			float angle = 0;
 			Vector3 pPos = this.transform.position;
 			Vector2 origin = new Vector2(pPos.x,pPos.y), direction,end;

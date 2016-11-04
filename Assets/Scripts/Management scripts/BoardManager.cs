@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using Random = UnityEngine.Random;
+using Completed;
 
 public class BoardManager : MonoBehaviour {
     [Serializable]
