@@ -19,32 +19,23 @@ public class MapLoader : MonoBehaviour
 
 
     private Texture2D mapTex;
+    private Texture2D miniTex;
     private Sprite mapSprite;
+    private Sprite miniSprite;
     private BoardManager board;
+
+    private GameObject miniMap;
+    private GameObject mainMap;
+
+    private int mapRadius = 7;
     // Use this for initialization. Start or Awake will crash it. 
-    void OnEnable()
+    void Start()
     {
-        Center(); // While not important to be first, it's best if it is. Centering the window correctly takes little effort and prevents the menu from never appearing due to shenanigans.
-    }
-    void Awake()
-    {
+        miniMap = gameObject.transform.FindChild("Contents").gameObject;
+        mainMap = gameObject.transform.FindChild("Expand").gameObject;
         board = (BoardManager)gameManager.GetComponent(typeof(BoardManager));
         loadMap();
-    }
-
-    /// <summary>
-    ///  Force Centers the UI element. 
-    /// </summary>
-    private void Center() //Private because nothing outside this script should be using this.
-    {
-        rtf = gameObject.GetComponent<RectTransform>();
-        
-        int width = (int)rtf.rect.width;
-        int height = (int)rtf.rect.height;
-        float x = (Screen.width) / 2; //Anchor of Panel SHOULD be centered. No need to worry.
-        float y = (Screen.height) / 2;
-        Vector3 newpos = new Vector3(x, y);
-        rtf.position = newpos;
+        constructMiniMap();
     }
 
     /// <summary>
@@ -75,8 +66,7 @@ public class MapLoader : MonoBehaviour
         }
         mapTex.Apply();
         mapSprite = Sprite.Create(mapTex, new Rect(0, 0, mapTex.width, mapTex.height), new Vector2(0.5f, 0.5f),16.0f);
-        gameObject.transform.FindChild("MapStore").gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(mapBoard.GetLength(0)*10,mapBoard.GetLength(1)*10);
-        gameObject.transform.FindChild("MapStore").gameObject.GetComponent<Image>().sprite = mapSprite;
+        mainMap.transform.FindChild("MapStore").gameObject.GetComponent<Image>().sprite = mapSprite;
     }
     
     /// <summary>
@@ -109,16 +99,10 @@ public class MapLoader : MonoBehaviour
                 else
                     mapTex.SetPixel(i, j, Color.gray);
 
-            }
-        }
-        for (int i = 1; i < mapTex.width - 1; i++) //Fog Pass
-        {
-            for (int j = 1; j < mapTex.height - 1; j++)
-            {
-                var curFog = fog[i, j].GetComponent<SpriteRenderer>();
+                var curFog = fog[i, j].GetComponent<SpriteRenderer>(); //Fog Pass
                 if (curFog != null)
                 {
-                    if (curFog.color.a > 0.8f) //Deep Fog
+                    if (curFog.color.a > 0.8f) //Hidden and unseen
                     {
                         mapTex.SetPixel(i, j, Color.black);
                     }
@@ -126,13 +110,78 @@ public class MapLoader : MonoBehaviour
                     {
                         if (mapBoard[i - 1, j - 1] == 2)
                             mapTex.SetPixel(i, j, Color.white);
-                    }
-                    
-                }
 
+                        mapTex.SetPixel(i, j, mapTex.GetPixel(i, j) - new Color(0.2f, 0.2f, 0.2f, 0));
+                    }
+
+                }
             }
         }
         mapTex.Apply();
+    }
+
+    private void constructMiniMap()
+    {
+        miniTex = new Texture2D(2*mapRadius+1,2*mapRadius+1, TextureFormat.ARGB32, false);
+        miniTex.filterMode = FilterMode.Point;
+
+
+        miniSprite = Sprite.Create(miniTex, new Rect(0, 0, miniTex.width, miniTex.height), new Vector2(0.5f, 0.5f), 16.0f);
+        miniMap.transform.FindChild("MapStore").gameObject.GetComponent<Image>().sprite = miniSprite;
+    }   
+
+    private void UpdateMiniMap()
+    {
+        Vector2 playerPos = getPlayerPosition();
+        int[,] mapBoard = createMapBoard();
+        List<Vector2> enemies = board.GetEnemyPositions();
+        GameObject[,] fog = createFogTile();
+
+        mapBoard[(int)playerPos.x, (int)playerPos.y] = 3; //Player Pass
+        foreach (Vector2 v in enemies) //Enemy Pass
+        {
+            mapBoard[(int)v.x, (int)v.y] = 2;
+        }
+
+        for (int i = -mapRadius; i <= mapRadius; i++) //Raw Pass
+        {
+            for (int j = -mapRadius; j <= mapRadius; j++)
+            {
+                if (playerPos.x + i < 0 || playerPos.x + i >= mapBoard.GetLength(0) || playerPos.y + j < 0 || playerPos.y + j >= mapBoard.GetLength(1))
+                {
+                    miniTex.SetPixel(i + mapRadius, j + mapRadius, Color.black);
+                }
+                else
+                {
+                    if (mapBoard[(int)playerPos.x + i, (int)playerPos.y + j] == 3)
+                        miniTex.SetPixel(i + mapRadius, j + mapRadius, Color.green);
+                    else if (mapBoard[(int)playerPos.x + i, (int)playerPos.y + j] == 2)
+                        miniTex.SetPixel(i + mapRadius, j + mapRadius, Color.red);
+                    else if (mapBoard[(int)playerPos.x + i, (int)playerPos.y + j] == 0)
+                        miniTex.SetPixel(i + mapRadius, j + mapRadius, Color.white);
+                    else
+                        miniTex.SetPixel(i + mapRadius, j + mapRadius, Color.gray);
+
+                    var curFog = fog[(int)playerPos.x + i + 1, (int)playerPos.y + j + 1].GetComponent<SpriteRenderer>(); //Fog Pass
+                    if (curFog != null)
+                    {
+                        if (curFog.color.a > 0.8f) //Hidden and unseen
+                        {
+                            miniTex.SetPixel(i + mapRadius, j + mapRadius, Color.black);
+                        }
+                        else if (curFog.color.a > 0.5f && curFog.color.a < 0.8f) //Seen, but currently hidden
+                        {
+                            if (mapBoard[(int)playerPos.x + i, (int)playerPos.y + j] == 2)
+                                miniTex.SetPixel(i + mapRadius, j + mapRadius, Color.white);
+
+                            miniTex.SetPixel(i + mapRadius, j + mapRadius, miniTex.GetPixel(i + mapRadius, j + mapRadius) - new Color(0.2f, 0.2f, 0.2f, 0));
+                        }
+
+                    }
+                }
+            }
+        }
+        miniTex.Apply();
     }
 
     /// <summary>
@@ -169,6 +218,7 @@ public class MapLoader : MonoBehaviour
         {
             //If the UI element needs to repeatedly update: Do it here.
             updateMap();
+            UpdateMiniMap();
         }
     }
 
