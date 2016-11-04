@@ -41,6 +41,11 @@ namespace Completed
 			inventory = new Inventory ();
 		}
 
+		public void Attack(Character enemy)
+		{
+			
+		}
+
 		/// <summary>
 		/// Add the item to the inventory.
 		/// </summary>
