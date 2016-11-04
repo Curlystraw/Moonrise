@@ -4,11 +4,11 @@ namespace ItemSpace
 {
 	public abstract class Weapon : EquipItem
 	{
-		protected int power, range;
+		protected int attack, range;
 
-		public int Power {
+		public int Attack {	// will eventually be affected by prefix/infix/suffix
 			get {
-				return power;
+				return attack;
 			}
 		}
 

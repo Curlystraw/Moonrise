@@ -41,9 +41,26 @@ namespace Completed
 			inventory = new Inventory ();
 		}
 
-		public void Attack(Character enemy)
+		public void AttackEnemy(Character enemy)
 		{
-			
+			int damage = CalcDamage (enemy);
+			enemy.TakeDamage (damage);
+		}
+
+		public void TakeDamage(int damage)
+		{
+			currentHP -= damage;
+			if(currentHP <= 0) {
+				// die, drop items, etc.
+			}
+		}
+
+		public int CalcDamage(Character enemy)
+		{
+			Weapon weapon = (Weapon)equippedItems.Get (ItemClass.Weapon);
+			int attack = baseAttack + weapon.Attack;
+
+			return attack;
 		}
 
 		/// <summary>
@@ -73,6 +90,7 @@ namespace Completed
 					equippedItems.Equip (equippable);
 				}
 			}
+			// TODO: update stats based on changed items
 		}
 
 		/// <summary>
