@@ -9,6 +9,8 @@ namespace Completed
     {
 		public float speed = 1f;			//object speed, added to the object's AP each tick
 		public float AP = 0f;				//Action Points, every action for now costs 1 AP
+
+		public int hp;
 		
         public float moveTime = 0.1f;		//Movement time for animation
         public LayerMask blockingLayer;		
@@ -43,7 +45,7 @@ namespace Completed
             }
             return false;
         }
-		
+
 		//Don't bother with this for now, it moves objects from start to stop in moveTime seconds
         protected IEnumerator SmoothMovement(Vector3 end)
         {
@@ -59,6 +61,15 @@ namespace Completed
 
 			OnFinishMove();
         }
+
+		public virtual void LoseHp(int loss)
+		{
+			hp -= loss;
+			if (hp <= 0) {
+				KillObject ();
+			}
+			return;
+		}
 
 		//Similar to move, but if a move fails due to a unit, strike the unit.
         protected virtual void AttemptMove<T>(int xDir, int yDir) where T : Component
@@ -81,6 +92,8 @@ namespace Completed
 
         protected abstract void OnCantMove<T>(T component) where T : Component;
 		protected abstract void OnFinishMove();
+
+		protected abstract void KillObject ();
 
     }
 }
