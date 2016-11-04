@@ -80,13 +80,22 @@ MonoBehaviour:
   blockingLayer:
     serializedVersion: 2
     m_Bits: 256
+  sneak: 4
   wallDamage: 1
   pointsPerGold: 10
   restartLevelDelay: 1
+  sightRange: 6
+  indicator: {fileID: 0}
   displayText: {fileID: 0}
   timeLeft: 
-  goldText: 
+  goldText: 8
   hpText: 
+  sightBlocks:
+    serializedVersion: 2
+    m_Bits: 0
+  fogLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!212 &21223816
 SpriteRenderer:
   m_ObjectHideFlags: 1

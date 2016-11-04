@@ -12,7 +12,7 @@ GameObject:
   - 114: {fileID: 11432310}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -41,11 +41,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90eae884846c3a1479aa23105f439d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeLeft: 4320
   levelStartDelay: 2
   turnDelay: 0.1
   playerGoldPoints: 100
-  playerHp: 100
   playersTurn: 1
 --- !u!114 &11442854
 MonoBehaviour:
@@ -58,16 +56,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1517ef1d55b1d0d4bb1cf67573cc4a9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  columns: 8
+  columns: 14
   rows: 8
   wallCount:
-    minimum: 3
-    maximum: 9
+    minimum: 15
+    maximum: 25
   goldCount:
     minimum: 2
     maximum: 8
   door1: {fileID: 166078, guid: 82394ce74612ab245aebfb3f6781624f, type: 2}
   player: {fileID: 146232, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
+  fog: {fileID: 1000013503040542, guid: 7baf4b253367574499eef4268d796131, type: 2}
   floorTiles:
   - {fileID: 170992, guid: b021cef5c367b884387065f8bae5ef1e, type: 2}
   wallTiles:

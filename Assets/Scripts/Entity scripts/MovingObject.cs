@@ -58,6 +58,8 @@ namespace Completed
                 sqrRemainingDistance = (transform.position - end).sqrMagnitude;
                 yield return null;
             }
+
+			OnFinishMove();
         }
 
 		public virtual void LoseHp(int loss)
@@ -89,6 +91,7 @@ namespace Completed
         }
 
         protected abstract void OnCantMove<T>(T component) where T : Component;
+		protected abstract void OnFinishMove();
 
 		protected abstract void KillObject ();
 
