@@ -14,8 +14,15 @@ namespace Completed
         public float restartLevelDelay = 1f;
 		public int sneak = 4;
 		public float sightRange = 12f;
-		public Sprite werewolfSprite;
-		public Sprite humanSprite;
+		public Sprite werewolfFront;
+		public Sprite werewolfBack;
+		public Sprite werewolfLeft;
+		public Sprite werewolfRight;
+		public Sprite humanFront;
+		public Sprite humanBack;
+		public Sprite humanLeft;
+		public Sprite humanRight;
+		public Orientation orientation;
 		public Color original;
 		public GameObject indicator;
 
@@ -38,6 +45,7 @@ namespace Completed
         {
 
 			speed = 1;
+			orientation = Orientation.North;
 			original = this.gameObject.GetComponent<SpriteRenderer> ().color;
 			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
 			goldText = "Gold: " + GameManager.instance.playerGoldPoints;
@@ -72,6 +80,35 @@ namespace Completed
 			}
 		}
 
+		public void UpdateSprite()
+		{
+			Sprite sprite;
+			Color color;
+			if(GameManager.instance.isWerewolf) {
+				if (orientation == Orientation.North)
+					sprite = werewolfBack;
+				else if (orientation == Orientation.East)
+					sprite = werewolfRight;
+				else if (orientation == Orientation.South)
+					sprite = werewolfFront;
+				else
+					sprite = werewolfLeft;
+				color = Color.gray;
+			} else {
+				if (orientation == Orientation.North)
+					sprite = humanBack;
+				else if (orientation == Orientation.East)
+					sprite = humanRight;
+				else if (orientation == Orientation.South)
+					sprite = humanFront;
+				else
+					sprite = humanLeft;
+				color = original;
+			}
+			this.gameObject.GetComponent<SpriteRenderer> ().sprite = sprite;
+			this.gameObject.GetComponent<SpriteRenderer> ().color = color;
+		}
+
         // Update is called once per frame
         void Update()
         {
@@ -96,9 +133,6 @@ namespace Completed
             vertical = (int)Input.GetAxisRaw("Vertical");
 			bool spacebar = Input.GetKeyUp(KeyCode.Space);
 
-            if (horizontal != 0)
-                vertical = 0;
-
             if (horizontal != 0 || vertical != 0 || spacebar)
             {
                 AttemptMove<Wall>(horizontal, vertical);
@@ -106,7 +140,16 @@ namespace Completed
         }
 
 		protected override void AttemptMove<T>(int xDir, int yDir)
-        {
+		{
+			if (xDir > 0)
+				orientation = Orientation.East;
+			else if (xDir < 0)
+				orientation = Orientation.West;
+			else if (yDir > 0)
+				orientation = Orientation.North;
+			else
+				orientation = Orientation.South;
+			UpdateSprite ();
 
 			GameManager.instance.timeLeft--;
 			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
@@ -257,20 +300,21 @@ namespace Completed
 			if (GameManager.instance.isWerewolf) {
 				this.TotalHP *= 2;
 				this.CurrentHP *= 2;
-				hpText = "HP: " + this.CurrentHP;
-				UpdateText ();
-				this.gameObject.GetComponent<SpriteRenderer> ().sprite = werewolfSprite;
-				this.gameObject.GetComponent<SpriteRenderer> ().color = Color.gray;
 			} else {
 				this.TotalHP /= 2;
 				this.CurrentHP /= 2;
-				hpText = "HP: " + this.CurrentHP;
-				UpdateText ();
-				this.gameObject.GetComponent<SpriteRenderer> ().sprite = humanSprite;
-				this.gameObject.GetComponent<SpriteRenderer> ().color = original;
 			}
-				
+			hpText = "HP: " + this.CurrentHP;
+			UpdateText ();
+			UpdateSprite ();
 		}
-    }
+	}
 
+	public enum Orientation
+	{
+		North,
+		East,
+		South,
+		West
+	}
 }
