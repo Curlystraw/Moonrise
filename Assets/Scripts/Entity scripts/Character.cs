@@ -1,80 +1,87 @@
 ﻿using System;
 using ItemSpace;
+using UnityEditor;
+using UnityEngine;
 
 namespace Completed
 {
 	public class Character : MovingObject
 	{
 		//leveled up with magic character points
-		private int baseHP;
-		private double baseDodge;
-		private double baseBlock;
-		private int baseAttack;
-		private double baseAccuracy;
-		private int baseRange;
+		protected int baseHP;
+		protected double baseDodge;
+		protected double baseBlock;
+		protected int baseAttack;
+		protected double baseAccuracy;
+		protected int baseRange;
 
 		//affected by items
-		private int totalHP;
-		private double totalDodge;
-		private double totalBlock;
-		private int totalAttack;
-		private double totalAccuracy;
-		private int totalRange;
+		protected int totalHP;
+		protected double totalDodge;
+		protected double totalBlock;
+		protected int totalAttack;
+		protected double totalAccuracy;
+		protected int totalRange;
 
-		private int currentHP;
+		protected int currentHP;
 
-		private double baseSpeed;
-		private double totalSpeed;
-
+		protected double baseSpeed;
+		protected double totalSpeed;
 
 		private EquippedItemSet equippedItems;
 		private Inventory inventory;
 
-		Random rand = new Random();
-
 		public Character () : this(100, .1, .1, 5, .9, 5, 1.0)
 		{
 		}
-
+			
 		public Character (int hp, double dodge, double block, int attack, double accuracy,int range, double speed)
 		{
 			baseHP = hp;
 			baseBlock = block;
 			baseAttack = attack;
+			baseAccuracy = accuracy;
+			baseRange = range;
+			baseSpeed = speed;
 
 			currentHP = baseHP;
-
 			totalHP = baseHP;
+
 			totalBlock = baseBlock;
 			totalAttack = baseAttack;
+			totalAccuracy = baseAccuracy;
+			totalRange = baseRange;
+			totalSpeed = baseSpeed;
 
 			equippedItems = new EquippedItemSet ();
 			inventory = new Inventory ();
 		}
+
 		/// <summary>
 		/// Ranged attack function
 		/// </summary>
 		/// <returns>The attack.</returns>
 		/// <param name="target">Target.</param>
 		public int RangedAttack(Character target) {
-			if (rand.NextDouble () <= this.TotalAccuracy) {
-				if (rand.NextDouble () > target.TotalDodge) {
-					int damage = this.TotalAttack + (int)(this.TotalAttack * (rand.NextDouble () / 10 - .05));
+			if (UnityEngine.Random.Range (0.0f, 1.0f) <= this.TotalAccuracy) {
+				if (UnityEngine.Random.Range (0.0f, 1.0f) > target.TotalDodge) {
+					int damage = this.TotalAttack + (int)(this.TotalAttack * (UnityEngine.Random.Range (0.0f, 1.0f) / 10 - .05));
 					target.CurrentHP -= damage;
 					return damage;
 				}
 			}
 			return 0;
 		}
+
 		/// <summary>
 		/// Melee attack function
 		/// </summary>
 		/// <returns>The attack.</returns>
 		/// <param name="target">Target.</param>
 		public int MeleeAttack(Character target) {
-			if (rand.NextDouble () <= this.TotalAccuracy) {
-				if (rand.NextDouble () > target.TotalBlock) {
-					int damage = this.TotalAttack + (int)(this.TotalAttack * (rand.NextDouble () / 10 - .05));
+			if (UnityEngine.Random.Range (0.0f, 1.0f) <= this.TotalAccuracy) {
+				if (UnityEngine.Random.Range (0.0f, 1.0f) > target.TotalBlock) {
+					int damage = this.TotalAttack + (int)(this.TotalAttack * (UnityEngine.Random.Range (0.0f, 1.0f) / 10 - .05));
 					target.CurrentHP -= damage;
 					return damage;
 				}
@@ -164,6 +171,15 @@ namespace Completed
 			}
 			set {
 				totalDodge = value;
+			}
+		}
+
+		public int BaseAttack {
+			get {
+				return this.baseAttack;
+			}
+			set {
+				baseAttack = value;
 			}
 		}
 
