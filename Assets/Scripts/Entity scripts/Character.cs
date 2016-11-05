@@ -28,8 +28,8 @@ namespace Completed
 		protected double baseSpeed;
 		protected double totalSpeed;
 
-		private EquippedItemSet equippedItems;
-		private Inventory inventory;
+		protected EquippedItemSet equippedItems;
+		protected Inventory inventory;
 
 		public Character () : this(100, .1, .1, 5, .9, 5, 1.0)
 		{
