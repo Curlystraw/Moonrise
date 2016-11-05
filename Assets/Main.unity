@@ -266,12 +266,13 @@ Prefab:
     - target: {fileID: 11460302, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
       propertyPath: werewolfSprite
       value: 
-      objectReference: {fileID: 21300000, guid: 4a40d8d8070c90c46a565a280ae537a1,
+      objectReference: {fileID: 21300000, guid: 6e1cd654ef4b84565a9a9f0a62734143,
         type: 3}
     - target: {fileID: 11460302, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
       propertyPath: humanSprite
       value: 
-      objectReference: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
+      objectReference: {fileID: 21300000, guid: 34a9fac0049db4f71b0afe1df1969db8,
+        type: 3}
     - target: {fileID: 11460302, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
       propertyPath: sightBlocks.m_Bits
       value: 256
@@ -284,6 +285,11 @@ Prefab:
       propertyPath: actionText
       value: 
       objectReference: {fileID: 1158986564}
+    - target: {fileID: 21223816, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 34a9fac0049db4f71b0afe1df1969db8,
+        type: 3}
     - target: {fileID: 11460302, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
       propertyPath: hpBar
       value: 
