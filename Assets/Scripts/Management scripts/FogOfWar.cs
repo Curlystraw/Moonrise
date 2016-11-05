@@ -9,12 +9,12 @@ namespace Completed {
 		private GameManager g;
 
 		//Is this tile visible?
-		private bool visible, oldVis;
+		public bool visible, oldVis;
 		//Has this tile been uncovered before?
 		private bool seen;
 		// Use this for initialization
 		void Start () {
-			visible = false;
+			//visible = false;
 			oldVis = false;
 			//Get board manager
 			g = GameObject.Find("GameManager").GetComponent<GameManager>();
