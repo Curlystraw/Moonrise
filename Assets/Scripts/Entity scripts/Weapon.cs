@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace ItemSpace
 {
@@ -15,6 +16,16 @@ namespace ItemSpace
 		private int attackBonus, hpBonus;
 		private double attackMult, speedMult;
 
+		private static List<WeaponPrefix> prefixApostrophes = new List<WeaponPrefix>( new[] {
+			WeaponPrefix.Soldier, WeaponPrefix.Knight, WeaponPrefix.Captain, 
+			WeaponPrefix.Ogre, WeaponPrefix.Titan, WeaponPrefix.Dragon, 
+			WeaponPrefix.Medic, WeaponPrefix.Doctor, WeaponPrefix.Surgeon
+		});
+
+		private static List<WeaponSuffix> suffixNoThes = new List<WeaponSuffix>( new[] {
+			WeaponSuffix.Sight, WeaponSuffix.Strength, WeaponSuffix.Might, WeaponSuffix.Power, WeaponSuffix.Destruction
+		});
+
 		public Weapon() : this(WeaponType.Crossbow, WeaponWeight.Medium, WeaponPrefix.Great, WeaponInfix.Silver, WeaponSuffix.Assassin)
 		{
 			
@@ -22,7 +33,6 @@ namespace ItemSpace
 
 		public Weapon(WeaponType type, WeaponWeight weight, WeaponPrefix prefix, WeaponInfix infix, WeaponSuffix suffix)
 		{
-			name = "Weapon";
 			this.itemClass = ItemClass.Weapon;
 			this.type = type;
 			this.weight = weight;
@@ -109,6 +119,28 @@ namespace ItemSpace
 				speedMult = 1.25;
 				break;
 			}
+
+			string weightStr, prefixStr, infixStr, typeStr, suffixStr;
+
+			weightStr = weight.ToString ();
+
+			prefixStr = prefix.ToString ();
+			if (prefixApostrophes.Contains (prefix))
+				prefixStr += "'s";
+
+			infixStr = infix.ToString ();
+
+			typeStr = type.ToString ();
+
+			suffixStr = suffix.ToString ();
+			if (suffix == WeaponSuffix.Sight)
+				suffixStr = "True " + suffixStr;
+			if (!suffixNoThes.Contains (suffix))
+				suffixStr = "of the " + suffixStr;
+
+			name = String.Join (" ", new[] {
+				weightStr, prefixStr, infixStr, typeStr, suffixStr
+			});
 		}
 
 		public int AttackBonus {
@@ -197,6 +229,9 @@ namespace ItemSpace
 		Eagle,
 		Hawk,
 		Sight,
+		Strength,
+		Might,
+		Power,
 		Destruction
 	}
 }
