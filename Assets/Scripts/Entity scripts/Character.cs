@@ -1,44 +1,91 @@
 ﻿using System;
 using ItemSpace;
+using UnityEditor;
+using UnityEngine;
 
 namespace Completed
 {
 	public class Character : MovingObject
 	{
 		//leveled up with magic character points
-		private int baseHP;
-		private int baseArmor;
-		private int baseAttack;
+		protected int baseHP;
+		protected double baseDodge;
+		protected double baseBlock;
+		protected int baseAttack;
+		protected double baseAccuracy;
+		protected int baseRange;
 
 		//affected by items
-		private int totalHP;
-		private int totalArmor;
-		private int totalAttack;
+		protected int totalHP;
+		protected double totalDodge;
+		protected double totalBlock;
+		protected int totalAttack;
+		protected double totalAccuracy;
+		protected int totalRange;
 
-		private int currentHP;
+		protected int currentHP;
+
+		protected double baseSpeed;
+		protected double totalSpeed;
 
 		private EquippedItemSet equippedItems;
 		private Inventory inventory;
 
-		public Character () : this(7, 2, 3)
+		public Character () : this(100, .1, .1, 5, .9, 5, 1.0)
 		{
 			currentHP = 6;
 		}
 
-		public Character (int hp, int armor, int attack)
+		public Character (int hp, int armor, int attack, double accuracy, int range, double speed)
 		{
 			baseHP = hp;
-			baseArmor = armor;
 			baseAttack = attack;
+			baseAccuracy = accuracy;
+			baseRange = range;
+			baseSpeed = speed;
 
 			currentHP = baseHP;
 
 			totalHP = baseHP;
-			totalArmor = baseArmor;
 			totalAttack = baseAttack;
+			totalAccuracy = baseAccuracy;
+			totalRange = baseRange;
+			totalSpeed = baseSpeed;
 
 			equippedItems = new EquippedItemSet ();
 			inventory = new Inventory ();
+		}
+
+		/// <summary>
+		/// Ranged attack function
+		/// </summary>
+		/// <returns>The attack.</returns>
+		/// <param name="target">Target.</param>
+		public int RangedAttack(Character target) {
+			if (UnityEngine.Random.Range (0.0f, 1.0f) <= this.TotalAccuracy) {
+				if (UnityEngine.Random.Range (0.0f, 1.0f) > target.TotalDodge) {
+					int damage = this.TotalAttack + (int)(this.TotalAttack * (UnityEngine.Random.Range (0.0f, 1.0f) / 10 - .05));
+					target.CurrentHP -= damage;
+					return damage;
+				}
+			}
+			return 0;
+		}
+
+		/// <summary>
+		/// Melee attack function
+		/// </summary>
+		/// <returns>The attack.</returns>
+		/// <param name="target">Target.</param>
+		public int MeleeAttack(Character target) {
+			if (UnityEngine.Random.Range (0.0f, 1.0f) <= this.TotalAccuracy) {
+				if (UnityEngine.Random.Range (0.0f, 1.0f) > target.TotalBlock) {
+					int damage = this.TotalAttack + (int)(this.TotalAttack * (UnityEngine.Random.Range (0.0f, 1.0f) / 10 - .05));
+					target.CurrentHP -= damage;
+					return damage;
+				}
+			}
+			return 0;
 		}
 
 		/// <summary>
@@ -115,15 +162,6 @@ namespace Completed
 			}
 		}
 
-		public int BaseArmor {
-			get {
-				return this.baseArmor;
-			}
-			set {
-				baseArmor = value;
-			}
-		}
-
 		public int BaseAttack {
 			get {
 				return this.baseAttack;
@@ -139,15 +177,6 @@ namespace Completed
 			}
 			set {
 				totalHP = value;
-			}
-		}
-
-		public int TotalArmor {
-			get {
-				return this.totalArmor;
-			}
-			set {
-				totalArmor = value;
 			}
 		}
 

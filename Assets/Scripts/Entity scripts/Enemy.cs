@@ -43,16 +43,29 @@ namespace Completed
         }
 
 		/// <summary>
-		/// Reduces enemy's HP when clicked, in range
+		/// Reduces enemy's HP when clicked and in range
 		/// </summary>
 		void OnMouseDown() {
 			if (GameManager.instance.playersTurn) {
-				Debug.Log ("Enemy out of range");
-				if (Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)) <= player.attackRange) {
+
+				// Ranged attack (hoo-man)
+				if (!GameManager.instance.isWerewolf && Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)) <= player.TotalRange) {
 					GameManager.instance.enemyClicked = true;
-					int damage = player.TotalAttack - this.TotalArmor;
+					int damage = player.RangedAttack (this);
 					LoseHp (damage);
-					Debug.Log ("Damage done to enemy: " + damage);
+					Debug.Log ("Ranged damage: " + damage);
+				} else {
+					Debug.Log ("Enemy out of range");
+				}
+
+				// Melee attack (werewolf who is both were and a wolf)
+				if (GameManager.instance.isWerewolf && Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)) <= 1) {
+					GameManager.instance.enemyClicked = true;
+					int damage = player.MeleeAttack (this);
+					LoseHp (damage);
+					Debug.Log ("Melee damage: " + damage);
+				} else {
+					Debug.Log ("Enemy out of range");
 				}
 			}
 		}
@@ -67,14 +80,6 @@ namespace Completed
 				c.a += 0.05f;
 			this.GetComponent<SpriteRenderer>().color = c;
 		}
-
-        /*protected override void AttemptMove<T>(int xDir, int yDir)
-        {
-            
-            base.AttemptMove<T>(xDir, yDir);
-
-            skipMove = true;
-        }*/
 
 		/// <summary>
 		///	This is where the enemy logic goes, for the base class should be a basic line of sight = attack processing.
