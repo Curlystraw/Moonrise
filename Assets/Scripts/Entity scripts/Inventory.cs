@@ -5,11 +5,12 @@ namespace ItemSpace
 {
 	public class Inventory
 	{
-		private List<List<Item>> items;
+		private List<Item> items;
 
 		public Inventory()
 		{
-			items = new List<List<Item>>(Enum.GetNames(typeof(ItemClass)).Length);
+			items = new List<Item> ();
+
 		}
 
 		/// <summary>
@@ -20,7 +21,7 @@ namespace ItemSpace
 		public void AddItem(Item item)
 		{
 			if(item != null)
-				items[(int)item.ItemClass].Add(item);
+				items.Add(item);
 		}
 
 		/// <summary>
@@ -30,10 +31,10 @@ namespace ItemSpace
 		/// <param name="item">Item.</param>
 		public bool RemoveItem(Item item)
 		{
-			return items[(int)item.ItemClass].Remove(item);
+			return items.Remove(item);
 		}
 
-		public List<List<Item>> Items {
+		public List<Item> Items {
 			get {
 				return items;
 			}
