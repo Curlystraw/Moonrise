@@ -178,6 +178,24 @@ namespace Completed
 			}
 		}
 
+		public int TotalRange {
+			get {
+				return this.totalRange;
+			}
+			set {
+				totalRange = value;
+			}
+		}
+
+		public double TotalSpeed {
+			get {
+				return this.totalSpeed;
+			}
+			set {
+				totalSpeed = value;
+			}
+		}
+
 		public int CurrentHP {
 			get {
 				return this.currentHP;
