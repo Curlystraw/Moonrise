@@ -113,7 +113,7 @@ namespace Completed
 			if (item is EquipItem) {
 				equippable = (EquipItem)item;
 				if (RemoveItem (equippable)) {
-					Item unequipped = equippedItems.Unequip (equippable.GetItemClass ());
+					Item unequipped = equippedItems.Unequip (equippable.ItemClass);
 					if (equippable != null)
 						inventory.AddItem (unequipped);
 					equippedItems.Equip (equippable);
