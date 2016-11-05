@@ -30,6 +30,8 @@ namespace Completed
 		public LayerMask sightBlocks, fogLayer;
 		private ArrayList revealed;
 
+		//Healthbar object
+		public GameObject hpBar;
 
         // Use this for initialization
         protected override void Start()
@@ -61,6 +63,10 @@ namespace Completed
 		public void UpdateText(String message = "")
 		{
 			displayText.text = timeLeft + " | " + goldText + " | " + hpText;
+			Vector3 scale = hpBar.transform.localScale;
+			scale.x = ((float)currentHP/(float)totalHP);
+			hpBar.transform.localScale = scale;
+
 			if (message != "") {
 				displayText.text += " | " + message;
 			}
