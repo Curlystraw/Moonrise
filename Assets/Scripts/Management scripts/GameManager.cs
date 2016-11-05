@@ -16,12 +16,14 @@ namespace Completed
         public float turnDelay = 0.1f;                          
         public int playerGoldPoints = 100;
 		public int playerHp = 100;
+		public bool isWerewolf = false;
         public static GameManager instance = null;              
         [HideInInspector]
-        public bool playersTurn = true;       
+        public bool playersTurn = true;     
+		public bool enemyClicked = false;
 
 
-        private Text levelText;                                 
+        private Text levelText, actionText;                                 
         private GameObject levelImage;                        
         private BoardManager boardScript;                       
         private int level = 1;                                  
@@ -77,6 +79,8 @@ namespace Completed
             levelImage = GameObject.Find("LevelImage");
 
             levelText = GameObject.Find("LevelText").GetComponent<Text>();
+			actionText = GameObject.Find("ActionText").GetComponent<Text>();
+
 
             levelText.text = "Day " + level;
 
@@ -122,6 +126,13 @@ namespace Completed
             enabled = false;
         }
 
+		public void RemoveEnemyFromList(Enemy script) 
+		{
+			enemies.Remove (script);
+
+		}
+
+
 		/// <summary>
 		/// Processes enemy turns
 		/// </summary>
@@ -149,7 +160,9 @@ namespace Completed
 					
 					
 				}
-				yield return new WaitForSeconds(enemies[0].moveTime+0.05f);
+				if (enemies.Count > 0) {
+					yield return new WaitForSeconds(enemies[0].moveTime+0.05f);
+				}
 				init = false;		//Make sure the enemies don't get speed added each time
 			}
 			
@@ -157,6 +170,34 @@ namespace Completed
 
             enemiesMoving = false;
         }
+
+		/// <summary>
+		/// Gets enemy at position pos
+		/// </summary>
+		/// <returns>The enemy.</returns>
+		/// <param name="pos">Position.</param>
+		public GameObject getEnemy(Vector2 pos){
+			foreach(Enemy e in enemies){
+				Transform t = e.transform;
+				if(new Vector2(t.position.x,t.position.y).Equals(pos)){
+					return t.gameObject;
+				}
+			}
+			return null;
+		}
+
+		/// <summary>
+		/// Adds "string" to the action log
+		/// </summary>
+		public void print(string s){
+			Debug.Log(s);
+			actionText.text += s+"\n";
+		}
+
+
+		public void clearLog(){
+			actionText.text = "";
+		}
     }
 }
 
