@@ -172,6 +172,8 @@ public class BoardManager : MonoBehaviour {
 			}
 
 			open.Sort();
+			if (open.Count == 0)	// return empty list if there is no possible path
+				return new List<Vector2> ();
 			current = open[0];
 			open.RemoveAt(0);
 			closed.Add(current.loc);
