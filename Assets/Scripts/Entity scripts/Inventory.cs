@@ -20,7 +20,7 @@ namespace ItemSpace
 		public void AddItem(Item item)
 		{
 			if(item != null)
-				items[(int)item.GetItemClass()].Add(item);
+				items[(int)item.ItemClass].Add(item);
 		}
 
 		/// <summary>
@@ -30,7 +30,7 @@ namespace ItemSpace
 		/// <param name="item">Item.</param>
 		public bool RemoveItem(Item item)
 		{
-			return items[(int)item.GetItemClass()].Remove(item);
+			return items[(int)item.ItemClass].Remove(item);
 		}
 
 		public List<List<Item>> Items {

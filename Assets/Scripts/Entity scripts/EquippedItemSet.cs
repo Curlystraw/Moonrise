@@ -26,7 +26,7 @@ namespace ItemSpace
 		/// <returns>Whether the item was successfully equipped.</returns>
 		public bool Equip(EquipItem item)
 		{
-			ItemClass ic = item.GetItemClass();
+			ItemClass ic = item.ItemClass;
 			if (items.ContainsKey (ic) && items [ic] == null) {
 				items [ic] = item;
 				return true;
