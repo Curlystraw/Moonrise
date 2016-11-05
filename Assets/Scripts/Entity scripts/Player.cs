@@ -9,10 +9,10 @@ namespace Completed
 
 	public class Player : Character
     {
-		public int sneak = 4;
         public int wallDamage = 1;
         public int pointsPerGold = 10;
         public float restartLevelDelay = 1f;
+		public int sneak = 4;
 		public float sightRange = 12f;
 		public Sprite werewolfSprite;
 		public Sprite humanSprite;
@@ -110,6 +110,8 @@ namespace Completed
             GameManager.instance.playersTurn = false;
         }
 
+        //pick up an item. If nothing on square does nothing.
+
         private void OnTriggerEnter2D(Collider2D other)
         {
 			//Debug.Log("#TRIGGERED");
@@ -118,13 +120,18 @@ namespace Completed
                 Invoke("Restart", restartLevelDelay);
                 enabled = false;
             }
-            else if (other.tag == "Gold")
+            else if (other.tag == "Item")
             {
 				GameManager.instance.playerGoldPoints += pointsPerGold;
 				goldText = "Gold: " + GameManager.instance.playerGoldPoints;
 				String message = "+" + pointsPerGold + " Gold";
                 other.gameObject.SetActive(false);
             }
+        }
+
+        private void interact()
+        {
+
         }
 
         protected override void OnCantMove<T>(T component)
