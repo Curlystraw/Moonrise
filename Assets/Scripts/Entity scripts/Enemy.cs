@@ -6,7 +6,7 @@ namespace Completed
 	/// <summary>
 	/// Generic enemy class, contains a melee attack and line-of-sight based aggression.
 	/// </summary>
-    public class Enemy : MovingObject
+	public class Enemy : Character
     {
 
         public int playerDamage;
@@ -42,6 +42,44 @@ namespace Completed
 			path = new List<Vector2>();
         }
 
+		/// <summary>
+		/// Reduces enemy's HP when clicked and in range
+		/// </summary>
+		void OnMouseDown() {
+			if (GameManager.instance.playersTurn) {
+				GameManager.instance.clearLog();
+				if(!GameManager.instance.isWerewolf){
+					// Ranged attack (hoo-man)
+					if (Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)) <= player.TotalRange) {
+						GameManager.instance.enemyClicked = true;
+						int damage = player.RangedAttack (this);
+						if(damage > 0)
+							GameManager.instance.print ("Ranged damage: " + damage);
+						else
+							GameManager.instance.print ("You miss!");
+							
+						LoseHp (damage);
+					} else {
+						GameManager.instance.print("Enemy out of range");
+					}
+				}
+				else{
+					// Melee attack (werewolf who is both were and a wolf)
+					if (Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)) <= 1) {
+						GameManager.instance.enemyClicked = true;
+						int damage = player.MeleeAttack (this);
+						LoseHp (damage);
+						if(damage > 0	)
+							GameManager.instance.print ("Melee damage: " + damage);
+						else
+							GameManager.instance.print ("You miss!");
+					} else {
+						GameManager.instance.print ("Enemy out of range");
+					}
+				}
+			}
+		}
+
 		protected void Update(){
 			//checkVisible();
 
@@ -52,14 +90,6 @@ namespace Completed
 				c.a += 0.05f;
 			this.GetComponent<SpriteRenderer>().color = c;
 		}
-
-        /*protected override void AttemptMove<T>(int xDir, int yDir)
-        {
-            
-            base.AttemptMove<T>(xDir, yDir);
-
-            skipMove = true;
-        }*/
 
 		/// <summary>
 		///	This is where the enemy logic goes, for the base class should be a basic line of sight = attack processing.
@@ -73,8 +103,9 @@ namespace Completed
 			float range = sightRange-player.sneak;
 			if(hit.transform == target && hit.distance <= range){
 				targetLoc = new Vector2(target.position.x,target.position.y);
+				if(path.Count == 0)
+					GameManager.instance.print("You hear a shout!");
 				path = board.findPath(new Vector2((int)transform.position.x,(int)transform.position.y),targetLoc);
-				Debug.Log("\"Target sighted!\" - "+this.name.ToString());
 				/*for(int i = 0; i < path.Count; i++){
 					Vector2 targ = path[i];
 					Instantiate(indicator, new Vector2(targ.x,targ.y), Quaternion.identity);
@@ -147,12 +178,12 @@ namespace Completed
         }
 
 
-
         protected override void OnCantMove<T>(T component)
         {
             Player hitPlayer = component as Player;
 
             hitPlayer.LoseHp(playerDamage);
+			GameManager.instance.print("The enemy strikes you!");
         }
 
 		protected override void OnFinishMove ()
@@ -190,6 +221,14 @@ namespace Completed
 
 		public void isVisible(bool v){
 			visible = v;
+		}
+
+
+
+		protected override void KillObject()
+		{
+			GameManager.instance.RemoveEnemyFromList (this);
+			Destroy (gameObject);
 		}
     }
 }
