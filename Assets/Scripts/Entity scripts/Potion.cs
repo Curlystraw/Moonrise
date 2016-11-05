@@ -4,9 +4,9 @@ namespace ItemSpace
 {
 	public abstract class Potion : ConsumeItem
 	{
-		public override ItemClass GetItemClass ()
+		public Potion()
 		{
-			return ItemClass.Potion;
+			itemClass = ItemClass.Potion;
 		}
 	}
 }

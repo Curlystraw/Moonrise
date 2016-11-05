@@ -33,20 +33,21 @@ namespace Completed
 
 		public Character () : this(100, .1, .1, 5, .9, 5, 1.0)
 		{
-			currentHP = 6;
 		}
-
-		public Character (int hp, int armor, int attack, double accuracy, int range, double speed)
+			
+		public Character (int hp, double dodge, double block, int attack, double accuracy,int range, double speed)
 		{
 			baseHP = hp;
+			baseBlock = block;
 			baseAttack = attack;
 			baseAccuracy = accuracy;
 			baseRange = range;
 			baseSpeed = speed;
 
 			currentHP = baseHP;
-
 			totalHP = baseHP;
+
+			totalBlock = baseBlock;
 			totalAttack = baseAttack;
 			totalAccuracy = baseAccuracy;
 			totalRange = baseRange;
@@ -98,6 +99,16 @@ namespace Completed
 		}
 
 		/// <summary>
+		/// Remove the item from the inventory.
+		/// </summary>
+		/// <returns><c>true</c>, if item was removed, <c>false</c> otherwise.</returns>
+		/// <param name="item">Item.</param>
+		public bool RemoveItem(Item item)
+		{
+			return inventory.RemoveItem (item);
+		}
+
+		/// <summary>
 		/// Equip the selected item from the inventory, 
 		/// and remove the item from the inventory.
 		/// If an item of the same type is already equipped, unequip it.
@@ -109,12 +120,13 @@ namespace Completed
 			if (item is EquipItem) {
 				equippable = (EquipItem)item;
 				if (RemoveItem (equippable)) {
-					Item unequipped = equippedItems.Unequip (equippable.GetItemClass ());
+					Item unequipped = equippedItems.Unequip (equippable.ItemClass);
 					if (equippable != null)
 						inventory.AddItem (unequipped);
 					equippedItems.Equip (equippable);
 				}
 			}
+			// TODO: update stats based on changed items
 		}
 
 		/// <summary>
@@ -143,22 +155,22 @@ namespace Completed
 			AddItem (unequipped);
 		}
 
-		/// <summary>
-		/// Remove the item from the inventory.
-		/// </summary>
-		/// <returns><c>true</c>, if item was removed, <c>false</c> otherwise.</returns>
-		/// <param name="item">Item.</param>
-		public bool RemoveItem(Item item)
-		{
-			return inventory.RemoveItem (item);
-		}
-			
-		public int BaseHP {
+		#region properties	
+		public int TotalHP {
 			get {
-				return this.baseHP;
+				return this.totalHP;
 			}
 			set {
-				baseHP = value;
+				totalHP = value;
+			}
+		}
+
+		public double TotalDodge {
+			get {
+				return this.totalDodge;
+			}
+			set {
+				totalDodge = value;
 			}
 		}
 
@@ -171,12 +183,12 @@ namespace Completed
 			}
 		}
 
-		public int TotalHP {
+		public double TotalBlock {
 			get {
-				return this.totalHP;
+				return this.totalBlock;
 			}
 			set {
-				totalHP = value;
+				totalBlock = value;
 			}
 		}
 
@@ -186,6 +198,33 @@ namespace Completed
 			}
 			set {
 				totalAttack = value;
+			}
+		}
+
+		public double TotalAccuracy {
+			get {
+				return this.totalAccuracy;
+			}
+			set {
+				totalAccuracy = value;
+			}
+		}
+
+		public int TotalRange {
+			get {
+				return this.totalRange;
+			}
+			set {
+				totalRange = value;
+			}
+		}
+
+		public double TotalSpeed {
+			get {
+				return this.totalSpeed;
+			}
+			set {
+				totalSpeed = value;
 			}
 		}
 
@@ -200,18 +239,22 @@ namespace Completed
 
 		public EquippedItemSet EquippedItems {
 			get {
-				return equippedItems;
+				return this.equippedItems;
+			}
+			set {
+				equippedItems = value;
 			}
 		}
 
 		public Inventory Inventory {
 			get {
-				return inventory;
+				return this.inventory;
 			}
 			set {
 				inventory = value;
 			}
 		}
+		#endregion
 
 		protected override void OnCantMove<T>(T component)
 		{

@@ -39,7 +39,7 @@ namespace Completed
 			original = this.gameObject.GetComponent<SpriteRenderer> ().color;
 			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
 			goldText = "Gold: " + GameManager.instance.playerGoldPoints;
-			hpText = "HP: " + GameManager.instance.playerHp;
+			hpText = "HP: " + this.CurrentHP;
 			UpdateText ();
 		
 			animator = GetComponent<Animator>();
@@ -147,6 +147,7 @@ namespace Completed
 				GameManager.instance.playerGoldPoints += pointsPerGold;
 				goldText = "Gold: " + GameManager.instance.playerGoldPoints;
 				String message = "+" + pointsPerGold + " Gold";
+				UpdateText ();
                 other.gameObject.SetActive(false);
             }
         }
@@ -170,9 +171,9 @@ namespace Completed
 
 		public void LoseHp(int loss)
 		{
-			GameManager.instance.playerHp -= loss;
+			this.CurrentHP -= loss;
 			String message = "-" + loss + " HP";
-			hpText = "HP: " + GameManager.instance.playerHp;
+			hpText = "HP: " + this.CurrentHP;
 			UpdateText ();
 			CheckIfGameOver();
 		}
@@ -187,7 +188,7 @@ namespace Completed
 
         private void CheckIfGameOver()
         {
-			if (GameManager.instance.playerGoldPoints <= 0 || GameManager.instance.playerHp <= 0)
+			if (GameManager.instance.playerGoldPoints <= 0 || this.CurrentHP <= 0)
             {
                 GameManager.instance.GameOver();
             }
@@ -248,14 +249,16 @@ namespace Completed
 		private void switchForm () {
 			GameManager.instance.isWerewolf = !GameManager.instance.isWerewolf;
 			if (GameManager.instance.isWerewolf) {
-				GameManager.instance.playerHp *= 2;
-				hpText = "HP: " + GameManager.instance.playerHp;
+				this.TotalHP *= 2;
+				this.CurrentHP *= 2;
+				hpText = "HP: " + this.CurrentHP;
 				UpdateText ();
 				this.gameObject.GetComponent<SpriteRenderer> ().sprite = werewolfSprite;
 				this.gameObject.GetComponent<SpriteRenderer> ().color = Color.gray;
 			} else {
-				GameManager.instance.playerHp /= 2;
-				hpText = "HP: " + GameManager.instance.playerHp;
+				this.TotalHP /= 2;
+				this.CurrentHP /= 2;
+				hpText = "HP: " + this.CurrentHP;
 				UpdateText ();
 				this.gameObject.GetComponent<SpriteRenderer> ().sprite = humanSprite;
 				this.gameObject.GetComponent<SpriteRenderer> ().color = original;
