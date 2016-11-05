@@ -49,6 +49,13 @@ namespace ItemSpace
 			return null;
 		}
 
+		public Item Get(ItemClass ic)
+		{
+			if (items.ContainsKey (ic))
+				return items [ic];
+			return null;
+		}
+
 		public Dictionary<ItemClass, EquipItem> Items {
 			get {
 				return items;

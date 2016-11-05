@@ -6,7 +6,7 @@ namespace ItemSpace
 	{
 		public Crossbow ()
 		{
-			this.power = 5;
+			this.attack = 5;
 			this.range = 5;
 			this.description = "This is a crossbow.";
 		}
