@@ -33,6 +33,7 @@ namespace ItemSpace
 
 		public Weapon(WeaponType type, WeaponWeight weight, WeaponPrefix prefix, WeaponInfix infix, WeaponSuffix suffix)
 		{
+			name = "Weapon";
 			this.itemClass = ItemClass.Weapon;
 			this.type = type;
 			this.weight = weight;
