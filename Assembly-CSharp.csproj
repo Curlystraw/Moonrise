@@ -45,7 +45,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\ActualMarketGeneration\ActualMarketGeneration.cs" />
+     <Compile Include="Assets\ActualMarketGeneration\Builder.cs" />
+     <Compile Include="Assets\ActualMarketGeneration\CenterMarket.cs" />
+     <Compile Include="Assets\ActualMarketGeneration\Market.cs" />
+     <Compile Include="Assets\ActualMarketGeneration\RoadBuilder.cs" />
+     <Compile Include="Assets\ActualMarketGeneration\SideMarket.cs" />
      <Compile Include="Assets\CameraMove.cs" />
+     <Compile Include="Assets\GenerateMarket.cs" />
      <Compile Include="Assets\MazeGenerator2.cs" />
      <Compile Include="Assets\Scripts\Entity scripts\Enemy.cs" />
      <Compile Include="Assets\Scripts\Entity scripts\MovingObject.cs" />

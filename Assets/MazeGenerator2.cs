@@ -200,11 +200,12 @@ public class MazeGenerator2 : MonoBehaviour {
 					for (int w = 0; w < room.tiles.GetLength (0); w++) {
 						room.tiles [w, h] = new Tile ();
 						Destroy (largeGrid [(int)roomParents [iter].transform.position.x + w, (int)roomParents [iter].transform.position.y + h].obj);
-						if (h == 0 || w == 0 || h == room.tiles.GetLength (1) - 1 || w == room.tiles.GetLength (0) - 1) {
+						/*if (h == 0 || w == 0 || h == room.tiles.GetLength (1) - 1 || w == room.tiles.GetLength (0) - 1) {
 							room.tiles [w, h].obj = Instantiate (wall) as GameObject;
 						} else {
 							room.tiles [w, h].obj = Instantiate (floor) as GameObject;
-						}
+						}*/
+						room.tiles [w, h].obj = Instantiate (floor) as GameObject;
 						//yield return new WaitForSeconds (speed);
 						room.tiles [w, h].obj.transform.parent = roomParents [iter].transform;
 						room.tiles [w, h].obj.transform.localPosition = new Vector3 (w, h, 0);
