@@ -37,6 +37,7 @@ public class BoardManager : MonoBehaviour {
     public GameObject[] wallTiles;
     public GameObject[] goldTiles;
     public GameObject[] enemyTiles;
+	public GameObject[] chestTiles;
     public GameObject[] outerWallTiles;
 
     
@@ -135,6 +136,8 @@ public class BoardManager : MonoBehaviour {
         InitializeList();       //Create the list of board positions
         LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);      //Place wall tiles
         LayoutObjectAtRandom(goldTiles, goldCount.minimum, goldCount.maximum);      //Place gold tiles
+		int chestCount = 7;
+		LayoutObjectAtRandom (chestTiles, chestCount, chestCount);
         int enemyCount = 2;//(int)Mathf.Log(level, 2f);
         LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);                   //Place enemies
         Instantiate(door1, new Vector2(columns - 1, rows - 1), Quaternion.identity);//Create the floor exit
