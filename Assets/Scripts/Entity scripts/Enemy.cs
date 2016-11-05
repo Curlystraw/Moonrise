@@ -42,6 +42,13 @@ namespace Completed
 			path = new List<Vector2>();
         }
 
+		void OnMouseDown() {
+			if (GameManager.instance.playersTurn) {
+				GameManager.instance.enemyClicked = true;
+				LoseHp (5);
+			}
+		}
+
 		protected void Update(){
 			//checkVisible();
 
@@ -189,6 +196,14 @@ namespace Completed
 
 		public void isVisible(bool v){
 			visible = v;
+		}
+
+
+
+		protected override void KillObject()
+		{
+			GameManager.instance.RemoveEnemyFromList (this);
+			Destroy (gameObject);
 		}
     }
 }

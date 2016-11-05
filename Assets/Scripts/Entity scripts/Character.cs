@@ -7,38 +7,79 @@ namespace Completed
 	{
 		//leveled up with magic character points
 		private int baseHP;
-		private int baseArmor;
+		private double baseDodge;
+		private double baseBlock;
 		private int baseAttack;
+		private double baseAccuracy;
+		private int baseRange;
 
 		//affected by items
 		private int totalHP;
-		private int totalArmor;
+		private double totalDodge;
+		private double totalBlock;
 		private int totalAttack;
+		private double totalAccuracy;
+		private int totalRange;
 
 		private int currentHP;
+
+		private double baseSpeed;
+		private double totalSpeed;
+
 
 		private EquippedItemSet equippedItems;
 		private Inventory inventory;
 
-		public Character () : this(7, 2, 3)
+		Random rand = new Random();
+
+		public Character () : this(100, .1, .1, 5, .9, 5, 1.0)
 		{
-			currentHP = 6;
 		}
 
-		public Character (int hp, int armor, int attack)
+		public Character (int hp, double dodge, double block, int attack, double accuracy,int range, double speed)
 		{
 			baseHP = hp;
-			baseArmor = armor;
+			baseBlock = block;
 			baseAttack = attack;
 
 			currentHP = baseHP;
 
 			totalHP = baseHP;
-			totalArmor = baseArmor;
+			totalBlock = baseBlock;
 			totalAttack = baseAttack;
 
 			equippedItems = new EquippedItemSet ();
 			inventory = new Inventory ();
+		}
+		/// <summary>
+		/// Ranged attack function
+		/// </summary>
+		/// <returns>The attack.</returns>
+		/// <param name="target">Target.</param>
+		public int RangedAttack(Character target) {
+			if (rand.NextDouble () <= this.TotalAccuracy) {
+				if (rand.NextDouble () > target.TotalDodge) {
+					int damage = this.TotalAttack + (int)(this.TotalAttack * (rand.NextDouble () / 10 - .05));
+					target.CurrentHP -= damage;
+					return damage;
+				}
+			}
+			return 0;
+		}
+		/// <summary>
+		/// Melee attack function
+		/// </summary>
+		/// <returns>The attack.</returns>
+		/// <param name="target">Target.</param>
+		public int MeleeAttack(Character target) {
+			if (rand.NextDouble () <= this.TotalAccuracy) {
+				if (rand.NextDouble () > target.TotalBlock) {
+					int damage = this.TotalAttack + (int)(this.TotalAttack * (rand.NextDouble () / 10 - .05));
+					target.CurrentHP -= damage;
+					return damage;
+				}
+			}
+			return 0;
 		}
 
 		/// <summary>
@@ -48,6 +89,16 @@ namespace Completed
 		public void AddItem(Item item)
 		{
 			inventory.AddItem (item);
+		}
+
+		/// <summary>
+		/// Remove the item from the inventory.
+		/// </summary>
+		/// <returns><c>true</c>, if item was removed, <c>false</c> otherwise.</returns>
+		/// <param name="item">Item.</param>
+		public bool RemoveItem(Item item)
+		{
+			return inventory.RemoveItem (item);
 		}
 
 		/// <summary>
@@ -68,8 +119,25 @@ namespace Completed
 					equippedItems.Equip (equippable);
 				}
 			}
+			// TODO: update stats based on changed items
 		}
 
+		/// <summary>
+		/// Drops hp by loss
+		/// </summary>
+		/// <param name="loss">Loss.</param>
+		public virtual void LoseHp(int loss)
+		{
+			currentHP -= loss;
+			if (currentHP <= 0) {
+				KillObject ();
+			}
+			return;
+		}
+
+		protected virtual void KillObject()
+		{
+		}
 		/// <summary>
 		/// Unequip the item and add it to the inventory.
 		/// </summary>
@@ -80,43 +148,7 @@ namespace Completed
 			AddItem (unequipped);
 		}
 
-		/// <summary>
-		/// Remove the item from the inventory.
-		/// </summary>
-		/// <returns><c>true</c>, if item was removed, <c>false</c> otherwise.</returns>
-		/// <param name="item">Item.</param>
-		public bool RemoveItem(Item item)
-		{
-			return inventory.RemoveItem (item);
-		}
-			
-		public int BaseHP {
-			get {
-				return this.baseHP;
-			}
-			set {
-				baseHP = value;
-			}
-		}
-
-		public int BaseArmor {
-			get {
-				return this.baseArmor;
-			}
-			set {
-				baseArmor = value;
-			}
-		}
-
-		public int BaseAttack {
-			get {
-				return this.baseAttack;
-			}
-			set {
-				baseAttack = value;
-			}
-		}
-
+		#region properties	
 		public int TotalHP {
 			get {
 				return this.totalHP;
@@ -126,12 +158,21 @@ namespace Completed
 			}
 		}
 
-		public int TotalArmor {
+		public double TotalDodge {
 			get {
-				return this.totalArmor;
+				return this.totalDodge;
 			}
 			set {
-				totalArmor = value;
+				totalDodge = value;
+			}
+		}
+
+		public double TotalBlock {
+			get {
+				return this.totalBlock;
+			}
+			set {
+				totalBlock = value;
 			}
 		}
 
@@ -141,6 +182,33 @@ namespace Completed
 			}
 			set {
 				totalAttack = value;
+			}
+		}
+
+		public double TotalAccuracy {
+			get {
+				return this.totalAccuracy;
+			}
+			set {
+				totalAccuracy = value;
+			}
+		}
+
+		public int TotalRange {
+			get {
+				return this.totalRange;
+			}
+			set {
+				totalRange = value;
+			}
+		}
+
+		public double TotalSpeed {
+			get {
+				return this.totalSpeed;
+			}
+			set {
+				totalSpeed = value;
 			}
 		}
 
@@ -155,18 +223,22 @@ namespace Completed
 
 		public EquippedItemSet EquippedItems {
 			get {
-				return equippedItems;
+				return this.equippedItems;
+			}
+			set {
+				equippedItems = value;
 			}
 		}
 
 		public Inventory Inventory {
 			get {
-				return inventory;
+				return this.inventory;
 			}
 			set {
 				inventory = value;
 			}
 		}
+		#endregion
 
 		protected override void OnCantMove<T>(T component)
 		{
