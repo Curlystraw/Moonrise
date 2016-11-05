@@ -123,6 +123,22 @@ namespace Completed
 		}
 
 		/// <summary>
+		/// Drops hp by loss
+		/// </summary>
+		/// <param name="loss">Loss.</param>
+		public virtual void LoseHp(int loss)
+		{
+			currentHP -= loss;
+			if (currentHP <= 0) {
+				KillObject ();
+			}
+			return;
+		}
+
+		protected virtual void KillObject()
+		{
+		}
+		/// <summary>
 		/// Unequip the item and add it to the inventory.
 		/// </summary>
 		/// <param name="ic">Item class.</param>
