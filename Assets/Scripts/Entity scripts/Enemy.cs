@@ -42,10 +42,18 @@ namespace Completed
 			path = new List<Vector2>();
         }
 
+		/// <summary>
+		/// When enemy is clicked
+		/// </summary>
 		void OnMouseDown() {
 			if (GameManager.instance.playersTurn) {
-				GameManager.instance.enemyClicked = true;
-				LoseHp (5);
+				Debug.Log (Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)));
+				Debug.Log (player.attackRange);
+				if (Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)) <= player.attackRange) {
+					GameManager.instance.enemyClicked = true;
+					LoseHp (5); // damage done to enemy---currently constant number
+
+				}
 			}
 		}
 

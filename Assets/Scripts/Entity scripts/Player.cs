@@ -14,6 +14,7 @@ namespace Completed
         public float restartLevelDelay = 1f;
 		public int sneak = 4;
 		public float sightRange = 12f;
+		public int attackRange = 3;
 		public Sprite werewolfSprite;
 		public Sprite humanSprite;
 		public Color original;
