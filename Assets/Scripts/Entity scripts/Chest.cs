@@ -7,7 +7,6 @@ namespace Completed {
 		private Player player;
 		// Use this for initialization
 		void Start () {
-			BaseHP = 1;
 			CurrentHP = 1;
 			playerTransform = GameObject.FindGameObjectWithTag ("Player").transform;
 			player = playerTransform.GetComponent<Player>();
