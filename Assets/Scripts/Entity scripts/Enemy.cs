@@ -43,16 +43,16 @@ namespace Completed
         }
 
 		/// <summary>
-		/// When enemy is clicked
+		/// Reduces enemy's HP when clicked, in range
 		/// </summary>
 		void OnMouseDown() {
 			if (GameManager.instance.playersTurn) {
-				Debug.Log (Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)));
-				Debug.Log (player.attackRange);
+				Debug.Log ("Enemy out of range");
 				if (Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)) <= player.attackRange) {
 					GameManager.instance.enemyClicked = true;
-					LoseHp (5); // damage done to enemy---currently constant number
-
+					int damage = player.TotalAttack - this.TotalArmor;
+					LoseHp (damage);
+					Debug.Log ("Damage done to enemy: " + damage);
 				}
 			}
 		}
