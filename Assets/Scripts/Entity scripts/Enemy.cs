@@ -50,7 +50,7 @@ namespace Completed
 				Debug.Log ("Enemy out of range");
 				if (Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)) <= player.attackRange) {
 					GameManager.instance.enemyClicked = true;
-					int damage = player.TotalAttack - this.TotalArmor;
+					int damage = player.TotalAttack;
 					LoseHp (damage);
 					Debug.Log ("Damage done to enemy: " + damage);
 				}
