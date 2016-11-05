@@ -23,7 +23,7 @@ namespace Completed
 		public bool enemyClicked = false;
 
 
-        private Text levelText;                                 
+        private Text levelText, actionText;                                 
         private GameObject levelImage;                        
         private BoardManager boardScript;                       
         private int level = 1;                                  
@@ -79,6 +79,8 @@ namespace Completed
             levelImage = GameObject.Find("LevelImage");
 
             levelText = GameObject.Find("LevelText").GetComponent<Text>();
+			actionText = GameObject.Find("ActionText").GetComponent<Text>();
+
 
             levelText.text = "Day " + level;
 
@@ -182,6 +184,19 @@ namespace Completed
 				}
 			}
 			return null;
+		}
+
+		/// <summary>
+		/// Adds "string" to the action log
+		/// </summary>
+		public void print(string s){
+			Debug.Log(s);
+			actionText.text += s+"\n";
+		}
+
+
+		public void clearLog(){
+			actionText.text = "";
 		}
     }
 }

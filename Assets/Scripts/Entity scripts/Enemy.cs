@@ -47,25 +47,35 @@ namespace Completed
 		/// </summary>
 		void OnMouseDown() {
 			if (GameManager.instance.playersTurn) {
-
-				// Ranged attack (hoo-man)
-				if (!GameManager.instance.isWerewolf && Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)) <= player.TotalRange) {
-					GameManager.instance.enemyClicked = true;
-					int damage = player.RangedAttack (this);
-					LoseHp (damage);
-					Debug.Log ("Ranged damage: " + damage);
-				} else {
-					Debug.Log ("Enemy out of range");
+				GameManager.instance.clearLog();
+				if(!GameManager.instance.isWerewolf){
+					// Ranged attack (hoo-man)
+					if (Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)) <= player.TotalRange) {
+						GameManager.instance.enemyClicked = true;
+						int damage = player.RangedAttack (this);
+						if(damage > 0)
+							GameManager.instance.print ("Ranged damage: " + damage);
+						else
+							GameManager.instance.print ("You miss!");
+							
+						LoseHp (damage);
+					} else {
+						GameManager.instance.print("Enemy out of range");
+					}
 				}
-
-				// Melee attack (werewolf who is both were and a wolf)
-				if (GameManager.instance.isWerewolf && Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)) <= 1) {
-					GameManager.instance.enemyClicked = true;
-					int damage = player.MeleeAttack (this);
-					LoseHp (damage);
-					Debug.Log ("Melee damage: " + damage);
-				} else {
-					Debug.Log ("Enemy out of range");
+				else{
+					// Melee attack (werewolf who is both were and a wolf)
+					if (Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)) <= 1) {
+						GameManager.instance.enemyClicked = true;
+						int damage = player.MeleeAttack (this);
+						LoseHp (damage);
+						if(damage > 0	)
+							GameManager.instance.print ("Melee damage: " + damage);
+						else
+							GameManager.instance.print ("You miss!");
+					} else {
+						GameManager.instance.print ("Enemy out of range");
+					}
 				}
 			}
 		}
@@ -93,8 +103,9 @@ namespace Completed
 			float range = sightRange-player.sneak;
 			if(hit.transform == target && hit.distance <= range){
 				targetLoc = new Vector2(target.position.x,target.position.y);
+				if(path.Count == 0)
+					GameManager.instance.print("You hear a shout!");
 				path = board.findPath(new Vector2((int)transform.position.x,(int)transform.position.y),targetLoc);
-				Debug.Log("\"Target sighted!\" - "+this.name.ToString());
 				/*for(int i = 0; i < path.Count; i++){
 					Vector2 targ = path[i];
 					Instantiate(indicator, new Vector2(targ.x,targ.y), Quaternion.identity);
@@ -172,6 +183,7 @@ namespace Completed
             Player hitPlayer = component as Player;
 
             hitPlayer.LoseHp(playerDamage);
+			GameManager.instance.print("The enemy strikes you!");
         }
 
 		protected override void OnFinishMove ()

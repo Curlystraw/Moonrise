@@ -21,7 +21,7 @@ namespace Completed {
 			// if(hp == 0) {
 			if (Mathf.Sqrt(Mathf.Pow(playerTransform.position.x - this.transform.position.x, 2) + Mathf.Pow(playerTransform.position.y - this.transform.position.y, 2)) == 1) {
 				player.AddItem (item);
-				print ("A " + item.Name + " was added to inventory");
+				GameManager.instance.print ("A " + item.Name + " was added to inventory");
 				Destroy (this.gameObject);
 			}
 	

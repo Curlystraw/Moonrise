@@ -78,6 +78,7 @@ namespace Completed
             if (!GameManager.instance.playersTurn) return;
 
 			if (Input.GetKeyDown (KeyCode.T)) {
+				actionText.text = "";
 				switchForm ();
 				GameManager.instance.playersTurn = false;
 				GameManager.instance.timeLeft--;
@@ -86,6 +87,7 @@ namespace Completed
 				return;
 			} else if (Input.GetMouseButtonDown (0)) {
 				if (GameManager.instance.enemyClicked) {
+					
 					RangedAttack ();
 				}
 			}
@@ -100,7 +102,8 @@ namespace Completed
                 vertical = 0;
 
             if (horizontal != 0 || vertical != 0 || spacebar)
-            {
+			{
+				actionText.text = "";
                 AttemptMove<Wall>(horizontal, vertical);
             }
         }
@@ -123,7 +126,7 @@ namespace Completed
 
 		protected void RangedAttack()
 		{
-			actionText.text = "You attacked an enemy!";
+			actionText.text += "You attacked an enemy!\n";
 			GameManager.instance.enemyClicked = false;
 
 			EndTurn ();
@@ -150,6 +153,7 @@ namespace Completed
             }
             else if (other.tag == "Item")
             {
+				GameManager.instance.print("Picked up "+pointsPerGold+" gold");
 				GameManager.instance.playerGoldPoints += pointsPerGold;
 				goldText = "Gold: " + GameManager.instance.playerGoldPoints;
 				String message = "+" + pointsPerGold + " Gold";
