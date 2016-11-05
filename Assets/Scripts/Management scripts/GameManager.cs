@@ -158,7 +158,9 @@ namespace Completed
 					
 					
 				}
-				yield return new WaitForSeconds(enemies[0].moveTime+0.05f);
+				if (enemies.Count > 0) {
+					yield return new WaitForSeconds(enemies[0].moveTime+0.05f);
+				}
 				init = false;		//Make sure the enemies don't get speed added each time
 			}
 			
