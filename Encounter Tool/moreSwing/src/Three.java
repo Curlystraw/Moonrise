@@ -5,6 +5,7 @@ import java.awt.event.KeyListener;
 
 import javax.swing.*;
 
+
 import two.Two;
 
 class Three extends JFrame
@@ -17,7 +18,8 @@ class Three extends JFrame
 	//	10/25/16	Version 3.2		3.2
 	//	10/26/16	Version 3.3		3.3
 	//  11/02/16	Version 3.4		3.4
-	//  11/04/16	Version 3.5		3.5
+	//  11/04/16	Version 3.5		3.5 ***THIS IS THE PRE-CRUNCH VERSION***
+	//	11/04/16	Version 3.6		3.6 ***THIS IS THE POST-CRUNCH VERSION***
 	
 	//I've done some math (counting) and we need 40 frames.
 	//That means (at my calculations) we need like 683 separate parts of the xml file.
@@ -33,8 +35,16 @@ class Three extends JFrame
 	 * ......\____/......./________/.../_/........./_/...../_/........./_/....../__/........./__/..../_/..........
 	 */
 		
+	//Output stuff
+	OutputFrame frame = new OutputFrame();
+	
 	//Font stuff
-	Font myFont = new Font("Helvetica", 1, 25);
+	Font myFont = new Font("Helvetica", 1, 12);
+	
+	
+	//Sizing stuff
+	final int HEIGHT = 1920;
+	final int WIDTH = 1080;
 	
 	//This is every piece of the JFrame, including the DialogSets
 	JTextField name = new JTextField("Name the encounter.");  //Encounter naming text field
@@ -77,7 +87,7 @@ class Three extends JFrame
 		}		
 		
 		//Initializing Window
-		setSize(3600, 2100); //This size doesn't work all the time but it works for me and its size is what everything's locations are based off of.
+		setSize(HEIGHT, WIDTH); //This size doesn't work all the time but it works for me and its size is what everything's locations are based off of.
 		setTitle("Encounter Tool"); //Makes sense.
 		//Initializing easy stuff
 		initializeStuff(); //"Stuff" means the text box for encounter name, the buttons quit, create encounter, increment frame, and decrement frame
@@ -91,9 +101,11 @@ class Three extends JFrame
 	void initializeStuff()
 	{
 		//drop method is defined waaay below
-		drop(100, 100, 300, 50, true, name); //Name box placement/creation
-		drop(100, 1500, 200, 50, true, quit); //Quit button placement/creation
-		drop(350, 1500, 300, 50, true, crEnc); //create encounter button placement/creation
+		drop(HEIGHT/40, WIDTH/40, 6*HEIGHT/40, WIDTH/40, true, name); //Name box placement/creation
+		drop(HEIGHT/40, 8*WIDTH/10, HEIGHT/20, WIDTH/40, true, quit); //Quit button placement/creation
+		drop(HEIGHT/10, 8*WIDTH/10, 3*HEIGHT/20, WIDTH/40, true, crEnc); //create encounter button placement/creation
+		drop(HEIGHT/40, 13*WIDTH/40, WIDTH, HEIGHT/4, false, frame.text);
+		drop(3*HEIGHT/10, 17*WIDTH/20, HEIGHT/20, WIDTH/40, false, frame.back);
 		name.addActionListener((ActionEvent waitForClick) -> {
 			parts[0] = "";
 			parts[0] = "Encounter name: " + name.getText();
@@ -102,12 +114,14 @@ class Three extends JFrame
 		//runs the create-a-string algorithm
 		crEnc.addActionListener((ActionEvent event)->{
 			setUpString(); //this is the method for that
-			JOptionPane.showMessageDialog(null, aggregateOutput); 
-			//this last line will be unnecessary when the string is translated to xml, but we could still use it so writers can check their work
+//			JOptionPane.showMessageDialog(null, aggregateOutput); //THIS WHOLE THING DOESN'T WORK
+//			//this last line will be unnecessary when the string is translated to xml, but we could still use it so writers can check their work
+			frame.setWords(aggregateOutput);
+			frame.setVisible(true);
 		});
 		
 		//In the final version, this functionality can exist but shouldn't be the only way to navigate
-		drop(700, 1500, 300, 50, true, buttonUp); //next frame button placement/creation
+		drop(3*HEIGHT/10, 8*WIDTH/10, 3*HEIGHT/20, WIDTH/40, true, buttonUp); //next frame button placement/creation
 		buttonUp.addActionListener((ActionEvent event)->{
 			if (activeFrame < 39) //check if current frame is last frame
 			{
@@ -121,7 +135,7 @@ class Three extends JFrame
 			}
 		});
 		
-		drop(1050, 1500, 300, 50, true, buttonDown); //previous frame button placement/creation
+		drop(HEIGHT/2, 8*WIDTH/10, 3*HEIGHT/20, WIDTH/40, true, buttonDown); //previous frame button placement/creation
 		buttonDown.addActionListener((ActionEvent event)->{
 			if (activeFrame > 0) //check if current frame is first frame
 			{
@@ -164,10 +178,10 @@ class Three extends JFrame
 	void initializeNav() //Both of these are far from done
 	{
 		
-		add(tree);
-		tree.setLocation(3000, 1000);
-		tree.setSize(400, 800);
-		tree.setVisible(true);
+//		add(tree);
+//		tree.setLocation(3000, 1000);
+//		tree.setSize(400, 800);
+//		tree.setVisible(true);
 		
 		//for some reason adding a useless label really helps it all come together.
 		JLabel x = new JLabel();
@@ -175,7 +189,7 @@ class Three extends JFrame
 		x.setSize(10, 10);
 		add(x);
 		
-		//drop(1000, 500, 400, 300, true, tree);
+		drop(7*HEIGHT/10, 11*WIDTH/40, HEIGHT/5, 3*WIDTH/5, true, tree);
 		//make a tree and put it in here (I think this one works now but at first I hadn't fixed the method so it wouldn't work)
 	}
 	
@@ -186,8 +200,8 @@ class Three extends JFrame
 //		list.setSize(400, 800);
 //		list.setVisible(true);
 	
-		drop(2250, 150, 1200, 50, true, flagLabel);
-		drop(2650, 250, 400, 50, true, flags);
+		drop(6*HEIGHT/10, WIDTH/40, 3*HEIGHT/10, WIDTH/40, true, flagLabel);
+		drop(6*HEIGHT/10, 3*WIDTH/40, 3*HEIGHT/10, WIDTH/40, true, flags);
 		flags.addActionListener((ActionEvent event)->{
 			parts[3] = "";
 			parts[3] = "Flags for the encounter: " + flags.getText();
@@ -439,27 +453,27 @@ class Three extends JFrame
 		//This method should put all the things in the frame
 		void dropFrame(DialogSet set, boolean bool) //holy shit this method is really cool- i didn't think it was gonna work but it did
 		{
-			drop(200, 200, 200, 50, bool, set.initializeTXT[0]); //this
-			drop(200, 300, 1500, 50, bool, set.initializeTXT[1]); //literally
-			drop(250, 450, 200, 50, bool, set.initializeTXT[2]); //puts
-			drop(250, 550, 200, 50, bool, set.initializeTXT[3]); //in
-			drop(250, 650, 200, 50, bool, set.initializeTXT[4]); //the 
-			drop(500, 450, 200, 50, bool, set.initializeDD[0]); //Jframe
-			drop(500, 550, 200, 50, bool, set.initializeDD[1]); //every
-			drop(500, 650, 200, 50, bool, set.initializeDD[2]); //single
-			drop(750, 450, 200, 50, bool, set.initializeReactDD[0]); //teensy
-			drop(750, 550, 200, 50, bool, set.initializeReactDD[1]); //weensy
-			drop(750, 650, 200, 50, bool, set.initializeReactDD[2]); //teeny
-			drop(750, 450, 200, 50, bool, set.initializeReactTXT[0]); //itsy
-			drop(750, 550, 200, 50, bool, set.initializeReactTXT[1]); //bitsy
-			drop(750, 650, 200, 50, bool, set.initializeReactTXT[2]); //specific
-			drop(1000, 450, 200, 50, bool, set.initializeToggle[0]); //tiny
-			drop(1000, 550, 200, 50, bool, set.initializeToggle[1]); //precise
-			drop(1000, 650, 200, 50, bool, set.initializeToggle[2]); //piece
-			drop(1250, 450, 200, 50, bool, set.initializeReactTXT[3]); //of
-			drop(1250, 550, 200, 50, bool, set.initializeReactTXT[4]); //the
-			drop(1250, 650, 200, 50, bool, set.initializeReactTXT[5]); //Dialog
-			drop(500, 200, 200, 50, bool, set.design); //Set
+			drop(HEIGHT/40, 3*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeTXT[0]); //this
+			drop(HEIGHT/40, 5*WIDTH/40, 11*HEIGHT/20, WIDTH/40, bool, set.initializeTXT[1]); //literally
+			drop(HEIGHT/40, 7*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeTXT[2]); //puts
+			drop(HEIGHT/40, 9*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeTXT[3]); //in
+			drop(HEIGHT/40, 11*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeTXT[4]); //the 
+			drop(3*HEIGHT/20, 7*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeDD[0]); //Jframe
+			drop(3*HEIGHT/20, 9*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeDD[1]); //every
+			drop(3*HEIGHT/20, 11*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeDD[2]); //single
+			drop(11*HEIGHT/40, 7*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeReactDD[0]); //teensy
+			drop(11*HEIGHT/40, 9*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeReactDD[1]); //weensy
+			drop(11*HEIGHT/40, 11*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeReactDD[2]); //teeny
+			drop(11*HEIGHT/40, 7*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeReactTXT[0]); //itsy
+			drop(11*HEIGHT/40, 9*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeReactTXT[1]); //bitsy
+			drop(11*HEIGHT/40, 11*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeReactTXT[2]); //specific
+			drop(2*HEIGHT/5, 7*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeToggle[0]); //tiny
+			drop(2*HEIGHT/5, 9*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeToggle[1]); //precise
+			drop(2*HEIGHT/5, 11*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeToggle[2]); //piece
+			drop(21*HEIGHT/40, 7*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeReactTXT[3]); //of
+			drop(21*HEIGHT/40, 9*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeReactTXT[4]); //the
+			drop(21*HEIGHT/40, 11*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.initializeReactTXT[5]); //Dialog
+			drop(3*HEIGHT/10, 3*WIDTH/40, HEIGHT/10, WIDTH/40, bool, set.design); //Set
 		}
 		
 		//This method should change the visibility of an entire frame
@@ -585,7 +599,7 @@ class Three extends JFrame
 				});
 				set.initializeReactDD[0].addActionListener((ActionEvent event) ->{
 					parts[3 + (set.IDNum * 17) + 6] = "";
-					parts[3 + (set.IDNum * 17) + 6] = "Frame " + set.designation + "Option 1 requirement amount: " + set.reqs[set.initializeReactDD[0].getSelectedIndex()];
+					parts[3 + (set.IDNum * 17) + 6] = "Frame " + set.designation + "Option 1 requirement amount: " + set.reactReqs[set.initializeDD[0].getSelectedIndex()][set.initializeReactDD[0].getSelectedIndex()];
 				});
 					set.initializeToggle[0].addActionListener((ActionEvent event) -> {
 						if (set.initializeReactTXT[3].isVisible())
@@ -639,7 +653,7 @@ class Three extends JFrame
 				});
 				set.initializeReactDD[1].addActionListener((ActionEvent event) ->{
 					parts[3 + (set.IDNum * 17) + 11] = "";
-					parts[3 + (set.IDNum * 17) + 11] = "Frame " + set.designation + "Option 2 requirement amount: " + set.reqs[set.initializeReactDD[1].getSelectedIndex()];
+					parts[3 + (set.IDNum * 17) + 11] = "Frame " + set.designation + "Option 2 requirement amount: " + set.reactReqs[set.initializeDD[1].getSelectedIndex()][set.initializeReactDD[1].getSelectedIndex()];
 				});
 					set.initializeToggle[1].addActionListener((ActionEvent event) -> {
 						if (set.initializeReactTXT[4].isVisible())
@@ -693,7 +707,7 @@ class Three extends JFrame
 				});
 				set.initializeReactDD[2].addActionListener((ActionEvent event) ->{
 					parts[3 + (set.IDNum * 17) + 16] = "";
-					parts[3 + (set.IDNum * 17) + 16] = "Frame " + set.designation + "Option 3 requirement amount: " + set.reqs[set.initializeReactDD[2].getSelectedIndex()];
+					parts[3 + (set.IDNum * 17) + 16] = "Frame " + set.designation + "Option 3 requirement amount: " + set.reactReqs[set.initializeDD[2].getSelectedIndex()][set.initializeReactDD[2].getSelectedIndex()];
 				});
 					set.initializeToggle[2].addActionListener((ActionEvent event) -> {
 						if (set.initializeReactTXT[5].isVisible())
