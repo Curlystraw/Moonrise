@@ -19,7 +19,8 @@ namespace Completed
 		public bool isWerewolf = false;
         public static GameManager instance = null;              
         [HideInInspector]
-        public bool playersTurn = true;       
+        public bool playersTurn = true;     
+		public bool enemyClicked = false;
 
 
         private Text levelText;                                 
@@ -122,6 +123,13 @@ namespace Completed
 
             enabled = false;
         }
+
+		public void RemoveEnemyFromList(Enemy script) 
+		{
+			enemies.Remove (script);
+
+		}
+
 
 		/// <summary>
 		/// Processes enemy turns

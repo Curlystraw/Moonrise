@@ -23,6 +23,7 @@ namespace Completed
 		public String timeLeft;
 		public String goldText;
 		public String hpText;
+		public Text actionText;
 
 		private BoxCollider2D hitbox;	//hitbox for the object - used for raycast tests?
         private Animator animator;
@@ -77,6 +78,10 @@ namespace Completed
 				timeLeft = "Time Left: " + GameManager.instance.timeLeft;
 				UpdateText ();
 				return;
+			} else if (Input.GetMouseButtonDown (0)) {
+				if (GameManager.instance.enemyClicked) {
+					RangedAttack ();
+				}
 			}
             int horizontal = 0;
             int vertical = 0;
@@ -109,6 +114,24 @@ namespace Completed
 
             GameManager.instance.playersTurn = false;
         }
+
+		protected void RangedAttack()
+		{
+			actionText.text = "You attacked an enemy!";
+			GameManager.instance.enemyClicked = false;
+
+			EndTurn ();
+		}
+
+		protected void EndTurn()
+		{
+			GameManager.instance.timeLeft--;
+			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
+			UpdateText ();
+
+			CheckIfGameOver ();
+			GameManager.instance.playersTurn = false;
+		}
 
         private void OnTriggerEnter2D(Collider2D other)
         {
