@@ -74,13 +74,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb3d72eecbee6d14bb0147d485140821, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1
+  speed: 0.75
   AP: 0
   moveTime: 0.1
   blockingLayer:
     serializedVersion: 2
     m_Bits: 256
   playerDamage: 2
+  indicator: {fileID: 1000013966800682, guid: 38d7c28b8e2bad64cbe045e0164934db, type: 2}
+  sightRange: 5
 --- !u!212 &21249280
 SpriteRenderer:
   m_ObjectHideFlags: 1

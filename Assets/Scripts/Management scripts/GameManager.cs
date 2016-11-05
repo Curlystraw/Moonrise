@@ -10,9 +10,13 @@ namespace Completed
     public class GameManager : MonoBehaviour
     {
 
+		public int timeLeft = 4320; // 30 days * 24 hours * 6 10-minute periods
+
         public float levelStartDelay = 2f;                      
         public float turnDelay = 0.1f;                          
-        public int playerGoldPoints = 100;                      
+        public int playerGoldPoints = 100;
+		public int playerHp = 100;
+		public bool isWerewolf = false;
         public static GameManager instance = null;              
         [HideInInspector]
         public bool playersTurn = true;       
@@ -49,11 +53,11 @@ namespace Completed
             InitGame();
         }
 
-        void OnLevelWasLoaded(int index)
+        /*void OnLevelWasLoaded(int index)
         {
             level++;
             InitGame();
-        }
+        }*/
 
 		/// <summary>
 		/// Displays day, begins board setup
@@ -100,7 +104,7 @@ namespace Completed
             if (playersTurn || enemiesMoving || doingSetup)
 
                 return;
-
+			
 			StartCoroutine(MoveEnemies());
         }
 
@@ -128,7 +132,7 @@ namespace Completed
 			bool moreMoves = true;	//If there is an enemy who can still take an action, enemy turn does not end
             enemiesMoving = true;
 
-            yield return new WaitForSeconds(turnDelay);
+            yield return new WaitForSeconds(turnDelay*2);
 
             if (enemies.Count == 0)
             {
@@ -154,6 +158,21 @@ namespace Completed
 
             enemiesMoving = false;
         }
+
+		/// <summary>
+		/// Gets enemy at position pos
+		/// </summary>
+		/// <returns>The enemy.</returns>
+		/// <param name="pos">Position.</param>
+		public GameObject getEnemy(Vector2 pos){
+			foreach(Enemy e in enemies){
+				Transform t = e.transform;
+				if(new Vector2(t.position.x,t.position.y).Equals(pos)){
+					return t.gameObject;
+				}
+			}
+			return null;
+		}
     }
 }
 
