@@ -11,6 +11,7 @@ public class MazeGenerator2 : MonoBehaviour {
 	[Range(0.0001f, 1f)]
 	public float speed; //how quickly each step is performed (when in a coroutine for demonstration purposes)
 	public Tile[,] grid; //a 2D array of tiles
+	public int[,] boardMap; //int representation of map
 	private int[] start = {1, 1}; //start position of maze generator (doesn't matter as long as both numbers are odd and less than radius)
 	private Tile[,] largeGrid; //the same 2d array of tiles, but inflated by 3 (each tile becomes a group of 3x3 tiles)
 	private Room[] rooms; //array of all of the rooms to be generated after the paths
@@ -21,18 +22,19 @@ public class MazeGenerator2 : MonoBehaviour {
 	public int maxRoomSize = 10; //maximum room dimension
 
 	// Use this for initialization
-	void Start () {
+	public void Init () {
+		boardMap = new int[radius*3, radius*3];
 		largeGrid = new Tile[radius * 3, radius * 3]; //ensures that the large grid is a 3x inflation of the original grid
 		rooms = new Room[Random.Range (minRoomCount, maxRoomCount)]; //creates a randomly sized list of rooms
 		for (int i = 0; i < rooms.Length; i++) {
 			rooms [i] = new Room (minRoomSize, maxRoomSize); //initializes each room
 		}
+		Debug.Log("mazegen initialized");	
 		//StartCoroutine ("GeneratePath");
-		GeneratePath();
 	}
 
 	//The entire algorithm. Recommend eventually moving this into several functions
-	void GeneratePath () {
+	public void GeneratePath () {
 		if (radius % 2 == 0) {
 			radius++; //if the user is dumb and makes the radius an even number, makes it odd to ensure the path generator doesn't look weird
 		}
@@ -44,9 +46,10 @@ public class MazeGenerator2 : MonoBehaviour {
 
 				//Generates a floor in a swiss cheese style (part of the algorithm), each floor tile is surrounded by 8 wall tiles
 				if ((h == 0 || h == radius - 1 || w == 0 || w == radius - 1) || !(h % 2 == 1 && w % 2 == 1)) {
-					grid [w, h].obj = Instantiate (wall, transform.position + new Vector3 (w, h, 0), Quaternion.identity) as GameObject;
+					grid [w, h].obj = Instantiate (wall,new Vector3 (w, h, 0), Quaternion.identity) as GameObject;
 				} else {
-					grid[w,h].obj = Instantiate (floor, transform.position + new Vector3 (w, h, 0), Quaternion.identity) as GameObject;
+					grid[w,h].obj = Instantiate (floor,new Vector3 (w, h, 0), Quaternion.identity) as GameObject;
+					grid[w,h].passable = 0; //Mark as passable terrain
 				}
 			}
 		}
@@ -103,18 +106,22 @@ public class MazeGenerator2 : MonoBehaviour {
 				if (direction == 0) {
 					Destroy (grid [position [0] - 1, position [1]].obj);
 					grid [position[0] - 1, position[1]].obj = Instantiate(floor, new Vector3(position[0] - 1, position[1], 0f), Quaternion.identity) as GameObject;
+					grid [position[0] - 1, position[1]].passable = 0;
 					position[0] -= 2;
 				} else if (direction == 1) {
 					Destroy (grid [position [0], position [1] + 1].obj);
 					grid [position[0], position[1] + 1].obj = Instantiate(floor, new Vector3(position[0], position[1] + 1, 0f), Quaternion.identity) as GameObject;
+					grid [position[0], position[1] + 1].passable = 0;
 					position[1] += 2;
 				} else if (direction == 2) {
 					Destroy (grid [position [0] + 1, position [1]].obj);
 					grid [position[0] + 1, position[1]].obj = Instantiate(floor, new Vector3(position[0] + 1, position[1], 0f), Quaternion.identity) as GameObject;
+					grid [position[0] + 1, position[1]].passable = 0;
 					position[0] += 2;
 				} else if (direction == 3) {
 					Destroy (grid [position [0], position [1] - 1].obj);
 					grid [position[0], position[1] - 1].obj = Instantiate(floor, new Vector3(position[0], position[1] - 1, 0f), Quaternion.identity) as GameObject;
+					grid [position[0], position[1] - 1].passable = 0;
 					position[1] -= 2;
 				}
 				index++;
@@ -157,6 +164,11 @@ public class MazeGenerator2 : MonoBehaviour {
 					largeGrid [w * 3+2, h * 3].obj = Instantiate (grid [w, h].obj, new Vector3 (w * 3+2, h * 3, 0), Quaternion.identity) as GameObject;
 					largeGrid [w * 3+2, h * 3+1].obj = Instantiate (grid [w, h].obj, new Vector3 (w * 3+2, h * 3+1, 0), Quaternion.identity) as GameObject;
 					largeGrid [w * 3+2, h * 3+2].obj = Instantiate (grid [w, h].obj, new Vector3 (w * 3+2, h * 3+2, 0), Quaternion.identity) as GameObject;
+					for(int x = 0; x < 3; x++){
+						for(int y = 0; y < 3; y++){
+							boardMap[w*3+x,h*3+y] = grid[w,h].passable;
+						}
+					}
 					//yield return new WaitForSeconds (speed);
 				}
 				//destroy the original grid instantiations
@@ -222,22 +234,31 @@ public class MazeGenerator2 : MonoBehaviour {
 	}
 }
 
-public class Tile : MonoBehaviour {
+public class Tile {
 	public GameObject obj;
 	public int[] position;
 	public bool visited;
+	public int passable;
 
 	public Tile () {
+		passable = 1;
 		position = new int[2];
+	}
+
+	public Tile (GameObject pf, int[] pos, int pass) {
+		obj = pf;
+		position = pos;
+		passable = pass;
 	}
 
 	public Tile (GameObject pf, int[] pos) {
 		obj = pf;
 		position = pos;
+		passable = 1;
 	}
 }
 
-public class Room : MonoBehaviour {
+public class Room {
 	public int[,] size;
 	public Tile[,] tiles;
 

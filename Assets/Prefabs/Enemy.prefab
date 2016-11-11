@@ -76,7 +76,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 0.75
   AP: 0
-  moveTime: 0.1
+  moveTime: 0
   blockingLayer:
     serializedVersion: 2
     m_Bits: 256

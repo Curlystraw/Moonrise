@@ -183,11 +183,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 492892, guid: 240702aa0cfe4b147a8886d03c14b265, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0.7615523
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 492892, guid: 240702aa0cfe4b147a8886d03c14b265, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0.016821418
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 492892, guid: 240702aa0cfe4b147a8886d03c14b265, type: 2}
       propertyPath: m_LocalPosition.z
@@ -213,9 +213,40 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 11442854, guid: 240702aa0cfe4b147a8886d03c14b265, type: 2}
+      propertyPath: goldCount.minimum
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 11442854, guid: 240702aa0cfe4b147a8886d03c14b265, type: 2}
+      propertyPath: goldCount.maximum
+      value: 40
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 240702aa0cfe4b147a8886d03c14b265, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &318594513 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 139320, guid: 240702aa0cfe4b147a8886d03c14b265, type: 2}
+  m_PrefabInternal: {fileID: 318594512}
+--- !u!114 &318594514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 318594513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 381e36a00d0984c9a914dbc6c64eaa60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floor: {fileID: 1000013810770954, guid: b8f2a1a7139bf4450a84b3a11048584e, type: 2}
+  wall: {fileID: 141938, guid: 65923a9620d79894d8a5cbd1ecaceba7, type: 2}
+  radius: 31
+  speed: 1
+  minRoomCount: 8
+  maxRoomCount: 10
+  minRoomSize: 3
+  maxRoomSize: 10
 --- !u!1001 &375036325
 Prefab:
   m_ObjectHideFlags: 0
@@ -225,11 +256,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 417000, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 417000, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 417000, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
       propertyPath: m_LocalPosition.z
