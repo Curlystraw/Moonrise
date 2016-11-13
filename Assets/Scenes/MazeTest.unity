@@ -239,7 +239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 381e36a00d0984c9a914dbc6c64eaa60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floor: {fileID: 170992, guid: b021cef5c367b884387065f8bae5ef1e, type: 2}
+  floor: {fileID: 1000013810770954, guid: b021cef5c367b884387065f8bae5ef1e, type: 2}
   wall: {fileID: 141938, guid: 65923a9620d79894d8a5cbd1ecaceba7, type: 2}
   radius: 31
   speed: 0.0001

@@ -236,14 +236,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 318594513}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 381e36a00d0984c9a914dbc6c64eaa60, type: 3}
+  m_Script: {fileID: 11500000, guid: 1a871382401b5468a98bb2d06dccfe19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   floor: {fileID: 1000013810770954, guid: b8f2a1a7139bf4450a84b3a11048584e, type: 2}
   wall: {fileID: 141938, guid: 65923a9620d79894d8a5cbd1ecaceba7, type: 2}
-  radius: 31
-  speed: 1
-  minRoomCount: 8
+  radius: 21
+  speed: 0
+  minRoomCount: 5
   maxRoomCount: 10
   minRoomSize: 3
   maxRoomSize: 10
@@ -339,22 +339,17 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 11460302, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
       propertyPath: sneak
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 11460302, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
-      propertyPath: werewolfFront
-      value: 
-      objectReference: {fileID: 21300000, guid: 6e1cd654ef4b84565a9a9f0a62734143,
-        type: 3}
     - target: {fileID: 11460302, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
       propertyPath: werewolfBack
       value: 
       objectReference: {fileID: 21300000, guid: 50f5e7a5f2f3f4d65b7e8f354592a403,
         type: 3}
     - target: {fileID: 11460302, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
-      propertyPath: werewolfLeft
+      propertyPath: werewolfFront
       value: 
-      objectReference: {fileID: 21300000, guid: a1218f5c3c00b4a38a3b81fe2c292383,
+      objectReference: {fileID: 21300000, guid: 6e1cd654ef4b84565a9a9f0a62734143,
         type: 3}
     - target: {fileID: 11460302, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
       propertyPath: werewolfRight
@@ -362,14 +357,9 @@ Prefab:
       objectReference: {fileID: 21300000, guid: 22a8362a821354872a6cdcdc8c3f9ffc,
         type: 3}
     - target: {fileID: 11460302, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
-      propertyPath: humanFront
+      propertyPath: humanRight
       value: 
-      objectReference: {fileID: 21300000, guid: 34a9fac0049db4f71b0afe1df1969db8,
-        type: 3}
-    - target: {fileID: 11460302, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
-      propertyPath: humanBack
-      value: 
-      objectReference: {fileID: 21300000, guid: 3814eaa387b4a4a8aa916ec47ee99f97,
+      objectReference: {fileID: 21300000, guid: 602ebbc18a99f43c9917eef69c2581df,
         type: 3}
     - target: {fileID: 11460302, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
       propertyPath: humanLeft
@@ -377,9 +367,19 @@ Prefab:
       objectReference: {fileID: 21300000, guid: 04aadf27362b548a0914eff8537363ed,
         type: 3}
     - target: {fileID: 11460302, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
-      propertyPath: humanRight
+      propertyPath: humanBack
       value: 
-      objectReference: {fileID: 21300000, guid: 602ebbc18a99f43c9917eef69c2581df,
+      objectReference: {fileID: 21300000, guid: 3814eaa387b4a4a8aa916ec47ee99f97,
+        type: 3}
+    - target: {fileID: 11460302, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
+      propertyPath: humanFront
+      value: 
+      objectReference: {fileID: 21300000, guid: 34a9fac0049db4f71b0afe1df1969db8,
+        type: 3}
+    - target: {fileID: 11460302, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
+      propertyPath: werewolfLeft
+      value: 
+      objectReference: {fileID: 21300000, guid: a1218f5c3c00b4a38a3b81fe2c292383,
         type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
