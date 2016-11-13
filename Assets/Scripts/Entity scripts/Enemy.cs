@@ -48,9 +48,14 @@ namespace Completed
 		void OnMouseDown() {
 			if (GameManager.instance.playersTurn) {
 				GameManager.instance.clearLog();
+
 				if(!GameManager.instance.isWerewolf){
 					// Ranged attack (hoo-man)
 					if (Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)) <= player.TotalRange) {
+						if (Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)) <= 1) {
+							
+						}
+
 						GameManager.instance.enemyClicked = true;
 						int damage = player.RangedAttack (this);
 						if(damage > 0)
@@ -123,8 +128,32 @@ namespace Completed
 			int xDir = 0;
 			int yDir = 0;
 
-			//Attempt to pursue target
+			//Attempt to attack target
+			float distance = Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2));
+			if (distance <= this.TotalRange) {
+				GameManager.instance.print ("within range");
+				int damage;
+				if (distance <= 1) {
+					damage = this.MeleeAttack (player);
+					if (damage > 0) {
+						GameManager.instance.print ("The enemy strikes you for " + damage + " damage!");
+					} else {
+						GameManager.instance.print ("The enemy tries to attack but misses!");
+					}
+				} else {
+					damage = this.RangedAttack (player);
+					if (damage > 0) {
+						GameManager.instance.print ("The enemy shoots you for " + damage + " damage!");
+					} else {
+						GameManager.instance.print ("The enemy tries to attack but misses!");
+					}
+				}
+				player.LoseHp(playerDamage);
+			} else
+
+			//If cannot attack target, attempt to pursue target
 			if(path.Count > 0){
+					GameManager.instance.print ("Trying to move");
 				yDir = 0;
 				xDir = 0;
 				//Debug.Log(path[0]+" "+path[path.Count-1]);
@@ -178,13 +207,13 @@ namespace Completed
         }
 
 
-        protected override void OnCantMove<T>(T component)
-        {
-            Player hitPlayer = component as Player;
-
-            hitPlayer.LoseHp(playerDamage);
-			GameManager.instance.print("The enemy strikes you!");
-        }
+//        protected override void OnCantMove<T>(T component)
+//        {
+//            Player hitPlayer = component as Player;
+//
+//            hitPlayer.LoseHp(playerDamage);
+//			GameManager.instance.print("The enemy strikes you!");
+//        }
 
 		protected override void OnFinishMove ()
 		{

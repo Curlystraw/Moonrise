@@ -73,10 +73,10 @@ namespace Completed
 
             T hitComponent = hit.transform.GetComponent<T>();
 
-            if (!canMove && hitComponent != null)
-            {
-                OnCantMove(hitComponent);
-            }
+//            if (!canMove && hitComponent != null)
+//            {
+//                OnCantMove(hitComponent);
+//            }
         }
 
         protected abstract void OnCantMove<T>(T component) where T : Component;
