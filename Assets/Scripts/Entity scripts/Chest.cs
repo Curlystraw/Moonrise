@@ -10,7 +10,7 @@ namespace Completed {
 		void Start () {
 			CurrentHP = 1;
 			playerTransform = GameObject.FindGameObjectWithTag ("Player").transform;
-			item = new Weapon ();
+			item = Item.RandomItem ();
 		}
 
 	
