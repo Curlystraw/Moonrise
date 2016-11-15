@@ -45,7 +45,8 @@ namespace ItemSpace
 		private static List<WeaponPrefix> prefixApostrophes = new List<WeaponPrefix>( new[] {
 			WeaponPrefix.Soldier, WeaponPrefix.Knight, WeaponPrefix.Captain, 
 			WeaponPrefix.Ogre, WeaponPrefix.Titan, WeaponPrefix.Dragon, 
-			WeaponPrefix.Medic, WeaponPrefix.Doctor, WeaponPrefix.Surgeon
+			WeaponPrefix.Medic, WeaponPrefix.Doctor, WeaponPrefix.Surgeon,
+			WeaponPrefix.Duke, WeaponPrefix.Lord, WeaponPrefix.King
 		});
 
 		private static List<WeaponSuffix> suffixNoThes = new List<WeaponSuffix>( new[] {
