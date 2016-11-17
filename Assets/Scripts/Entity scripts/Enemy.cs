@@ -49,31 +49,28 @@ namespace Completed
 			if (GameManager.instance.playersTurn) {
 				GameManager.instance.clearLog();
 
+				float distance = Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2));
+
 				if(!GameManager.instance.isWerewolf){
 					// Ranged attack (hoo-man)
-					if (Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)) <= player.TotalRange) {
-						if (Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)) <= 1) {
-							
-						}
-
+					if (distance <= player.TotalRange) {
 						GameManager.instance.enemyClicked = true;
 						int damage = player.RangedAttack (this);
 						if(damage > 0)
 							GameManager.instance.print ("Ranged damage: " + damage);
 						else
 							GameManager.instance.print ("You miss!");
-							
-						LoseHp (damage);
+
+						//LoseHp (damage); // already accounted for in Character's RangedAttack
 					} else {
 						GameManager.instance.print("Enemy out of range");
 					}
-				}
-				else{
+				} else {
 					// Melee attack (werewolf who is both were and a wolf)
-					if (Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2)) <= 1) {
+					if (distance <= 1) {
 						GameManager.instance.enemyClicked = true;
 						int damage = player.MeleeAttack (this);
-						LoseHp (damage);
+						//LoseHp (damage);
 						if(damage > 0	)
 							GameManager.instance.print ("Melee damage: " + damage);
 						else
