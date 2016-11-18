@@ -124,8 +124,7 @@ namespace Completed
 				return;
 			} else if (Input.GetMouseButtonDown (0)) {
 				if (GameManager.instance.enemyClicked) {
-					
-					RangedAttack ();
+					Attack ();
 				}
 			}
             int horizontal = 0;
@@ -154,20 +153,22 @@ namespace Completed
 				orientation = Orientation.South;
 			UpdateSprite ();
 
-			GameManager.instance.timeLeft--;
-			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
-			UpdateText ();
+			RaycastHit2D hit;
+			bool canMove = Move(xDir, yDir, out hit);
 
-            base.AttemptMove<T>(xDir, yDir);
+			// Only reset turn if can move
+			if (canMove) {
+				GameManager.instance.timeLeft--;
+				timeLeft = "Time Left: " + GameManager.instance.timeLeft;
+				UpdateText ();
 
-            RaycastHit2D hit;
+				CheckIfGameOver();
 
-            CheckIfGameOver();
-
-            GameManager.instance.playersTurn = false;
+				GameManager.instance.playersTurn = false;
+			}
         }
 
-		protected void RangedAttack()
+		protected void Attack()
 		{
 			actionText.text += "You attacked an enemy!\n";
 			GameManager.instance.enemyClicked = false;
