@@ -236,14 +236,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 318594513}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 381e36a00d0984c9a914dbc6c64eaa60, type: 3}
+  m_Script: {fileID: 11500000, guid: 1a871382401b5468a98bb2d06dccfe19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   floor: {fileID: 1000013810770954, guid: b8f2a1a7139bf4450a84b3a11048584e, type: 2}
   wall: {fileID: 141938, guid: 65923a9620d79894d8a5cbd1ecaceba7, type: 2}
-  radius: 31
-  speed: 1
-  minRoomCount: 8
+  radius: 21
+  speed: 0
+  minRoomCount: 5
   maxRoomCount: 10
   minRoomSize: 3
   maxRoomSize: 10

@@ -137,11 +137,11 @@ namespace Completed
             if (horizontal != 0 || vertical != 0 || spacebar)
 			{
 				actionText.text = "";
-                AttemptMove<Wall>(horizontal, vertical);
+                AttemptMove(horizontal, vertical);
             }
         }
 
-		protected override void AttemptMove<T>(int xDir, int yDir)
+		protected override void AttemptMove(int xDir, int yDir)
 		{
 			if (xDir > 0)
 				orientation = Orientation.East;
@@ -211,10 +211,18 @@ namespace Completed
 
         }
 
-        protected override void OnCantMove<T>(T component)
+        protected override void OnCantMove(Transform transform)
         {
-            Wall hitWall = component as Wall;
-
+			Character character = transform.GetComponent<Character> ();
+            // Wall hitWall = component as Wall;
+			if (character is Enemy) {
+				
+			} else if (character is Chest) {
+				Chest chest = (Chest)character;
+				chest.ObtainItem (this);
+			} else if (character is Wall) {	// TODO: Walls are not Characters, must fix
+				
+			}
         }
 
         private void Restart()

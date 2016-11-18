@@ -261,7 +261,7 @@ namespace Completed
 		}
 		#endregion
 
-		protected override void OnCantMove<T>(T component)
+		protected override void OnCantMove(Transform transform)
 		{
 
 		}

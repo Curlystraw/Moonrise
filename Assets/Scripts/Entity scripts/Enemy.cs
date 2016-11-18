@@ -48,9 +48,7 @@ namespace Completed
 		void OnMouseDown() {
 			if (GameManager.instance.playersTurn) {
 				GameManager.instance.clearLog();
-
 				float distance = Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2));
-
 				if(!GameManager.instance.isWerewolf){
 					// Ranged attack (hoo-man)
 					if (distance <= player.TotalRange) {
@@ -196,21 +194,12 @@ namespace Completed
 				}
 			}
 
-			AttemptMove<Player>(xDir, yDir);
+			AttemptMove(xDir, yDir);
 			AP--;
 			
 			//Return true if the enemy can move again
 			return (AP >= 1);
         }
-
-
-//        protected override void OnCantMove<T>(T component)
-//        {
-//            Player hitPlayer = component as Player;
-//
-//            hitPlayer.LoseHp(playerDamage);
-//			GameManager.instance.print("The enemy strikes you!");
-//        }
 
 		protected override void OnFinishMove ()
 		{
