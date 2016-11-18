@@ -282,7 +282,7 @@ namespace Completed
 				}
 				//Debug.Log(direction);
 
-				angle += (float)(Math.PI/16f);
+				angle += (float)(Math.PI/18f);
 				//yield return null;
 			}
 
