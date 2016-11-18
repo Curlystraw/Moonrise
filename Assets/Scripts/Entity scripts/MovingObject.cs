@@ -65,14 +65,11 @@ namespace Completed
         {
             RaycastHit2D hit;
             bool canMove = Move(xDir, yDir, out hit);
-
 			if (hit.transform != null && !canMove)
 				OnCantMove (hit.transform);
         }
 
         protected abstract void OnCantMove(Transform transform); // expects transform to be not null
 		protected abstract void OnFinishMove();
-	
-
     }
 }
