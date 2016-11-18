@@ -23,7 +23,7 @@ namespace Completed {
 		}
 
 		public void ObtainItem(Player player) {
-			AddItem (item);
+			player.AddItem (item);
 			GameManager.instance.print ("A " + item.Name + " was added to inventory");
 			Destroy (this.gameObject);
 		}
