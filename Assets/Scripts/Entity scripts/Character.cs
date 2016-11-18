@@ -101,6 +101,7 @@ namespace Completed
 		public void AddItem(Item item)
 		{
 			inventory.AddItem (item);
+			GameManager.instance.print ("A " + item.Name + " was added to the inventory");
 		}
 
 		/// <summary>

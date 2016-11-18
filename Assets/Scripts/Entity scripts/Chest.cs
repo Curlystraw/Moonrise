@@ -24,7 +24,7 @@ namespace Completed {
 
 		public void ObtainItem(Player player) {
 			player.AddItem (item);
-			GameManager.instance.print ("A " + item.Name + " was added to inventory");
+			GameManager.instance.print ("A chest was opened");
 			Destroy (this.gameObject);
 		}
 	}
