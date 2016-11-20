@@ -154,4 +154,12 @@ public class TabManager : MonoBehaviour {
     {
         KeyPoll();
     }
+    /// <summary>
+    /// Pretty hacky, but allows for exiting via UI buttons.
+    /// </summary>
+    public void performExit()
+    {
+        Debug.Log("Game Exit");
+        Application.Quit();
+    }
 }

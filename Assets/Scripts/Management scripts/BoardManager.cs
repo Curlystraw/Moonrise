@@ -139,14 +139,15 @@ public class BoardManager : MonoBehaviour {
     /// <param name="tileArray">Array of tiles to select from</param>
     /// <param name="minimum">Minimum number of tiles to place</param>
     /// <param name="maximum">Maximum number of tiles to place</param>
-	void LayoutObjectAtRandom(GameObject[] tileArray, int minimum, int maximum)
+    /// <param name="tileType">The type of tile to place. Used for mapping</param>
+	void LayoutObjectAtRandom(GameObject[] tileArray, int minimum, int maximum,int tileType)
     {
         int objectCount = Random.Range(minimum, maximum + 1);
 
         for (int i = 0; i < objectCount; i++)
         {
             Vector2 randomPosition = RandomPosition();
-			boardMap[(int)randomPosition.x,(int)randomPosition.y] = 1;
+			boardMap[(int)randomPosition.x,(int)randomPosition.y] = tileType;
             GameObject tileChoice = tileArray[Random.Range(0, tileArray.Length)];
 			GameObject ob = (GameObject)Instantiate(tileChoice, randomPosition, Quaternion.identity);
         }
@@ -157,12 +158,12 @@ public class BoardManager : MonoBehaviour {
     {
         BoardSetup();           //Initialize board with floor/outer wall tiles
         InitializeList();       //Create the list of board positions
-        LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);      //Place wall tiles
-        LayoutObjectAtRandom(goldTiles, goldCount.minimum, goldCount.maximum);      //Place gold tiles
+        LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum,1);      //Place wall tiles
+        LayoutObjectAtRandom(goldTiles, goldCount.minimum, goldCount.maximum,10);      //Place gold tiles
 		int chestCount = 7;
-		//LayoutObjectAtRandom (chestTiles, chestCount, chestCount);
+		LayoutObjectAtRandom (chestTiles, chestCount, chestCount,15);
         int enemyCount = 2;//(int)Mathf.Log(level, 2f);
-        LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);                   //Place enemies
+        LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount,0);                   //Place enemies
         Instantiate(door1, new Vector2(columns - 1, rows - 1), Quaternion.identity);//Create the floor exit
 
     }

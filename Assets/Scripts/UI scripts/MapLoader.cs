@@ -8,6 +8,14 @@ using UnityEngine.UI;
  * Note: You MUST put everything in OnEnable. Unity throws unfixable errors when
  * manipulating objects that aren't enabled for some reason. Some sort of 
  * SUCCEEDED(hr) that crashes the script object. 
+ * 
+ * TileTypes: Moving objects instantiate to 0
+ *  0-Empty
+ *  1-Wall
+ *  2-Enemy
+ *  3-Player
+ *  10-Gold Because Why not?
+ *  15-Chest
  */
 
 public class MapLoader : MonoBehaviour
@@ -89,12 +97,16 @@ public class MapLoader : MonoBehaviour
         {
             for (int j = 1; j < mapTex.height - 1; j++)
             {
-                if (mapBoard[i - 1, j - 1] == 3)           
+                if (mapBoard[i - 1, j - 1] == 3)
                     mapTex.SetPixel(i, j, Color.green);
                 else if (mapBoard[i - 1, j - 1] == 2)
                     mapTex.SetPixel(i, j, Color.red);
                 else if (mapBoard[i - 1, j - 1] == 0)
                     mapTex.SetPixel(i, j, Color.white);
+                else if (mapBoard[i - 1, j - 1] == 10)
+                    mapTex.SetPixel(i, j, Color.yellow);
+                else if (mapBoard[i - 1, j - 1] == 15)
+                    mapTex.SetPixel(i, j, Color.cyan);
                 else
                     mapTex.SetPixel(i, j, Color.gray);
 
@@ -107,7 +119,7 @@ public class MapLoader : MonoBehaviour
                     }
                     else if (curFog.color.a > 0.5f && curFog.color.a < 0.8f) //Seen, but currently hidden
                     {
-                        if (mapBoard[i - 1, j - 1] == 2)
+                        if (mapBoard[i - 1, j - 1] != 1)
                             mapTex.SetPixel(i, j, Color.white);
 
                         mapTex.SetPixel(i, j, mapTex.GetPixel(i, j) - new Color(0.2f, 0.2f, 0.2f, 0));
@@ -164,6 +176,10 @@ public class MapLoader : MonoBehaviour
                         miniTex.SetPixel(i + mapRadius, j + mapRadius, Color.red);
                     else if (mapBoard[(int)playerPos.x + i, (int)playerPos.y + j] == 0)
                         miniTex.SetPixel(i + mapRadius, j + mapRadius, Color.white);
+                    else if (mapBoard[(int)playerPos.x + i, (int)playerPos.y + j] == 10)
+                        miniTex.SetPixel(i + mapRadius, j + mapRadius, Color.yellow);
+                    else if (mapBoard[(int)playerPos.x + i, (int)playerPos.y + j] == 15)
+                        miniTex.SetPixel(i + mapRadius, j + mapRadius, Color.cyan);
                     else
                         miniTex.SetPixel(i + mapRadius, j + mapRadius, Color.gray);
 
@@ -176,7 +192,7 @@ public class MapLoader : MonoBehaviour
                         }
                         else if (curFog.color.a > 0.5f && curFog.color.a < 0.8f) //Seen, but currently hidden
                         {
-                            if (mapBoard[(int)playerPos.x + i, (int)playerPos.y + j] == 2)
+                            if (mapBoard[(int)playerPos.x + i, (int)playerPos.y + j] != 1)
                                 miniTex.SetPixel(i + mapRadius, j + mapRadius, Color.white);
 
                             miniTex.SetPixel(i + mapRadius, j + mapRadius, miniTex.GetPixel(i + mapRadius, j + mapRadius) - new Color(0.2f, 0.2f, 0.2f, 0));
