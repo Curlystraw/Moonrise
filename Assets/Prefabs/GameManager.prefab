@@ -41,9 +41,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90eae884846c3a1479aa23105f439d19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  timeLeft: 4320
   levelStartDelay: 2
   turnDelay: 0.1
   playerGoldPoints: 100
+  playerHp: 100
+  isWerewolf: 0
   playersTurn: 1
 --- !u!114 &11442854
 MonoBehaviour:
@@ -75,6 +78,8 @@ MonoBehaviour:
   - {fileID: 159468, guid: adcb95610e951554485c508205f418d6, type: 2}
   enemyTiles:
   - {fileID: 122792, guid: e1b9107774ed5c54792cd249c95bedc4, type: 2}
+  chestTiles:
+  - {fileID: 1000014228673168, guid: a65e7e84eac21ae42ab43ec74ba5ed82, type: 2}
   outerWallTiles:
   - {fileID: 109970, guid: 613875cbea9433f4a999e6cb714a11d1, type: 2}
 --- !u!1001 &100100000

@@ -12,7 +12,6 @@ using UnityEngine.UI;
 
 public class MapLoader : MonoBehaviour
 {
-
     public Canvas canvas; //No idea how important this is. Probably only important for automated UI Movements
     RectTransform rtf;
     public GameObject gameManager;
@@ -77,7 +76,7 @@ public class MapLoader : MonoBehaviour
         int[,] mapBoard = createMapBoard();
         GameObject[,] fog = createFogTile();
         Vector2 playerPos = getPlayerPosition();
-        List<Vector2> enemies = board.GetEnemyPositions();
+        List<Vector2> enemies = GetEnemyPositions();
 
         //Passes to adjust the map
         mapBoard[(int)playerPos.x, (int)playerPos.y] = 3; //Player Pass
@@ -120,6 +119,9 @@ public class MapLoader : MonoBehaviour
         mapTex.Apply();
     }
 
+    /// <summary>
+    /// Start construction of a minimap
+    /// </summary>
     private void constructMiniMap()
     {
         miniTex = new Texture2D(2*mapRadius+1,2*mapRadius+1, TextureFormat.ARGB32, false);
@@ -128,13 +130,16 @@ public class MapLoader : MonoBehaviour
 
         miniSprite = Sprite.Create(miniTex, new Rect(0, 0, miniTex.width, miniTex.height), new Vector2(0.5f, 0.5f), 16.0f);
         miniMap.transform.FindChild("MapStore").gameObject.GetComponent<Image>().sprite = miniSprite;
-    }   
-
+    }  
+     
+    /// <summary>
+    /// Update the minimap
+    /// </summary>
     private void UpdateMiniMap()
     {
         Vector2 playerPos = getPlayerPosition();
         int[,] mapBoard = createMapBoard();
-        List<Vector2> enemies = board.GetEnemyPositions();
+        List<Vector2> enemies = GetEnemyPositions();
         GameObject[,] fog = createFogTile();
 
         mapBoard[(int)playerPos.x, (int)playerPos.y] = 3; //Player Pass
@@ -193,6 +198,11 @@ public class MapLoader : MonoBehaviour
         int[,] curBoard = board.getBoard(); //Code gymnastics is fun.
         return curBoard;
     }
+
+    /// <summary>
+    /// Creates a copy of the fog matrix from BoardManager
+    /// </summary>
+    /// <returns></returns>
     private GameObject[,] createFogTile()
     {
         GameObject[,] fogTiles = board.getFogTiles();
@@ -211,6 +221,21 @@ public class MapLoader : MonoBehaviour
         return position;
     }
 
+    /// <summary>
+    /// Grabs the positions of all enemies
+    /// </summary>
+    /// <returns></returns>
+    public List<Vector2> GetEnemyPositions()
+    {
+        GameObject[] enemyList = GameObject.FindGameObjectsWithTag("Enemy");
+        List<Vector2> returnList = new List<Vector2>();
+       foreach (GameObject t in enemyList)
+        {
+            Vector2 pos = new Vector2(t.transform.position.x, t.transform.position.y);
+            returnList.Add(pos);
+        }
+        return returnList;
+    }
 
     void Update()
     {

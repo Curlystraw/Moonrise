@@ -81,6 +81,7 @@ namespace Completed
 
         protected abstract void OnCantMove<T>(T component) where T : Component;
 		protected abstract void OnFinishMove();
+	
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.UI;
 using System;
@@ -6,33 +7,41 @@ using System;
 namespace Completed
 {
 
-    public class Player : MovingObject
+	public class Player : Character
     {
-		public int sneak = 4;
         public int wallDamage = 1;
         public int pointsPerGold = 10;
         public float restartLevelDelay = 1f;
+		public int sneak = 4;
 		public float sightRange = 12f;
+		public Sprite werewolfSprite;
+		public Sprite humanSprite;
+		public Color original;
 		public GameObject indicator;
 
 		public Text displayText;
 		public String timeLeft;
 		public String goldText;
 		public String hpText;
+		public Text actionText;
 
 		private BoxCollider2D hitbox;	//hitbox for the object - used for raycast tests?
         private Animator animator;
 		public LayerMask sightBlocks, fogLayer;
 		private ArrayList revealed;
 
+		//Healthbar object
+		public GameObject hpBar;
+
         // Use this for initialization
         protected override void Start()
         {
-			speed = 1;
 
+			speed = 1;
+			original = this.gameObject.GetComponent<SpriteRenderer> ().color;
 			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
 			goldText = "Gold: " + GameManager.instance.playerGoldPoints;
-			hpText = "HP: " + GameManager.instance.playerHp;
+			hpText = "HP: " + this.CurrentHP;
 			UpdateText ();
 		
 			animator = GetComponent<Animator>();
@@ -54,6 +63,10 @@ namespace Completed
 		public void UpdateText(String message = "")
 		{
 			displayText.text = timeLeft + " | " + goldText + " | " + hpText;
+			Vector3 scale = hpBar.transform.localScale;
+			scale.x = ((float)currentHP/(float)totalHP);
+			hpBar.transform.localScale = scale;
+
 			if (message != "") {
 				displayText.text += " | " + message;
 			}
@@ -64,6 +77,20 @@ namespace Completed
         {
             if (!GameManager.instance.playersTurn) return;
 
+			if (Input.GetKeyDown (KeyCode.T)) {
+				actionText.text = "";
+				switchForm ();
+				GameManager.instance.playersTurn = false;
+				GameManager.instance.timeLeft--;
+				timeLeft = "Time Left: " + GameManager.instance.timeLeft;
+				UpdateText ();
+				return;
+			} else if (Input.GetMouseButtonDown (0)) {
+				if (GameManager.instance.enemyClicked) {
+					
+					RangedAttack ();
+				}
+			}
             int horizontal = 0;
             int vertical = 0;
 
@@ -75,7 +102,8 @@ namespace Completed
                 vertical = 0;
 
             if (horizontal != 0 || vertical != 0 || spacebar)
-            {
+			{
+				actionText.text = "";
                 AttemptMove<Wall>(horizontal, vertical);
             }
         }
@@ -96,6 +124,25 @@ namespace Completed
             GameManager.instance.playersTurn = false;
         }
 
+		protected void RangedAttack()
+		{
+			actionText.text += "You attacked an enemy!\n";
+			GameManager.instance.enemyClicked = false;
+
+			EndTurn ();
+		}
+
+		protected void EndTurn()
+		{
+			GameManager.instance.timeLeft--;
+			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
+			UpdateText ();
+
+			CheckIfGameOver ();
+			GameManager.instance.playersTurn = false;
+		}
+
+        //pick up an item. If nothing on square does nothing.
         private void OnTriggerEnter2D(Collider2D other)
         {
 			//Debug.Log("#TRIGGERED");
@@ -104,13 +151,20 @@ namespace Completed
                 Invoke("Restart", restartLevelDelay);
                 enabled = false;
             }
-            else if (other.tag == "Gold")
+            else if (other.tag == "Item")
             {
+				GameManager.instance.print("Picked up "+pointsPerGold+" gold");
 				GameManager.instance.playerGoldPoints += pointsPerGold;
 				goldText = "Gold: " + GameManager.instance.playerGoldPoints;
 				String message = "+" + pointsPerGold + " Gold";
+				UpdateText ();
                 other.gameObject.SetActive(false);
             }
+        }
+
+        private void interact()
+        {
+
         }
 
         protected override void OnCantMove<T>(T component)
@@ -121,14 +175,15 @@ namespace Completed
 
         private void Restart()
         {
-            Application.LoadLevel(Application.loadedLevel);
+           Application.LoadLevel(Application.loadedLevel);
+			//SceneManager.LoadScene(SceneManager.GetActiveScene);
         }
 
 		public void LoseHp(int loss)
 		{
-			GameManager.instance.playerHp -= loss;
+			this.CurrentHP -= loss;
 			String message = "-" + loss + " HP";
-			hpText = "HP: " + GameManager.instance.playerHp;
+			hpText = "HP: " + this.CurrentHP;
 			UpdateText ();
 			CheckIfGameOver();
 		}
@@ -143,7 +198,7 @@ namespace Completed
 
         private void CheckIfGameOver()
         {
-			if (GameManager.instance.playerGoldPoints <= 0 || GameManager.instance.playerHp <= 0)
+			if (GameManager.instance.playerGoldPoints <= 0 || this.CurrentHP <= 0)
             {
                 GameManager.instance.GameOver();
             }
@@ -156,7 +211,7 @@ namespace Completed
 		}
 
 		//Casts 17 rays, then casts a line along that detected ray to identify which squares are visible.
-		protected void FogCheck(){
+		public void FogCheck(){
 			float angle = 0;
 			Vector3 pPos = this.transform.position;
 			Vector2 origin = new Vector2(pPos.x,pPos.y), direction,end;
@@ -198,5 +253,28 @@ namespace Completed
 
 			revealed = fog;
 		}
+
+
+		//Switchs form (human or werewolf); updates hp and sprite
+		private void switchForm () {
+			GameManager.instance.isWerewolf = !GameManager.instance.isWerewolf;
+			if (GameManager.instance.isWerewolf) {
+				this.TotalHP *= 2;
+				this.CurrentHP *= 2;
+				hpText = "HP: " + this.CurrentHP;
+				UpdateText ();
+				this.gameObject.GetComponent<SpriteRenderer> ().sprite = werewolfSprite;
+				this.gameObject.GetComponent<SpriteRenderer> ().color = Color.gray;
+			} else {
+				this.TotalHP /= 2;
+				this.CurrentHP /= 2;
+				hpText = "HP: " + this.CurrentHP;
+				UpdateText ();
+				this.gameObject.GetComponent<SpriteRenderer> ().sprite = humanSprite;
+				this.gameObject.GetComponent<SpriteRenderer> ().color = original;
+			}
+				
+		}
     }
+
 }

@@ -6,18 +6,18 @@ namespace Completed {
 	public class FogOfWar : MonoBehaviour {
 		private float FOGMAX = 1f, FOGMIN = 0.5f;
 
-		private BoardManager b;
+		private GameManager g;
 
 		//Is this tile visible?
-		private bool visible, oldVis;
+		public bool visible, oldVis;
 		//Has this tile been uncovered before?
 		private bool seen;
 		// Use this for initialization
 		void Start () {
-			visible = false;
+			//visible = false;
 			oldVis = false;
 			//Get board manager
-			b = GameObject.Find("GameManager").GetComponent<BoardManager>();
+			g = GameObject.Find("GameManager").GetComponent<GameManager>();
 		}
 		
 		// Update is called once per frame
@@ -40,7 +40,7 @@ namespace Completed {
 			sp.color = c;
 
 			//if(visible != oldVis){
-				GameObject enemyT = b.getEnemy(new Vector2(this.transform.position.x,this.transform.position.y));
+				GameObject enemyT = g.getEnemy(new Vector2(this.transform.position.x,this.transform.position.y));
 				if(enemyT != null)
 					enemyT.GetComponent<Enemy>().isVisible(visible);
 				oldVis = visible;

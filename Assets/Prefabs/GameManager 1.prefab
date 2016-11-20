@@ -51,6 +51,7 @@ MonoBehaviour:
     maximum: 8
   door1: {fileID: 166078, guid: 82394ce74612ab245aebfb3f6781624f, type: 2}
   player: {fileID: 146232, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
+  fog: {fileID: 0}
   floorTiles:
   - {fileID: 170992, guid: b021cef5c367b884387065f8bae5ef1e, type: 2}
   wallTiles:
@@ -59,6 +60,8 @@ MonoBehaviour:
   - {fileID: 159468, guid: adcb95610e951554485c508205f418d6, type: 2}
   enemyTiles:
   - {fileID: 122792, guid: e1b9107774ed5c54792cd249c95bedc4, type: 2}
+  chestTiles:
+  - {fileID: 1000014228673168, guid: a65e7e84eac21ae42ab43ec74ba5ed82, type: 2}
   outerWallTiles:
   - {fileID: 109970, guid: 613875cbea9433f4a999e6cb714a11d1, type: 2}
 --- !u!114 &11480766
@@ -77,6 +80,7 @@ MonoBehaviour:
   turnDelay: 0.1
   playerGoldPoints: 100
   playerHp: 100
+  isWerewolf: 0
   playersTurn: 1
 --- !u!1001 &100100000
 Prefab:
