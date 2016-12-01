@@ -22,7 +22,6 @@ namespace Completed
 		public Sprite humanBack;
 		public Sprite humanLeft;
 		public Sprite humanRight;
-		public Orientation orientation;
 		public Color original;
 		public GameObject indicator;
 
@@ -80,7 +79,7 @@ namespace Completed
 			}
 		}
 
-		public void UpdateSprite()
+		protected override void UpdateSprite()
 		{
 			Sprite sprite;
 			Color color;
@@ -170,33 +169,26 @@ namespace Completed
 
 		protected override void AttemptMove(int xDir, int yDir)
 		{
-			if (xDir > 0)
-				orientation = Orientation.East;
-			else if (xDir < 0)
-				orientation = Orientation.West;
-			else if (yDir > 0)
-				orientation = Orientation.North;
-			else
-				orientation = Orientation.South;
-			UpdateSprite ();
+			base.AttemptMove (xDir, yDir);
 
 			RaycastHit2D hit;
-			bool canMove = Move(xDir, yDir, out hit);
+			bool canMove = Move (xDir, yDir, out hit);
 
 			bool willHitWall = WillHitWall (xDir, yDir, out hit);
 
 			// Only reset turn if can move
 			if (!willHitWall) {
-				Debug.Log ("will not hit wall");
-				
 				GameManager.instance.timeLeft--;
 				timeLeft = "Time Left: " + GameManager.instance.timeLeft;
 				UpdateText ();
 
-				CheckIfGameOver();
+				CheckIfGameOver ();
 
 				GameManager.instance.playersTurn = false;
 			}
+
+			if (hit.transform != null && !canMove)
+				OnCantMove (hit.transform);
         }
 
 		protected void Attack()
@@ -245,14 +237,11 @@ namespace Completed
         protected override void OnCantMove(Transform transform)
         {
 			Character character = transform.GetComponent<Character> ();
-            // Wall hitWall = component as Wall;
 			if (character is Enemy) {
 				
 			} else if (character is Chest) {
 				Chest chest = (Chest)character;
 				chest.ObtainItem (this);
-			} else if (character is Wall) {	// TODO: Walls are not Characters, must fix
-				
 			}
         }
 

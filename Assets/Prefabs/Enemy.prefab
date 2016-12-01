@@ -80,9 +80,14 @@ MonoBehaviour:
   blockingLayer:
     serializedVersion: 2
     m_Bits: 256
+  orientation: 0
   playerDamage: 2
   indicator: {fileID: 1000013966800682, guid: 38d7c28b8e2bad64cbe045e0164934db, type: 2}
   sightRange: 5
+  looterFront: {fileID: 21300000, guid: 0feece4e8dcb45840a8593963756555f, type: 3}
+  looterBack: {fileID: 21300000, guid: 510ebccd9a058cd44a0f283f71b0127a, type: 3}
+  looterLeft: {fileID: 21300000, guid: 7bb49624eca304444b42f92ad52fb70e, type: 3}
+  looterRight: {fileID: 21300000, guid: 8b529ca3fd76dc741a7922e084e2ecc5, type: 3}
 --- !u!212 &21249280
 SpriteRenderer:
   m_ObjectHideFlags: 1
