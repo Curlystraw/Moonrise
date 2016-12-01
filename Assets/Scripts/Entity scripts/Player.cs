@@ -124,7 +124,7 @@ namespace Completed
 				return;
 			} else if (Input.GetMouseButtonDown (0)) {
 				if (GameManager.instance.enemyClicked) {
-					RangedAttack ();
+					Attack ();
 				}
 			}
             int horizontal = 0;
@@ -141,6 +141,33 @@ namespace Completed
             }
         }
 
+		protected bool WillHitWall(int xDir, int yDir, out RaycastHit2D hit)
+		{
+			//Find movement points
+			Vector2 start = transform.position;
+			Vector2 end = start + new Vector2(xDir, yDir);
+
+			//BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
+
+
+
+			//Check if the move isn't blocked
+			//boxCollider.enabled = false;
+			hit = Physics2D.Linecast(end, start, blockingLayer);
+			//boxCollider.enabled = true;
+
+
+			if (hit.transform != null) {
+				if (hit.transform.tag == "Wall") {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+
 		protected override void AttemptMove(int xDir, int yDir)
 		{
 			if (xDir > 0)
@@ -153,20 +180,26 @@ namespace Completed
 				orientation = Orientation.South;
 			UpdateSprite ();
 
-			GameManager.instance.timeLeft--;
-			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
-			UpdateText ();
+			RaycastHit2D hit;
+			bool canMove = Move(xDir, yDir, out hit);
 
-            base.AttemptMove(xDir, yDir);
+			bool willHitWall = WillHitWall (xDir, yDir, out hit);
 
-            RaycastHit2D hit;
+			// Only reset turn if can move
+			if (!willHitWall) {
+				Debug.Log ("will not hit wall");
+				
+				GameManager.instance.timeLeft--;
+				timeLeft = "Time Left: " + GameManager.instance.timeLeft;
+				UpdateText ();
 
-            CheckIfGameOver();
+				CheckIfGameOver();
 
-            GameManager.instance.playersTurn = false;
+				GameManager.instance.playersTurn = false;
+			}
         }
 
-		protected void RangedAttack()
+		protected void Attack()
 		{
 			actionText.text += "You attacked an enemy!\n";
 			GameManager.instance.enemyClicked = false;
