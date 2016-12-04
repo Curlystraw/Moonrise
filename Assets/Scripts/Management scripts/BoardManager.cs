@@ -92,6 +92,7 @@ public class BoardManager : MonoBehaviour {
 		mapGenerator generator = generators[area];
 
 		boardMap = generator.init();
+		Debug.Log(boardMap);
 
 		rows = boardMap.GetLength(0);
 		columns = boardMap.GetLength(1);
@@ -139,7 +140,6 @@ public class BoardManager : MonoBehaviour {
         for (int i = 0; i < objectCount; i++)
         {
             Vector2 randomPosition = RandomPosition();
-			Debug.Log(boardMap[(int)randomPosition.x,(int)randomPosition.y]);
 			while(boardMap[(int)randomPosition.x,(int)randomPosition.y] > 0)
 				randomPosition = RandomPosition();
 			if(blocking)

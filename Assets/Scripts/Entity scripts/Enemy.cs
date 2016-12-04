@@ -48,6 +48,8 @@ namespace Completed
 
 			path = new List<Vector2>();
 			UpdateSprite ();
+
+			currentHP = 20;
         }
 
 		protected override void UpdateSprite()
@@ -76,8 +78,9 @@ namespace Completed
 					if (distance <= player.TotalRange) {
 						GameManager.instance.enemyClicked = true;
 						int damage = player.RangedAttack (this);
-						if(damage > 0)
-							GameManager.instance.print ("Ranged damage: " + damage);
+						if(damage > 0){
+							GameManager.instance.print ("Ranged damage: " + damage + ". HP remaining: "+currentHP);
+						}
 						else
 							GameManager.instance.print ("You miss!");
 
@@ -91,8 +94,9 @@ namespace Completed
 						GameManager.instance.enemyClicked = true;
 						int damage = player.MeleeAttack (this);
 						//LoseHp (damage);
-						if(damage > 0	)
+						if(damage > 0	){
 							GameManager.instance.print ("Melee damage: " + damage);
+						}
 						else
 							GameManager.instance.print ("You miss!");
 					} else {
@@ -186,7 +190,6 @@ namespace Completed
 							}
 						}
 					}
-					GameManager.instance.print ("Trying to move - "+xDir+","+yDir);
 					/*if (Mathf.Abs(targetLoc.y - transform.position.y) > float.Epsilon)
 						yDir = targetLoc.y > transform.position.y ? 1 : -1;
 
