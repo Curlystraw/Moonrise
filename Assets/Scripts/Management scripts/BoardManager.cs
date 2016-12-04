@@ -79,7 +79,7 @@ public class BoardManager : MonoBehaviour {
 
         boardHolder = new GameObject("Board").transform;
 		mapGen = GetComponent<MazeGenerator2>();
-		mapGen.Init();
+		//mapGen.Init();
 		columns = mapGen.radius*3;
 		rows = mapGen.radius*3;
 		mapGen.GeneratePath();

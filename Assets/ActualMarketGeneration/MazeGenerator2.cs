@@ -22,7 +22,7 @@ public class MazeGenerator2 : MonoBehaviour {
 	public int maxRoomSize = 10; //maximum room dimension
 
 	// Use this for initialization
-	public void Init () {
+	public void Start () {
 		boardMap = new int[radius*3, radius*3];
 		largeGrid = new Tile[radius * 3, radius * 3]; //ensures that the large grid is a 3x inflation of the original grid
 		rooms = new Room[Random.Range (minRoomCount, maxRoomCount)]; //creates a randomly sized list of rooms
@@ -30,6 +30,7 @@ public class MazeGenerator2 : MonoBehaviour {
 			rooms [i] = new Room (minRoomSize, maxRoomSize); //initializes each room
 		}
 		Debug.Log("mazegen initialized");	
+		GeneratePath ();
 		//StartCoroutine ("GeneratePath");
 	}
 
@@ -197,7 +198,9 @@ public class MazeGenerator2 : MonoBehaviour {
 						roomParents[i].transform.position.y < roomParents[iter].transform.position.y + (float)rooms[iter].size.GetLength(1) &&
 						roomParents[i].transform.position.y + (float)rooms[i].size.GetLength(1) > roomParents[iter].transform.position.y) {
 						isValid = false;
-					} else {
+					}
+					if (roomParents[i].transform.position.y + (float)rooms[i].size.GetLength(1) >= radius * 3 - 15) {
+						isValid = false;
 					}
 				}
 				tries++;
@@ -209,7 +212,7 @@ public class MazeGenerator2 : MonoBehaviour {
 			} while (!isValid);
 			if (spawnRoom) {
 				for (int h = 0; h < room.tiles.GetLength (1); h++) {
-					for (int w = 0; w < room.tiles.GetLength (0); w++) {
+					for (int w = 1; w < room.tiles.GetLength (0); w++) {
 						room.tiles [w, h] = new Tile ();
 						Destroy (largeGrid [(int)roomParents [iter].transform.position.x + w, (int)roomParents [iter].transform.position.y + h].obj);
 						/*if (h == 0 || w == 0 || h == room.tiles.GetLength (1) - 1 || w == room.tiles.GetLength (0) - 1) {
@@ -217,20 +220,44 @@ public class MazeGenerator2 : MonoBehaviour {
 						} else {
 							room.tiles [w, h].obj = Instantiate (floor) as GameObject;
 						}*/
-						room.tiles [w, h].obj = Instantiate (floor) as GameObject;
-						//yield return new WaitForSeconds (speed);
-						room.tiles [w, h].obj.transform.parent = roomParents [iter].transform;
-						room.tiles [w, h].obj.transform.localPosition = new Vector3 (w, h, 0);
+						if (h < radius * 3 - 15) {
+							room.tiles [w, h].obj = Instantiate (floor) as GameObject;
+							//yield return new WaitForSeconds (speed);
+							room.tiles [w, h].obj.transform.parent = roomParents [iter].transform;
+							room.tiles [w, h].obj.transform.localPosition = new Vector3 (w, h, 0);
+						} else {
+							Destroy (room.tiles [w, h].obj);
+						}
 					}
 				}
 			}
 			iter++;
 		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+		//DOCK GENERATION
+		//---------------------------------------------------------------------------------------------------------
+		for (int h = radius * 3 - 3; h < radius * 3; h++) {
+			for (int w = 0; w < radius * 3; w++) {
+				Destroy (largeGrid [w, h].obj);
+				Instantiate (floor, new Vector3 (w, h, 0), Quaternion.identity);
+			}
+		}
+		for (int h = radius * 3; h < radius * 3 + 12; h++) {
+			for (int w = 0; w < radius * 3; w+= 8) {
+				Instantiate (floor, new Vector3 (w, h, 0), Quaternion.identity);
+				Instantiate (floor, new Vector3 (w+1, h, 0), Quaternion.identity);
+				Instantiate (floor, new Vector3 (w+2, h, 0), Quaternion.identity);
+				if (w + 3 < radius * 3)
+					Instantiate (wall, new Vector3 (w+3, h, 0), Quaternion.identity);
+				if (w + 4 < radius * 3)
+					Instantiate (wall, new Vector3 (w+4, h, 0), Quaternion.identity);
+				if (w + 5 < radius * 3)
+					Instantiate (wall, new Vector3 (w+5, h, 0), Quaternion.identity);
+				if (w + 6 < radius * 3)
+					Instantiate (wall, new Vector3 (w+6, h, 0), Quaternion.identity);
+				if (w + 7 < radius * 3)
+					Instantiate (wall, new Vector3 (w+7, h, 0), Quaternion.identity);
+			}
+		}
 	}
 }
 
