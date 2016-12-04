@@ -143,7 +143,7 @@ namespace Completed
 						GameManager.instance.print ("The enemy tries to attack but misses!");
 					}
 				}
-				player.LoseHp(playerDamage);
+				//player.CurrentHP -= playerDamage;
 			} else
 
 			//If cannot attack target, attempt to pursue target

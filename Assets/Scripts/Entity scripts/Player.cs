@@ -72,7 +72,7 @@ namespace Completed
 		{
 			displayText.text = timeLeft + " | " + goldText + " | " + hpText;
 			Vector3 scale = hpBar.transform.localScale;
-			scale.x = ((float)currentHP/(float)totalHP);
+			scale.x = ((float)CurrentHP/(float)TotalHP);
 			hpBar.transform.localScale = scale;
 
 			if (message != "") {
@@ -262,13 +262,22 @@ namespace Completed
 			//SceneManager.LoadScene(SceneManager.GetActiveScene);
         }
 
-		public void LoseHp(int loss)
+		override public void LoseHp(int loss)
 		{
+			Debug.Log ("In loseHP");
+
 			this.CurrentHP -= loss;
 			String message = "-" + loss + " HP";
+			Debug.Log (this.CurrentHP);
 			hpText = "HP: " + this.CurrentHP;
 			UpdateText ();
 			CheckIfGameOver();
+		}
+
+		protected override void KillObject()
+		{
+			Debug.Log ("You DIED");
+			//Destroy (gameObject);
 		}
 
         public void LoseGold(int loss)

@@ -21,11 +21,12 @@ namespace Completed {
 				ObtainItem (playerTransform.GetComponent<Player>()); // this should never happen
 			}
 		}
+			
 
 		public void ObtainItem(Player player) {
 			AddItem (item);
 			GameManager.instance.print ("A " + item.Name + " was added to inventory");
-			Destroy (this.gameObject);
+			this.KillObject ();
 		}
 	}
 }

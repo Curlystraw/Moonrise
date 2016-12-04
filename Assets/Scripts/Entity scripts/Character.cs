@@ -31,7 +31,7 @@ namespace Completed
 		protected EquippedItemSet equippedItems;
 		protected Inventory inventory;
 
-		public Character () : this(90, .1, .1, 5, .9, 5, 1.0)
+		public Character () : this(90, .1, .1, 5, .9, 1, 1.0)
 		{
 		}
 			
@@ -71,7 +71,7 @@ namespace Completed
 
 				if (UnityEngine.Random.Range (0.0f, 1.0f) > missValue) {
 					int damage = this.TotalAttack + (int)(this.TotalAttack * (UnityEngine.Random.Range (0.0f, 1.0f) / 10 - .05));
-					target.CurrentHP -= damage;
+					target.LoseHp(damage);
 					return damage;
 				}
 			}
@@ -87,7 +87,7 @@ namespace Completed
 			if (UnityEngine.Random.Range (0.0f, 1.0f) <= this.TotalAccuracy) {
 				if (UnityEngine.Random.Range (0.0f, 1.0f) > target.TotalBlock) {
 					int damage = this.TotalAttack + (int)(this.TotalAttack * (UnityEngine.Random.Range (0.0f, 1.0f) / 10 - .05));
-					target.CurrentHP -= damage;
+					target.LoseHp (damage);
 					return damage;
 				}
 			}
@@ -140,15 +140,17 @@ namespace Completed
 		/// <param name="loss">Loss.</param>
 		public virtual void LoseHp(int loss)
 		{
-			currentHP -= loss;
-			if (currentHP <= 0) {
-				KillObject ();
+			CurrentHP -= loss;
+			if (CurrentHP <= 0) {
+				//KillObject ();
 			}
 			return;
 		}
+			
 
 		protected virtual void KillObject()
 		{
+			Destroy (this.gameObject);
 		}
 		/// <summary>
 		/// Unequip the item and add it to the inventory.
@@ -239,6 +241,10 @@ namespace Completed
 			}
 			set {
 				currentHP = value;
+				if (currentHP == 0) {
+					this.KillObject ();
+				}
+
 			}
 		}
 
