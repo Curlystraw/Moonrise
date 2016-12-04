@@ -139,6 +139,7 @@ public class BoardManager : MonoBehaviour {
         for (int i = 0; i < objectCount; i++)
         {
             Vector2 randomPosition = RandomPosition();
+			Debug.Log(boardMap[(int)randomPosition.x,(int)randomPosition.y]);
 			while(boardMap[(int)randomPosition.x,(int)randomPosition.y] > 0)
 				randomPosition = RandomPosition();
 			if(blocking)

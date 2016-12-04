@@ -147,7 +147,7 @@ namespace Completed
 
 			//Attempt to attack target
 			float distance = Mathf.Sqrt (Mathf.Pow (target.position.x - this.transform.position.x, 2) + Mathf.Pow (target.position.y - this.transform.position.y, 2));
-			if (distance <= this.TotalRange) {
+			if (distance <= this.TotalRange && hit.transform == target) {
 				GameManager.instance.print ("within range");
 				int damage;
 				if (distance <= 1) {
@@ -166,57 +166,59 @@ namespace Completed
 					}
 				}
 				player.LoseHp(playerDamage);
-			} else
+			} else{
 
-			//If cannot attack target, attempt to pursue target
-			if(path.Count > 0){
-					GameManager.instance.print ("Trying to move");
-				yDir = 0;
-				xDir = 0;
-				//Debug.Log(path[0]+" "+path[path.Count-1]);
-				while(Mathf.Abs(yDir)+Mathf.Abs(xDir) < float.Epsilon){
-					yDir = (int)(path[path.Count-1].y-transform.position.y);
-					xDir = (int)(path[path.Count-1].x-transform.position.x);
-					if(Mathf.Abs(yDir)+Mathf.Abs(xDir) < float.Epsilon){
-						path.RemoveAt(path.Count-1);
+				//If cannot attack target, attempt to pursue target
+				if(path.Count > 0){
+					yDir = 0;
+					xDir = 0;
+					//Debug.Log(path[0]+" "+path[path.Count-1]);
+					while(Mathf.Abs(yDir)+Mathf.Abs(xDir) < float.Epsilon){
+						yDir = (int)(path[path.Count-1].y-transform.position.y);
+						xDir = (int)(path[path.Count-1].x-transform.position.x);
+						
+						if(Mathf.Abs(yDir)+Mathf.Abs(xDir) < float.Epsilon){
+							path.RemoveAt(path.Count-1);
 
-						if(path.Count == 0){
-							Debug.Log("\"Target Lost.\" - "+this.name.ToString());
-							break;
+							if(path.Count == 0){
+								Debug.Log("\"Target Lost.\" - "+this.name.ToString());
+								break;
+							}
 						}
 					}
-				}
-				/*if (Mathf.Abs(targetLoc.y - transform.position.y) > float.Epsilon)
-					yDir = targetLoc.y > transform.position.y ? 1 : -1;
+					GameManager.instance.print ("Trying to move - "+xDir+","+yDir);
+					/*if (Mathf.Abs(targetLoc.y - transform.position.y) > float.Epsilon)
+						yDir = targetLoc.y > transform.position.y ? 1 : -1;
 
-				else if (Mathf.Abs(targetLoc.x - transform.position.x) > float.Epsilon)
-					xDir = targetLoc.x > transform.position.x ? 1 : -1;
-				else
-					targetLoc = new Vector2();*/ 	
-				
-			}
-			//If no target is known, move randomly
-			else{
-				int moveType = Mathf.FloorToInt(Random.Range(0,5));
-				switch(moveType){
-				case 0:
-					break;
-				case 1:
-					xDir = 1;
-					break;
-				case 2:
-					xDir = -1;
-					break;
-				case 3:
-					yDir = 1;
-					break;
-				case 4:
-					yDir = -1;
-					break;
+					else if (Mathf.Abs(targetLoc.x - transform.position.x) > float.Epsilon)
+						xDir = targetLoc.x > transform.position.x ? 1 : -1;
+					else
+						targetLoc = new Vector2();*/ 	
+					
 				}
-			}
+				//If no target is known, move randomly
+				else{
+					int moveType = Mathf.FloorToInt(Random.Range(0,5));
+					switch(moveType){
+					case 0:
+						break;
+					case 1:
+						xDir = 1;
+						break;
+					case 2:
+						xDir = -1;
+						break;
+					case 3:
+						yDir = 1;
+						break;
+					case 4:
+						yDir = -1;
+						break;
+					}
+				}
 
-			AttemptMove(xDir, yDir);
+				AttemptMove(xDir, yDir);
+			}
 			AP--;
 			
 			//Return true if the enemy can move again
