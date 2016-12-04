@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 namespace Completed
 {
@@ -21,6 +22,11 @@ namespace Completed
         private bool skipMove, visible;
 		private List<Vector2> path;
 
+		public Sprite looterFront;
+		public Sprite looterBack;
+		public Sprite looterLeft;
+		public Sprite looterRight;
+
 
 		//Contains enemy's hitbox
 		private BoxCollider2D hitbox;
@@ -31,6 +37,7 @@ namespace Completed
 
             animator = GetComponent<Animator>();
 			hitbox = GetComponent<BoxCollider2D>();
+			orientation = Orientation.South;
 
             target = GameObject.FindGameObjectWithTag("Player").transform;
 			player = target.GetComponent<Player>();
@@ -40,7 +47,22 @@ namespace Completed
             base.Start();
 
 			path = new List<Vector2>();
+			UpdateSprite ();
         }
+
+		protected override void UpdateSprite()
+		{
+			Sprite sprite;
+			if (orientation == Orientation.North)
+				sprite = looterBack;
+			else if (orientation == Orientation.East)
+				sprite = looterRight;
+			else if (orientation == Orientation.South)
+				sprite = looterFront;
+			else
+				sprite = looterLeft;
+			this.gameObject.GetComponent<SpriteRenderer> ().sprite = sprite;
+		}
 
 		/// <summary>
 		/// Reduces enemy's HP when clicked and in range

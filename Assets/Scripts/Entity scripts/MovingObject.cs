@@ -17,6 +17,8 @@ namespace Completed
         private Rigidbody2D rb2D;			
         private float inverseMoveTime;		// 1/moveTime, used to calculate the distance per frame for movement
 
+		public Orientation orientation;
+
         // Use this for initialization
         protected virtual void Start()
         {
@@ -63,13 +65,20 @@ namespace Completed
 		//Similar to move, but if a move fails due to a unit, strike the unit.
         protected virtual void AttemptMove(int xDir, int yDir)
         {
-            RaycastHit2D hit;
-            bool canMove = Move(xDir, yDir, out hit);
-			if (hit.transform != null && !canMove)
-				OnCantMove (hit.transform);
+			if (xDir > 0)
+				orientation = Orientation.East;
+			else if (xDir < 0)
+				orientation = Orientation.West;
+			else if (yDir > 0)
+				orientation = Orientation.North;
+			else
+				orientation = Orientation.South;
+			UpdateSprite ();
+
         }
 
         protected abstract void OnCantMove(Transform transform); // expects transform to be not null
 		protected abstract void OnFinishMove();
+		protected abstract void UpdateSprite();
     }
 }
