@@ -269,6 +269,9 @@ namespace Completed
 		protected override void OnFinishMove(){
 
 		}
+
+		protected override void UpdateSprite(){
+		}
 	}
 }
 
