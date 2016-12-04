@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class MazeGenerator2 : MonoBehaviour {
+public class MazeGenerator2 : mapGenerator {
 	//NOTE: I highly recommend putting all of the prefabs into another class that is referenced by every generation class (ex. this and BoardManager)
 	public GameObject floor; //floor prefab
 	public GameObject wall; //wall prefab
@@ -22,7 +22,7 @@ public class MazeGenerator2 : MonoBehaviour {
 	public int maxRoomSize = 10; //maximum room dimension
 
 	// Use this for initialization
-	public void Init () {
+	public override int[,] init () {
 		boardMap = new int[radius*3, radius*3];
 		largeGrid = new Tile[radius * 3, radius * 3]; //ensures that the large grid is a 3x inflation of the original grid
 		rooms = new Room[Random.Range (minRoomCount, maxRoomCount)]; //creates a randomly sized list of rooms
@@ -31,10 +31,11 @@ public class MazeGenerator2 : MonoBehaviour {
 		}
 		Debug.Log("mazegen initialized");	
 		//StartCoroutine ("GeneratePath");
+		return(GeneratePath());
 	}
 
 	//The entire algorithm. Recommend eventually moving this into several functions
-	public void GeneratePath () {
+	public int[,] GeneratePath () {
 		if (radius % 2 == 0) {
 			radius++; //if the user is dumb and makes the radius an even number, makes it odd to ensure the path generator doesn't look weird
 		}
@@ -174,6 +175,7 @@ public class MazeGenerator2 : MonoBehaviour {
 				//destroy the original grid instantiations
 				Destroy (grid [w, h].obj);
 			}
+
 		}
 		//create a parent object to link all room tiles together and set up origin point
 		GameObject[] roomParents = new GameObject[rooms.Length];
@@ -226,6 +228,9 @@ public class MazeGenerator2 : MonoBehaviour {
 			}
 			iter++;
 		}
+
+
+		return boardMap;
 	}
 	
 	// Update is called once per frame

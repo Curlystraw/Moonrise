@@ -27,15 +27,21 @@ public static class ActualMarketGeneration {
 
 	static List<int[]> roadSpaces = new List<int[]>();
 
-	public static void Start (GameObject _n, GameObject _b, GameObject _x, GameObject _i, GameObject _g, GameObject _a, GameObject _r, GameObject _c, GameObject _v, GameObject _h) {
+	public static int[,] Start (GameObject _n, GameObject _b, GameObject _x, GameObject _i, GameObject _g, GameObject _a, GameObject _r, GameObject _c, GameObject _v, GameObject _h, GameObject _tBuilding1, GameObject _tBuilding2) {
 		n = _n; b = _b; x = _x; iA = _i; g = _g; a = _a; rA = _r; cA = _c; v = _v; h = _h;
+		GameObject tBuilding1 = _tBuilding1, tBuilding2 = _tBuilding2;
+
 		MonoBehaviour.print (Mathf.Sign (1-1));
 		grid = new char[gridSizeX, gridSizeY];
 		bigGrid = new char[bigGridSizeX, bigGridSizeY];
 		zoneBounds = new int[,]{{2, 2, 0, 10, 2, 30}, {2, 30, 10, 0, 30, 30}, {30, 30, 0, -10, 30, 2}, {30, 2, -10, 0, 2, 2}};
+
+		//array map for pathfinding, later
+		int[,] boardMap = new int[gridSizeX, gridSizeY];
 	
 		for (int r = 0; r < gridSizeX; r ++) {
 			for (int c = 0; c < gridSizeY; c++) {
+				boardMap[r,c] = 0;
 				grid[r,c] = 'n';
 				if (r % 3 == 0)
 					bigGrid[r/3,c/3] = 'n';
@@ -72,23 +78,27 @@ public static class ActualMarketGeneration {
 				fillSquares(i, j, bigGrid[i, j]);
 			}
 		}
-
+		GameObject[,] tiles = new GameObject[gridSizeX,gridSizeY];
 		for (int r = 0; r < gridSizeX; r++) {
 			for (int c = 0; c < gridSizeY; c++) {
 				GameObject currentTile = null;
+				Vector2 offset = new Vector2(0,0);
 				switch(grid[r, c]) {
 				case 'n': //solid tile
 					currentTile = n;
+					boardMap[r,c] = 1;
 					break;
 				case 'b': //market tile
 					currentTile = b;
 					break;
 				case 'x': //solid tile
 					currentTile = x;
+					boardMap[r,c] = 1;
 					//fill(255, 0, 0);
 					break;
 				case 'i': //solid tile
 					currentTile = iA;
+					boardMap[r,c] = 1;
 					//fill(150, 0, 150);
 					break;
 				case 'g': //gateway tile/market tile
@@ -103,12 +113,31 @@ public static class ActualMarketGeneration {
 				case 'c': //road tile
 					currentTile = cA;
 					break;
-				case 'v': //solid tile
+				case 'v': //Vertical walls
 					currentTile = v;
+					boardMap[r,c] = 1;
 					//fill(0, 255, 0);
 					break;
-				case 'h': //solid tile
-					currentTile = h;
+				case 'h': //Horizontal walls
+					if(r > 0 && ("barc").Contains(grid[r-1,c].ToString())){
+						float rand = Random.Range(8,10);
+						//Occasionally select a building instead, removing extraneous tiles if necessary
+						if(rand < 8)
+							currentTile = h;
+						else{
+							if(rand == 8)
+								currentTile = tBuilding1;
+							else
+								currentTile = tBuilding2;
+							
+							if(r > 0)
+								GameObject.Destroy(tiles[r+1,c]);
+
+							offset = new Vector2(0f,0.5f);
+						}
+					}else
+						currentTile = h;
+					boardMap[r,c] = 1;
 					//fill(0, 0, 255);
 					break;
 				default:
@@ -116,10 +145,12 @@ public static class ActualMarketGeneration {
 					break;
 				}
 				if (currentTile != null) {
-					MonoBehaviour.Instantiate (currentTile, new Vector3 (c, r, 0f), Quaternion.identity);
+					tiles[r,c] = (GameObject)MonoBehaviour.Instantiate (currentTile, new Vector3 (c+offset.x, r+offset.y, 0f), Quaternion.identity);
 				}
 			}
 		}
+
+		return boardMap;
 	}
 
 	static void makeMarkets(int n, int j) {
