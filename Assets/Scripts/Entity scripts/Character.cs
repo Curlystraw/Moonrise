@@ -23,7 +23,7 @@ namespace Completed
 		protected double totalAccuracy;
 		protected int totalRange;
 
-		protected int currentHP;
+		public int currentHP;
 
 		protected double baseSpeed;
 		protected double totalSpeed;
@@ -31,30 +31,30 @@ namespace Completed
 		protected EquippedItemSet equippedItems;
 		protected Inventory inventory;
 
-		public Character () : this(100, .1, .1, 5, .9, 5, 1.0)
+		public Character () : this(90, .1, .1, 5, .9, 5, 1.0)
 		{
 		}
 			
 		public Character (int hp, double dodge, double block, int attack, double accuracy,int range, double speed)
 		{
-			baseHP = hp;
-			baseBlock = block;
-			baseAttack = attack;
-			baseAccuracy = accuracy;
-			baseRange = range;
-			baseSpeed = speed;
+			this.baseHP = hp;
+			this.baseBlock = block;
+			this.baseAttack = attack;
+			this.baseAccuracy = accuracy;
+			this.baseRange = range;
+			this.baseSpeed = speed;
 
-			currentHP = baseHP;
-			totalHP = baseHP;
+			this.currentHP = baseHP;
+			this.totalHP = baseHP;
 
-			totalBlock = baseBlock;
-			totalAttack = baseAttack;
-			totalAccuracy = baseAccuracy;
-			totalRange = baseRange;
-			totalSpeed = baseSpeed;
+			this.totalBlock = baseBlock;
+			this.totalAttack = baseAttack;
+			this.totalAccuracy = baseAccuracy;
+			this.totalRange = baseRange;
+			this.totalSpeed = baseSpeed;
 
-			equippedItems = new EquippedItemSet ();
-			inventory = new Inventory ();
+			this.equippedItems = new EquippedItemSet ();
+			this.inventory = new Inventory ();
 		}
 
 		/// <summary>

@@ -80,6 +80,7 @@ MonoBehaviour:
   blockingLayer:
     serializedVersion: 2
     m_Bits: 256
+  currentHP: 50
   playerDamage: 2
   indicator: {fileID: 1000013966800682, guid: 38d7c28b8e2bad64cbe045e0164934db, type: 2}
   sightRange: 5
