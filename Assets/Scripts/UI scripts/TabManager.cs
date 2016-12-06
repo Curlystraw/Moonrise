@@ -147,6 +147,7 @@ public class TabManager : MonoBehaviour {
             else
                 expandTab();
         }
+
     }
 
     //Needs to poll keyboard input, since the game is intended for either keyboard or mouse.

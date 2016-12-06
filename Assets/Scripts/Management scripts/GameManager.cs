@@ -22,6 +22,8 @@ namespace Completed
         public bool playersTurn = true;     
 		public bool enemyClicked = false;
 
+        public int journalSize = 30;
+
 
         private Text levelText, actionText;                                 
         private GameObject levelImage;                        
@@ -29,7 +31,9 @@ namespace Completed
         private int level = 1;                                  
         private List<Enemy> enemies;                          
         private bool enemiesMoving;                             
-        private bool doingSetup = true;     
+        private bool doingSetup = true;
+
+        private Queue<string> journalQueue;   
                             
 
 
@@ -48,6 +52,8 @@ namespace Completed
             DontDestroyOnLoad(gameObject);
 
             enemies = new List<Enemy>();
+
+            journalQueue = new Queue<string>();
 
             boardScript = GetComponent<BoardManager>();
 
@@ -185,6 +191,15 @@ namespace Completed
 			}
 			return null;
 		}
+        /// <summary>
+        /// Gets the current game Journal
+        /// </summary>
+        /// <returns></returns>
+        public Queue<string> getJournal()
+        {
+            Queue<string> retJ = journalQueue;
+            return retJ;
+        }
 
 		/// <summary>
 		/// Adds "string" to the action log
@@ -192,7 +207,12 @@ namespace Completed
 		public void print(string s){
 			Debug.Log(s);
 			actionText.text += s+"\n";
-		}
+
+            //Should probably be in its own location, but that would take a lot of effort for little reward.
+            if (journalQueue.Count == journalSize)
+                journalQueue.Dequeue();
+            journalQueue.Enqueue(s);
+        }
 
 
 		public void clearLog(){

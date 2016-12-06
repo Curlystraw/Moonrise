@@ -83,13 +83,13 @@
     <Compile Include="Assets\Scripts\Entity scripts\Steak.cs" />
     <Compile Include="Assets\Scripts\Entity scripts\Wall.cs" />
     <Compile Include="Assets\Scripts\Entity scripts\Weapon.cs" />
-    <Compile Include="Assets\Scripts\Loader.cs" />
     <Compile Include="Assets\Scripts\Management scripts\BoardManager.cs" />
     <Compile Include="Assets\Scripts\Management scripts\CameraMove.cs" />
     <Compile Include="Assets\Scripts\Management scripts\FogOfWar.cs" />
     <Compile Include="Assets\Scripts\Management scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\Management scripts\InventoryManager.cs" />
     <Compile Include="Assets\Scripts\UI scripts\ExpandTemplate.cs" />
+    <Compile Include="Assets\Scripts\UI scripts\JournalManager.cs" />
     <Compile Include="Assets\Scripts\UI scripts\MapLoader.cs" />
     <Compile Include="Assets\Scripts\UI scripts\TabManager.cs" />
     <Compile Include="Assets\StartGame.cs" />

@@ -73,6 +73,11 @@ public class MapLoader : MonoBehaviour
         }
         mapTex.Apply();
         mapSprite = Sprite.Create(mapTex, new Rect(0, 0, mapTex.width, mapTex.height), new Vector2(0.5f, 0.5f),16.0f);
+        var mapTransform = mainMap.transform.FindChild("MapStore").GetComponent<RectTransform>();
+        if (mapTransform != null)
+        {
+            mapTransform.sizeDelta = new Vector2(mapTransform.sizeDelta.x, mapTransform.sizeDelta.y * ((float)mapTex.height / (float)mapTex.width)); //Perfect Square Pixels
+        }
         mainMap.transform.FindChild("MapStore").gameObject.GetComponent<Image>().sprite = mapSprite;
     }
     
