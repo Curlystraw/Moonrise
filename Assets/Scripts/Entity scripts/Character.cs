@@ -1,11 +1,15 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using ItemSpace;
 using UnityEditor;
 using UnityEngine;
+using System.Xml.Linq;
+using System.Linq;
 
 namespace Completed
 {
-	public class Character : MovingObject
+	public class Character : MovingObject, SerialOb
 	{
 		//leveled up with magic character points
 		protected int baseHP;
@@ -260,6 +264,37 @@ namespace Completed
 				inventory = value;
 			}
 		}
+		#endregion
+
+		#region serialization
+		virtual public XElement serialize(){
+			XElement node = new XElement("character",
+				new XElement("bAttack", baseAttack),
+				new XElement("bAccuracy", baseAccuracy),
+				new XElement("bHP", baseHP),
+				new XElement("bDodge", baseDodge),
+				new XElement("bBlock", baseBlock),
+				new XElement("bRange", baseRange),
+				new XElement("bSpeed", baseSpeed),
+				new XElement("curHP", currentHP));
+			return node;
+		}
+
+		virtual public bool deserialize(XElement s){
+			//attack, accuracy, hp, dodge, block, range, speed, current HP
+			List<XElement> info = s.Descendants().ToList();
+			baseAttack = Convert.ToInt32(info[0].Value);
+			baseAccuracy = Convert.ToDouble(info[1].Value);
+			baseHP = Convert.ToInt32(info[2].Value);
+			baseDodge = Convert.ToDouble(info[3].Value);
+			baseBlock = Convert.ToDouble(info[4].Value);
+			baseRange = Convert.ToInt32(info[5].Value);
+			baseSpeed = Convert.ToDouble(info[6].Value);
+			currentHP = Convert.ToInt32(info[7].Value);
+
+			return true;
+		}
+
 		#endregion
 
 		protected override void OnCantMove(Transform transform)

@@ -1,13 +1,16 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System.Collections.Generic;
+using System.Xml.Linq;
+using System.Linq;
 using UnityEngine.UI;
 using System;
 
 namespace Completed
 {
 
-	public class Player : Character
+	public class Player : Character, SerialOb
     {
         public int wallDamage = 1;
         public int pointsPerGold = 10;
@@ -341,6 +344,31 @@ namespace Completed
 			UpdateText ();
 			UpdateSprite ();
 		}
+
+		#region serialization
+		//Serialization methods
+		public override XElement serialize(){
+			XElement node = new XElement("player",
+				new XElement("locationX",this.transform.localPosition.x),
+				new XElement("locationY",this.transform.localPosition.y),
+				new XElement("werewolf",GameManager.instance.isWerewolf),
+				base.serialize());
+			return node;
+		}
+
+		public override bool deserialize(XElement s){
+			//LocationX, locationY, werewolf status, character object
+			List<XElement> info = s.Elements().ToList<XElement>();
+			Vector3 v = new Vector3(0,0,0);
+			v.x = (float)Convert.ToDouble(info[0].Value);
+			v.y = (float)Convert.ToDouble(info[1].Value);
+			this.transform.localPosition = v;
+			GameManager.instance.isWerewolf = Convert.ToBoolean(info[2].Value);
+			base.deserialize(new XElement(info[3]));
+			return true;
+		}
+
+		#endregion
 	}
 
 	public enum Orientation

@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
+using System.Linq;
+using System.Xml.Linq;
+using sys = System;
 
 namespace Completed
 {
@@ -272,5 +275,28 @@ namespace Completed
 			GameManager.instance.RemoveEnemyFromList (this);
 			Destroy (gameObject);
 		}
+
+		#region serialize
+		public XElement serialize(){
+			XElement enemyNode = new XElement("enemy",
+				new XElement("locationX",this.transform.localPosition.x),
+				new XElement("locationY",this.transform.localPosition.y),
+				base.serialize());
+
+			return enemyNode;
+		}
+
+
+		public override bool deserialize(XElement s){
+			//LocationX, locationY, werewolf status, character object
+			List<XElement> info = s.Descendants().ToList<XElement>();
+			Vector3 v = new Vector3(0,0,0);
+			v.x = (float)sys.Convert.ToDouble(info[0].Value);
+			v.y = (float)sys.Convert.ToDouble(info[1].Value);
+			this.transform.localPosition = v;
+			base.deserialize(new XElement(info[2]));
+			return true;
+		}
+		#endregion
     }
 }

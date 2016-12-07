@@ -24,6 +24,7 @@ public class MazeGenerator2 : mapGenerator {
 	// Use this for initialization
 	public override int[,] init () {
 		boardMap = new int[radius*3, radius*3];
+		tileMap = new char[radius*3, radius*3];
 		largeGrid = new Tile[radius * 3, radius * 3]; //ensures that the large grid is a 3x inflation of the original grid
 		rooms = new Room[Random.Range (minRoomCount, maxRoomCount)]; //creates a randomly sized list of rooms
 		for (int i = 0; i < rooms.Length; i++) {
@@ -168,6 +169,11 @@ public class MazeGenerator2 : mapGenerator {
 					for(int x = 0; x < 3; x++){
 						for(int y = 0; y < 3; y++){
 							boardMap[w*3+x,h*3+y] = grid[w,h].passable;
+							if(grid[w,h].passable == 0){
+								tileMap[w*3+x,h*3+y] = 'f';
+							}
+							else
+								tileMap[w*3+x,h*3+y] = 'w';
 						}
 					}
 					//yield return new WaitForSeconds (speed);

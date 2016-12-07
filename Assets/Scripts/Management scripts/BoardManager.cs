@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System;
+using System.Linq;
+using System.Xml.Linq;
 using System.Collections.Generic;
 using Random = UnityEngine.Random;
 using Completed;
 
-public class BoardManager : MonoBehaviour {
+public class BoardManager : MonoBehaviour, SerialOb {
     [Serializable]
 
     //Class that acts as a range for a number of uses
@@ -19,15 +21,33 @@ public class BoardManager : MonoBehaviour {
             maximum = max;
         }
     }
+	//Enum for maps
+	public enum areas{
+		Market,
+		Slums,
+		Entertainment_NI,
+		Government_NI,
+		Temple_NI,
+		University_NI,
+		Estates_NI
+	}
+
+	private Dictionary<string,areas> areaLookup = new Dictionary<string, areas>{
+		{"Market", areas.Market},
+		{"Slums", areas.Slums}
+	};
 
 	//References to the map generators
 	private MazeGenerator2 slumGen;
 	private GenerateMarket marketGen;
-	private Dictionary<string,mapGenerator> generators = new Dictionary<string,mapGenerator>();
-	public string area = "M";
-	private Dictionary<string,int[]> startLocs = new Dictionary<string,int[]>{
-		{"M", new int[2]{60,60}},
-		{"S", new int[2]{4,4}}
+	private Dictionary<areas,mapGenerator> generators = new Dictionary<areas,mapGenerator>();
+	public areas area = areas.Market;
+	private Dictionary<areas,int[]> startLocs = new Dictionary<areas,int[]>{
+		{areas.Market, new int[2]{60,60}},
+		{areas.Slums, new int[2]{4,4}}
+	};
+
+	private Dictionary<areas,int[]> entries = new Dictionary<areas,int[]>{
 	};
 
     private int columns = 100;                       //Columns on the board
@@ -56,7 +76,8 @@ public class BoardManager : MonoBehaviour {
     /// 2D array of the board, to be pulled for pathfinding, etc.
     /// Current tiles - 0 = floor, 1 = wall
     /// </summary>
-    private int[,] boardMap;
+    public int[,] boardMap;
+	public char[,] tileMap;
 
     private Transform boardHolder;                              //Holds the parent transform of the board   
     private List<Vector2> gridPositions = new List<Vector2>();  //A list of grid coordinates, [0,0] to [columns,rows]
@@ -86,13 +107,13 @@ public class BoardManager : MonoBehaviour {
 		slumGen = GetComponent<MazeGenerator2>();
 		marketGen = GetComponent<GenerateMarket>();
 
-		generators.Add("M", marketGen);
-		generators.Add("S", slumGen);
+		generators.Add(areas.Market, marketGen);
+		generators.Add(areas.Slums, slumGen);
 
 		mapGenerator generator = generators[area];
 
 		boardMap = generator.init();
-		Debug.Log(boardMap);
+		tileMap = generator.tileMap;
 
 		rows = boardMap.GetLength(0);
 		columns = boardMap.GetLength(1);
@@ -108,11 +129,36 @@ public class BoardManager : MonoBehaviour {
             for (int y = -1; y < rows + 1; y++)
             {
                 
-				GameObject f = Instantiate(fog, new Vector2(x,y), Quaternion.identity) as GameObject;
-				f.transform.SetParent(this.transform);
+				//GameObject f = Instantiate(fog, new Vector2(x,y), Quaternion.identity) as GameObject;
+				//f.transform.SetParent(this.transform);
             }
         }
     }
+
+	/// <summary>
+	/// Depending on the area, parses the map and creates exits to other zones
+	/// </summary>
+	public void BuildExits(){
+		switch(area){
+		case areas.Market:
+			int entry = 0;
+			for(int y = 0; y < boardMap.GetLength(1); y++){
+				int[] start = new int[2];
+				start[1] = 0;
+				if(boardMap[y,0] == 0){
+					entry++;
+					if(entry == 2){
+						start[0] = y;
+						entries[areas.Slums] = start;
+					}
+					Instantiate(door1, new Vector2(0, y), Quaternion.identity);//Create the floor exit
+				}
+			}
+			break;
+		case areas.Slums:
+			break;
+		}
+	}
 
     /// <summary>
     /// Creates a random position in the grid
@@ -160,10 +206,10 @@ public class BoardManager : MonoBehaviour {
 		LayoutObjectAtRandom (chestTiles, chestCount, chestCount);
         int enemyCount = 18;//(int)Mathf.Log(level, 2f);
         LayoutObjectAtRandom(enemyTiles, enemyCount, enemyCount);                   //Place enemies
-        Instantiate(door1, new Vector2(columns - 1, rows - 1), Quaternion.identity);//Create the floor exit
+
+		BuildExits();
 
     }
-
 
 
 	/// <summary>
@@ -253,6 +299,51 @@ public class BoardManager : MonoBehaviour {
 		}
 		return false;
 	}
+
+	#region serialization
+	public XElement serialize(){
+		XElement enemies = new XElement("enemies");
+		foreach(Enemy enemy in GameManager.instance.getEnemies()){
+			XElement e = enemy.serialize();
+			enemies.Add(e);
+		}
+
+		XElement entryPoints = new XElement("entries");
+		foreach(areas areaCode in entries.Keys){
+			XElement startLoc = new XElement(areaCode.ToString(), entries[areaCode][0]+","+entries[areaCode][1]);
+			entryPoints.Add(startLoc);
+		}
+
+		string stringMap = "";
+		for(int x = 0; x < tileMap.GetLength(0); x++){
+			for(int y = 0; y < tileMap.GetLength(1); y++){
+				stringMap += tileMap[x,y];
+				if(y+1 < tileMap.GetLength(1))
+					stringMap += ",";
+				else
+					stringMap += ";";
+			}
+		}
+
+		XElement tiles = new XElement("tiles", stringMap);
+
+		XElement node = new XElement(area.ToString(),tiles,enemies,entryPoints);
+
+		dataSlave.instance.areas[area.ToString()] = node;
+		dataSlave.instance.updateEles();
+
+		return node;
+	}
+
+
+	public bool deserialize(XElement s){
+			return true;
+	}
+	#endregion
+
+	public void updateEntryPoint(string area, int[] point){
+		entries[areaLookup[area]] = point;
+	}
 }
 
 
@@ -283,5 +374,6 @@ public class ASquare : IComparable<ASquare>{
 	public int CompareTo(ASquare compareASquare){
 		return this.cost.CompareTo(compareASquare.cost);
 	}
+
 
 }
