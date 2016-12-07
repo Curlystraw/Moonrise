@@ -1,4 +1,5 @@
-﻿using System;
+﻿using UnityEngine;
+using System;
 
 namespace ItemSpace
 {
@@ -8,6 +9,7 @@ namespace ItemSpace
 		protected ItemClass itemClass;
 
 		public static Item RandomItem() {
+			// eventually we'll add more items...
 			return Weapon.RandomItem ();
 		}
 
