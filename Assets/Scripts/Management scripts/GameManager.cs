@@ -15,23 +15,19 @@ namespace Completed
         public float levelStartDelay = 2f;
         public float turnDelay = 0.1f;
         public int playerGoldPoints = 100;
-		public int playerHp = 100;
 		public bool isWerewolf = false;
         public static GameManager instance = null;
         [HideInInspector]
         public bool playersTurn = true;
 		public bool enemyClicked = false;
 
-
-        private Text levelText, actionText;
-        private GameObject levelImage;
-        private BoardManager boardScript;
-        private int level = 1;
-        private List<Enemy> enemies;
-        private bool enemiesMoving;
+        private Text levelText, actionText;                                 
+        private GameObject levelImage;                        
+        private BoardManager boardScript;                       
+        public int level = 1;                                  
+        private List<Enemy> enemies;                          
+        private bool enemiesMoving;                             
         private bool doingSetup = true;
-                            
-
 
         /// <summary>
         /// Pre-Start initialization

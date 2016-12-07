@@ -225,6 +225,16 @@ Prefab:
       propertyPath: player
       value: 
       objectReference: {fileID: 836931943}
+    - target: {fileID: 11442854, guid: 240702aa0cfe4b147a8886d03c14b265, type: 2}
+      propertyPath: fog
+      value: 
+      objectReference: {fileID: 1000013503040542, guid: 7baf4b253367574499eef4268d796131,
+        type: 2}
+    - target: {fileID: 11442854, guid: 240702aa0cfe4b147a8886d03c14b265, type: 2}
+      propertyPath: chestTiles.Array.data[0]
+      value: 
+      objectReference: {fileID: 1000014228673168, guid: a65e7e84eac21ae42ab43ec74ba5ed82,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 240702aa0cfe4b147a8886d03c14b265, type: 2}
   m_IsPrefabParent: 0
