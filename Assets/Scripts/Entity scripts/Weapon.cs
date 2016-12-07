@@ -15,7 +15,7 @@ namespace ItemSpace
 		private int range;
 
 		private int attackBonus, hpBonus;
-		private double attackMult, speedMult;
+		private double rangedAttackMult, speedMult;
 
 		private static List<int> weightProbs = new List<int> (new[] {
 			30, 40, 30
@@ -63,38 +63,47 @@ namespace ItemSpace
 			this.suffix = suffix;
 
 			attackBonus = 0;
-			attackMult = 1;
+			rangedAttackMult = 1;
 			speedMult = 1;
 			hpBonus = 0;
 
 			switch (prefix) {
 			case WeaponPrefix.Great:
-				attackMult = 1.15;
-				break;
+				rangedAttackMult = 1.15;
+                    meleeAttackMult = 1.15;
+                    break;
 			case WeaponPrefix.Mighty:
-				attackMult = 1.25;
-				break;
+				rangedAttackMult = 1.25;
+                    meleeAttackMult = 1.15;
+                    break;
 			case WeaponPrefix.Masterful:
-				attackMult = 1.4;
-				break;
+				rangedAttackMult = 1.4;
+                    meleeAttackMult = 1.15;
+                    break;
 			case WeaponPrefix.Soldier:
-				attackMult = 1.2;
-				break;
+				rangedAttackMult = 1.2;
+                    meleeAttackMult = 1.15;
+                    break;
 			case WeaponPrefix.Knight:
-				attackMult = 1.3;
-				break;
+				rangedAttackMult = 1.3;
+                    meleeAttackMult = 1.15;
+                    break;
 			case WeaponPrefix.Captain:
-				attackMult = 1.45;
-				break;
+				rangedAttackMult = 1.45;
+                    meleeAttackMult = 1.15;
+                    break;
 			case WeaponPrefix.Ogre:
-				attackMult = 1.3;
-				break;
+				rangedAttackMult = 1.3;
+                    meleeAttackMult = 1.15;
+                    break;
 			case WeaponPrefix.Titan:
-				attackMult = 1.4;
-				break;
+				rangedAttackMult = 1.4;
+                    meleeAttackMult = 1.15;
+                    break;
 			case WeaponPrefix.Dragon:
-				attackMult = 1.6;
-				break;
+				rangedAttackMult = 1.6;
+                    meleeAttackMult = 1.15;
+                    break;
 			case WeaponPrefix.Medic:
 				hpBonus = 20;
 				break;
@@ -226,7 +235,7 @@ namespace ItemSpace
 
 		public double AttackMult {
 			get {
-				return attackMult;
+				return rangedAttackMult;
 			}
 		}
 
