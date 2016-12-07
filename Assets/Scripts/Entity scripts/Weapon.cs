@@ -17,7 +17,10 @@ namespace ItemSpace
 		private int attackBonus, hpBonus;
 		private double attackMult, speedMult;
 
-		private static List<int> weightProbs = new List<int> (new[] {
+		private static List<int> typeProbs = new List<int> (new [] {
+			50, 50
+		}),
+		weightProbs = new List<int> (new[] {
 			30, 40, 30
 		}),
 		lightPrefixProbs = new List<int> (new [] {
@@ -187,7 +190,7 @@ namespace ItemSpace
 		}
 
 		public static new Item RandomItem() {
-			WeaponType type = WeaponType.Crossbow;
+			WeaponType type = (WeaponType)RandomEnum (typeProbs);
 			WeaponWeight weight = (WeaponWeight)RandomEnum (weightProbs);
 			List<int> prefixProbs, suffixProbs;
 			if (weight == WeaponWeight.Light) {
@@ -216,6 +219,36 @@ namespace ItemSpace
 					rand -= probs [i];
 			}
 			return -1; // this point should not be reached
+		}
+
+		public WeaponType Type {
+			get {
+				return this.type;
+			}
+		}
+
+		public WeaponWeight Weight {
+			get {
+				return this.weight;
+			}
+		}
+
+		public WeaponPrefix Prefix {
+			get {
+				return this.prefix;
+			}
+		}
+
+		public WeaponInfix Infix {
+			get {
+				return this.infix;
+			}
+		}
+
+		public WeaponSuffix Suffix {
+			get {
+				return this.suffix;
+			}
 		}
 
 		public int AttackBonus {
@@ -248,7 +281,8 @@ namespace ItemSpace
 
 	public enum WeaponType
 	{
-		Crossbow
+		Crossbow,
+		Talisman
 	}
 
 	public enum WeaponWeight

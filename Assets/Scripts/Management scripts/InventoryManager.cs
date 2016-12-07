@@ -8,8 +8,7 @@ public class InventoryManager : MonoBehaviour
 {
 	// prefab
 	public GridLayoutGroup equippedGrid, inventoryGrid;
-	// public ItemObject itemObjPrefab;
-	public Sprite itemSprite;
+	public ItemObject itemObjPrefab;
 
 	public void InitializeGrids(Player player)
 	{
@@ -20,9 +19,9 @@ public class InventoryManager : MonoBehaviour
 	private void DumpItemsIntoGrid<T>(IEnumerable<T> items, GridLayoutGroup grid) where T : Item
 	{
 		foreach (Item item in items) {
-			ItemObject itemObj = grid.gameObject.AddComponent<ItemObject> () as ItemObject;
-			itemObj.item = item;
-			itemObj.sprite = itemSprite;
+			ItemObject itemObj = (ItemObject) Instantiate (itemObjPrefab, grid.transform);
+			itemObj.Item = item;
+			// GameManager.instance.print (item.Name + " made");
 		}
 	}
 
@@ -30,8 +29,13 @@ public class InventoryManager : MonoBehaviour
 	void Start ()
 	{
 		List<Item> tempList = new List<Item> ();
-		tempList.Add (Weapon.RandomItem ());
+		for (int i = 0; i < 5; i++)
+			tempList.Add (Weapon.RandomItem ());
 		DumpItemsIntoGrid (tempList, equippedGrid);
+
+		tempList = new List<Item> ();
+		for (int i = 0; i < 12; i++)
+			tempList.Add (Weapon.RandomItem ());
 		DumpItemsIntoGrid (tempList, inventoryGrid);
 	}
 	

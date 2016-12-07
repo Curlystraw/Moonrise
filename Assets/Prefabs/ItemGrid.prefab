@@ -21,7 +21,7 @@ GameObject:
   - 224: {fileID: 224000012736758534}
   - 114: {fileID: 114000012484566700}
   m_Layer: 0
-  m_Name: InventoryGrid
+  m_Name: ItemGrid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
