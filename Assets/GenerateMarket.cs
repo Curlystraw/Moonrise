@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GenerateMarket : MonoBehaviour {
+public class GenerateMarket : mapGenerator {
 	public GameObject n, b, x, i, g, a, r, c, v, h;
-
+	public GameObject tallBuilding1,tallBuilding2;
 	// Use this for initialization
-	void Start () {
-		ActualMarketGeneration.Start (n, b, x, i, g, a, r, c, v, h);
+	public override int[,] init () {
+		int[,] board = ActualMarketGeneration.Start (n, b, x, i, g, a, r, c, v, h,tallBuilding1,tallBuilding2);
+		return board;
 	}
 }

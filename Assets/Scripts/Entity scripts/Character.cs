@@ -71,8 +71,9 @@ namespace Completed
 				double missValue = distance <= 1 ? target.TotalBlock : target.TotalDodge;
 
 				if (UnityEngine.Random.Range (0.0f, 1.0f) > missValue) {
-					int damage = this.TotalAttack + (int)(this.TotalAttack * (UnityEngine.Random.Range (0.0f, 1.0f) / 10 - .05));
-					target.CurrentHP -= damage;
+					
+					int damage = this.TotalAttack + (int)(this.TotalAttack * (UnityEngine.Random.Range (0.0f, 0.5f) - .25f));
+					target.LoseHp(damage);
 					return damage;
 				}
 			}
@@ -87,8 +88,8 @@ namespace Completed
 		public int MeleeAttack(Character target) {
 			if (UnityEngine.Random.Range (0.0f, 1.0f) <= this.TotalAccuracy) {
 				if (UnityEngine.Random.Range (0.0f, 1.0f) > target.TotalBlock) {
-					int damage = this.TotalAttack + (int)(this.TotalAttack * (UnityEngine.Random.Range (0.0f, 1.0f) / 10 - .05));
-					target.CurrentHP -= damage;
+					int damage = this.TotalAttack + (int)(this.TotalAttack * (UnityEngine.Random.Range (0.0f, 0.5f) - .25f));
+					target.LoseHp(damage);
 					return damage;
 				}
 			}
@@ -265,6 +266,9 @@ namespace Completed
 
 		protected override void OnFinishMove(){
 
+		}
+
+		protected override void UpdateSprite(){
 		}
 	}
 }

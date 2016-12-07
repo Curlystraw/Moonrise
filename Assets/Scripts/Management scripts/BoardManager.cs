@@ -20,9 +20,15 @@ public class BoardManager : MonoBehaviour {
         }
     }
 
-	//Temporary reference to the map generator. Shit's awkward.
-	private MazeGenerator2 mapGen;
-
+	//References to the map generators
+	private MazeGenerator2 slumGen;
+	private GenerateMarket marketGen;
+	private Dictionary<string,mapGenerator> generators = new Dictionary<string,mapGenerator>();
+	public string area = "M";
+	private Dictionary<string,int[]> startLocs = new Dictionary<string,int[]>{
+		{"M", new int[2]{60,60}},
+		{"S", new int[2]{4,4}}
+	};
 
     private int columns = 100;                       //Columns on the board
     private int rows = 100;                          //Rows on the board
@@ -75,15 +81,26 @@ public class BoardManager : MonoBehaviour {
     /// </summary>
     void BoardSetup()
     {
-        //boardMap = new int[columns, rows];
 
         boardHolder = new GameObject("Board").transform;
-		mapGen = GetComponent<MazeGenerator2>();
-		mapGen.Init();
-		columns = mapGen.radius*3;
-		rows = mapGen.radius*3;
-		mapGen.GeneratePath();
-		boardMap = mapGen.boardMap;
+		slumGen = GetComponent<MazeGenerator2>();
+		marketGen = GetComponent<GenerateMarket>();
+
+		generators.Add("M", marketGen);
+		generators.Add("S", slumGen);
+
+		mapGenerator generator = generators[area];
+
+		boardMap = generator.init();
+		Debug.Log(boardMap);
+
+		rows = boardMap.GetLength(0);
+		columns = boardMap.GetLength(1);
+
+
+		Vector3 loc = new Vector3(startLocs[area][0],startLocs[area][1],0);
+		Debug.Log(loc);
+		player.transform.localPosition = loc;
 
         //Loops through entire board, creating fog
         for (int x = -1; x < columns + 1; x++)
