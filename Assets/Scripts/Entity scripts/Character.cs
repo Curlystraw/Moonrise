@@ -81,6 +81,7 @@ namespace Completed
 			if (accuracyValue - blockValue > UnityEngine.Random.Range (0.0f, 100.0f)) {
 				int damage = (int)(this.RangedDamage + this.MeleeDamage/2 / 1.5) * (UnityEngine.Random.Range (weaponMin, weaponMax+1));
 				target.LoseHp(damage);
+				GameManager.instance.player.UpdateText ();
 				return damage;
 			}
 			return 0;
@@ -104,7 +105,8 @@ namespace Completed
 
 			if (accuracyValue - blockValue > UnityEngine.Random.Range (0.0f, 100.0f)) {
 				int damage = (int)(this.RangedDamage/2 + this.MeleeDamage / 1.5) * (UnityEngine.Random.Range (weaponMin, weaponMax+1));
-				((Player)target).LoseHp(damage);
+				target.LoseHp(damage);
+				GameManager.instance.player.UpdateText ();
 				return damage;
 			}
 			return 0;

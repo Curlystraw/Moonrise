@@ -30,7 +30,7 @@ namespace Completed
         private BoardManager boardScript;   
         public int level = 1;                                  
         private List<Enemy> enemies;
-		private Player player;
+		public Player player;
         private bool enemiesMoving;                             
         private bool doingSetup = true;     
                             
