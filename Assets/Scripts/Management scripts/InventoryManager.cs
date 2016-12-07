@@ -10,7 +10,9 @@ public class InventoryManager : MonoBehaviour
 	public GridLayoutGroup equippedGrid, inventoryGrid;
 	public ItemObject itemObjPrefab;
 
-	public void InitializeGrids(Player player)
+	private Player player;
+
+	public void InitializeGrids()
 	{
 		DumpItemsIntoGrid (player.EquippedItems, equippedGrid);
 		DumpItemsIntoGrid (player.Inventory, inventoryGrid);
@@ -18,6 +20,9 @@ public class InventoryManager : MonoBehaviour
 
 	private void DumpItemsIntoGrid<T>(IEnumerable<T> items, GridLayoutGroup grid) where T : Item
 	{
+		foreach (Transform child in grid.transform) {
+			Destroy (child.gameObject);
+		}
 		foreach (Item item in items) {
 			ItemObject itemObj = (ItemObject) Instantiate (itemObjPrefab, grid.transform);
 			itemObj.Item = item;
@@ -28,21 +33,18 @@ public class InventoryManager : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		List<Item> tempList = new List<Item> ();
-		for (int i = 0; i < 5; i++)
-			tempList.Add (Weapon.RandomItem ());
-		DumpItemsIntoGrid (tempList, equippedGrid);
-
-		tempList = new List<Item> ();
-		for (int i = 0; i < 12; i++)
-			tempList.Add (Weapon.RandomItem ());
-		DumpItemsIntoGrid (tempList, inventoryGrid);
+		player = GameObject.FindGameObjectWithTag ("Player").transform.GetComponent<Player> ();
+		InitializeGrids ();
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-	
+		// does this make sense?  can it be simplified?
+		if (player.inventoryUpdated) {
+			InitializeGrids ();
+			player.inventoryUpdated = false;
+		}
 	}
 }
 

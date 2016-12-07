@@ -39,6 +39,8 @@ namespace Completed
 		//Healthbar object
 		public GameObject hpBar;
 
+		public bool inventoryUpdated = false; // signal to InventoryManager
+
         // Use this for initialization
         protected override void Start()
         {
@@ -242,6 +244,7 @@ namespace Completed
 			} else if (character is Chest) {
 				Chest chest = (Chest)character;
 				chest.ObtainItem (this);
+				inventoryUpdated = true;
 			}
         }
 

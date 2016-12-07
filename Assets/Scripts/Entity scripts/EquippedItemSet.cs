@@ -59,7 +59,7 @@ namespace ItemSpace
 
 		public List<EquipItem> Items {
 			get {
-				return items.Values.ToList();
+				return items.Values.Where(i => i != null).ToList();
 			}
 		}
 	}
