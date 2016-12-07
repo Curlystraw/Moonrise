@@ -366,8 +366,33 @@ namespace Completed
             }
             else if (other.tag == "Item")
             {
-				AlterGold (pointsPerGold);
-				other.gameObject.SetActive(false);
+				int chance = UnityEngine.Random.Range (0, 2);
+				String message = "";
+				switch (other.name) {
+				case "Gold1":
+					GameManager.instance.print("Picked up "+pointsPerGold+" gold");
+					GameManager.instance.playerGoldPoints += pointsPerGold;
+					goldText = "Gold: " + GameManager.instance.playerGoldPoints;
+					message = "+" + pointsPerGold + " Gold";
+					UpdateText ();
+					other.gameObject.SetActive(false);
+					break;
+				case "HealthPack":
+					LoseHp (-20);
+					message = "+" + 20 + " Health";
+					print(message);
+					//UpdateText ();
+					other.gameObject.SetActive(false);
+					break;
+				default:
+					GameManager.instance.print("Picked up "+pointsPerGold+" gold");
+					GameManager.instance.playerGoldPoints += pointsPerGold;
+					goldText = "Gold: " + GameManager.instance.playerGoldPoints;
+					message = "+" + pointsPerGold + " Gold";
+					UpdateText ();
+					other.gameObject.SetActive(false);
+					break;
+				}
             }
         }
 
@@ -396,7 +421,17 @@ namespace Completed
 		public override void LoseHp(int loss)
 		{
 			this.CurrentHP -= loss;
-			String message = "-" + loss + " HP";
+			if (this.currentHP < 0) {
+				this.currentHP = 0;
+			} else if (this.currentHP > 100) {
+				this.currentHP = 100;
+			}
+			/*String message;
+			if (loss > 0) {
+				message = "-" + loss + " HP";
+			} else {
+				message = "+" + loss + " HP";
+			}*/
 			hpText = "HP: " + this.CurrentHP;
 			UpdateText ();
 			CheckIfGameOver();

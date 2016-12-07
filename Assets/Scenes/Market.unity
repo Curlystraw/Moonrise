@@ -181,6 +181,10 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 11442854, guid: 240702aa0cfe4b147a8886d03c14b265, type: 2}
+      propertyPath: goldTiles.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 492892, guid: 240702aa0cfe4b147a8886d03c14b265, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -225,6 +229,11 @@ Prefab:
       propertyPath: player
       value: 
       objectReference: {fileID: 836931943}
+    - target: {fileID: 11442854, guid: 240702aa0cfe4b147a8886d03c14b265, type: 2}
+      propertyPath: goldTiles.Array.data[1]
+      value: 
+      objectReference: {fileID: 1000012806191258, guid: 1b061cd3aad6aaa4884dbee3b5720d10,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 240702aa0cfe4b147a8886d03c14b265, type: 2}
   m_IsPrefabParent: 0
@@ -245,6 +254,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   floor: {fileID: 1000013810770954, guid: b8f2a1a7139bf4450a84b3a11048584e, type: 2}
   wall: {fileID: 141938, guid: 65923a9620d79894d8a5cbd1ecaceba7, type: 2}
+  water: {fileID: 0}
+  dock: {fileID: 0}
+  boat: {fileID: 0}
   radius: 21
   speed: 0
   minRoomCount: 5
@@ -410,6 +422,10 @@ Prefab:
       value: 
       objectReference: {fileID: 21300000, guid: a1218f5c3c00b4a38a3b81fe2c292383,
         type: 3}
+    - target: {fileID: 11460302, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
+      propertyPath: baseSneak
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5249b9519bdbed8439af5818a81ec0d6, type: 2}
   m_IsPrefabParent: 0

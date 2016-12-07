@@ -17,6 +17,8 @@ namespace Completed
 		public GameObject indicator;
 		public float sightRange;
 
+		public int Range;
+
         private Animator animator;
         private Transform target;
 		private Player player;
@@ -48,7 +50,6 @@ namespace Completed
 
 			targetLoc = new Vector2(-1	,-1);
             base.Start();
-
 			path = new List<Vector2>();
 			UpdateSprite ();
 
@@ -109,7 +110,6 @@ namespace Completed
 
 		protected void Update(){
 			//checkVisible();
-
 			Color c = this.GetComponent<SpriteRenderer>().color;
 			if(c.a > 0 && !visible)
 				c.a -= 0.05f;
@@ -127,7 +127,7 @@ namespace Completed
 			hitbox.enabled = false;
 			hit = Physics2D.Linecast(new Vector2(transform.position.x,transform.position.y),new Vector2(target.position.x,target.position.y), blockingLayer);
 			hitbox.enabled = true;
-			float range = sightRange-player.baseSneak;
+			float range = sightRange-(player.sneak);
 			if(hit.transform == target && hit.distance <= range){
 				targetLoc = new Vector2(target.position.x,target.position.y);
 				if(path.Count == 0)

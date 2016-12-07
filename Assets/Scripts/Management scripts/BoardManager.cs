@@ -50,6 +50,9 @@ public class BoardManager : MonoBehaviour, SerialOb {
 	private Dictionary<areas,int[]> entries = new Dictionary<areas,int[]>{
 	};
 
+	[SerializeField]
+	private LayerMask blockingLayer;
+
     private int columns = 100;                       //Columns on the board
     private int rows = 100;                          //Rows on the board
     public Count wallCount = new Count(20, 40 );    //Number of wall tiles
@@ -71,7 +74,6 @@ public class BoardManager : MonoBehaviour, SerialOb {
     public GameObject[] outerWallTiles;
 
     
-    
     /// <summary>
     /// 2D array of the board, to be pulled for pathfinding, etc.
     /// Current tiles - 0 = floor, 1 = wall
@@ -80,22 +82,9 @@ public class BoardManager : MonoBehaviour, SerialOb {
 	public char[,] tileMap;
 
     private Transform boardHolder;                              //Holds the parent transform of the board   
-    private List<Vector2> gridPositions = new List<Vector2>();  //A list of grid coordinates, [0,0] to [columns,rows]
     /// <summary>
     /// Creates a list of grid coordinates, [0,0] to [columns,rows]
     /// </summary>
-    void InitializeList()
-    {
-        gridPositions.Clear();
-
-        for (int x = 1; x < columns -1; x++)
-        {
-            for (int y = 1; y < rows - 1; y++)
-            {
-                gridPositions.Add(new Vector2(x, y));
-            }
-        }
-    }
 
     /// <summary>
     /// Initializes board with floor tiles and outer wall tiles
@@ -104,6 +93,7 @@ public class BoardManager : MonoBehaviour, SerialOb {
     {
 
         boardHolder = new GameObject("Board").transform;
+		
 		slumGen = GetComponent<MazeGenerator2>();
 		marketGen = GetComponent<GenerateMarket>();
 
@@ -129,8 +119,8 @@ public class BoardManager : MonoBehaviour, SerialOb {
             for (int y = -1; y < rows + 1; y++)
             {
                 
-				//GameObject f = Instantiate(fog, new Vector2(x,y), Quaternion.identity) as GameObject;
-				//f.transform.SetParent(this.transform);
+				GameObject f = Instantiate(fog, new Vector2(x,y), Quaternion.identity) as GameObject;
+				f.transform.SetParent(this.transform);
             }
         }
     }
@@ -166,11 +156,20 @@ public class BoardManager : MonoBehaviour, SerialOb {
     /// </summary>
     /// <returns>A Vector2 representing a location on the board</returns>
     Vector2 RandomPosition()
-    {
-        int randomIndex = Random.Range(0, gridPositions.Count);
-        Vector2 randomPosition = gridPositions[randomIndex];
-        gridPositions.RemoveAt(randomIndex);
-        return randomPosition;
+	{
+		bool repeat = true;
+		Vector2 randomPosition = Vector2.zero;
+		while (repeat) {
+			randomPosition = new Vector2 (Random.Range (0, rows), Random.Range (0, columns));
+			RaycastHit2D hit = Physics2D.Raycast (randomPosition, Vector2.up, 0.1f, blockingLayer);
+			if (hit.collider == null) {
+				repeat = false;
+			} else {
+				
+			}
+		
+		}
+		return randomPosition;
     }
 
 
@@ -193,6 +192,8 @@ public class BoardManager : MonoBehaviour, SerialOb {
 				boardMap[(int)randomPosition.x,(int)randomPosition.y] = 1;
             GameObject tileChoice = tileArray[Random.Range(0, tileArray.Length)];
 			GameObject ob = (GameObject)Instantiate(tileChoice, randomPosition, Quaternion.identity);
+			ob.transform.SetParent(boardHolder.transform);
+			ob.name = tileChoice.name;
         }
     }
 
@@ -200,7 +201,6 @@ public class BoardManager : MonoBehaviour, SerialOb {
    public void SetupScene (int level)
     {
         BoardSetup();           //Initialize board with floor/outer wall tiles
-        InitializeList();       //Create the list of board positions
         //LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);      //Place wall tiles
         LayoutObjectAtRandom(goldTiles, goldCount.minimum, goldCount.maximum);      //Place gold tiles
 		int chestCount = 7;
