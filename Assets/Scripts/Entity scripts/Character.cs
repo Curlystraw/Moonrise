@@ -63,10 +63,16 @@ namespace Completed
 		/// <returns>The attack.</returns>
 		/// <param name="target">Target.</param>
 		public int RangedAttack(Character target) {
+			float distance = Mathf.Sqrt (Mathf.Pow (target.transform.position.x - this.transform.position.x, 2) + Mathf.Pow (target.transform.position.y - this.transform.position.y, 2));
+
 			if (UnityEngine.Random.Range (0.0f, 1.0f) <= this.TotalAccuracy) {
-				if (UnityEngine.Random.Range (0.0f, 1.0f) > target.TotalDodge) {
-					int damage = this.TotalAttack + (int)(this.TotalAttack * (UnityEngine.Random.Range (0.0f, 1.0f) / 10 - .05));
-					target.CurrentHP -= damage;
+				// If distance is 1, use block instead of dodge
+				double missValue = distance <= 1 ? target.TotalBlock : target.TotalDodge;
+
+				if (UnityEngine.Random.Range (0.0f, 1.0f) > missValue) {
+					
+					int damage = this.TotalAttack + (int)(this.TotalAttack * (UnityEngine.Random.Range (0.0f, 0.5f) - .25f));
+					target.LoseHp(damage);
 					return damage;
 				}
 			}
@@ -81,8 +87,8 @@ namespace Completed
 		public int MeleeAttack(Character target) {
 			if (UnityEngine.Random.Range (0.0f, 1.0f) <= this.TotalAccuracy) {
 				if (UnityEngine.Random.Range (0.0f, 1.0f) > target.TotalBlock) {
-					int damage = this.TotalAttack + (int)(this.TotalAttack * (UnityEngine.Random.Range (0.0f, 1.0f) / 10 - .05));
-					target.CurrentHP -= damage;
+					int damage = this.TotalAttack + (int)(this.TotalAttack * (UnityEngine.Random.Range (0.0f, 0.5f) - .25f));
+					target.LoseHp(damage);
 					return damage;
 				}
 			}
@@ -256,13 +262,16 @@ namespace Completed
 		}
 		#endregion
 
-		protected override void OnCantMove<T>(T component)
+		protected override void OnCantMove(Transform transform)
 		{
 
 		}
 
 		protected override void OnFinishMove(){
 
+		}
+
+		protected override void UpdateSprite(){
 		}
 	}
 }

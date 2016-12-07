@@ -20,9 +20,20 @@ public class BoardManager : MonoBehaviour {
         }
     }
 
-	//Temporary reference to the map generator. Shit's awkward.
-	private MazeGenerator2 mapGen;
+	//References to the map generators
+	private MazeGenerator2 slumGen;
+	private GenerateMarket marketGen;
+	private Dictionary<string,mapGenerator> generators = new Dictionary<string,mapGenerator>();
+	private string area = "M";
+	public GenType generationType;
 
+	private Dictionary<string,int[]> startLocs = new Dictionary<string,int[]>{
+		{"M", new int[2]{60,60}},
+		{"S", new int[2]{4,4}}
+	};
+
+	[SerializeField]
+	private LayerMask blockingLayer;
 
     private int columns = 100;                       //Columns on the board
     private int rows = 100;                          //Rows on the board
@@ -44,7 +55,7 @@ public class BoardManager : MonoBehaviour {
 	public GameObject[] chestTiles;
     public GameObject[] outerWallTiles;
 
-    
+	public enum GenType { market, slums, entertainment }
     
     /// <summary>
     /// 2D array of the board, to be pulled for pathfinding, etc.
@@ -53,37 +64,47 @@ public class BoardManager : MonoBehaviour {
     private int[,] boardMap;
 
     private Transform boardHolder;                              //Holds the parent transform of the board   
-    private List<Vector2> gridPositions = new List<Vector2>();  //A list of grid coordinates, [0,0] to [columns,rows]
     /// <summary>
     /// Creates a list of grid coordinates, [0,0] to [columns,rows]
     /// </summary>
-    void InitializeList()
-    {
-        gridPositions.Clear();
-
-        for (int x = 1; x < columns -1; x++)
-        {
-            for (int y = 1; y < rows - 1; y++)
-            {
-                gridPositions.Add(new Vector2(x, y));
-            }
-        }
-    }
 
     /// <summary>
     /// Initializes board with floor tiles and outer wall tiles
     /// </summary>
     void BoardSetup()
     {
-        //boardMap = new int[columns, rows];
+		switch (generationType) {
+		case GenType.market:
+			area = "M";
+			break;
+		case GenType.slums:
+			area = "S";
+			break;
+		case GenType.entertainment:
+			area = "E";
+			break;
+		}
 
         boardHolder = new GameObject("Board").transform;
-		mapGen = GetComponent<MazeGenerator2>();
-		//mapGen.Init();
-		columns = mapGen.radius*3;
-		rows = mapGen.radius*3;
-		mapGen.GeneratePath();
-		boardMap = mapGen.boardMap;
+		
+		slumGen = GetComponent<MazeGenerator2>();
+		marketGen = GetComponent<GenerateMarket>();
+
+		generators.Add("M", marketGen);
+		generators.Add("S", slumGen);
+
+		mapGenerator generator = generators[area];
+
+		boardMap = generator.init();
+		Debug.Log(boardMap);
+
+		rows = boardMap.GetLength(0);
+		columns = boardMap.GetLength(1);
+
+
+		Vector3 loc = new Vector3(startLocs[area][0],startLocs[area][1],0);
+		Debug.Log(loc);
+		player.transform.localPosition = loc;
 
         //Loops through entire board, creating fog
         for (int x = -1; x < columns + 1; x++)
@@ -102,11 +123,20 @@ public class BoardManager : MonoBehaviour {
     /// </summary>
     /// <returns>A Vector2 representing a location on the board</returns>
     Vector2 RandomPosition()
-    {
-        int randomIndex = Random.Range(0, gridPositions.Count);
-        Vector2 randomPosition = gridPositions[randomIndex];
-        gridPositions.RemoveAt(randomIndex);
-        return randomPosition;
+	{
+		bool repeat = true;
+		Vector2 randomPosition = Vector2.zero;
+		while (repeat) {
+			randomPosition = new Vector2 (Random.Range (0, rows), Random.Range (0, columns));
+			RaycastHit2D hit = Physics2D.Raycast (randomPosition, Vector2.up, 0.1f, blockingLayer);
+			if (hit.collider == null) {
+				repeat = false;
+			} else {
+				
+			}
+		
+		}
+		return randomPosition;
     }
 
 
@@ -136,7 +166,6 @@ public class BoardManager : MonoBehaviour {
    public void SetupScene (int level)
     {
         BoardSetup();           //Initialize board with floor/outer wall tiles
-        InitializeList();       //Create the list of board positions
         //LayoutObjectAtRandom(wallTiles, wallCount.minimum, wallCount.maximum);      //Place wall tiles
         LayoutObjectAtRandom(goldTiles, goldCount.minimum, goldCount.maximum);      //Place gold tiles
 		int chestCount = 7;

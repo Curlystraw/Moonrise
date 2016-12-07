@@ -2,10 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class MazeGenerator2 : MonoBehaviour {
+public class MazeGenerator2 : mapGenerator {
 	//NOTE: I highly recommend putting all of the prefabs into another class that is referenced by every generation class (ex. this and BoardManager)
 	public GameObject floor; //floor prefab
 	public GameObject wall; //wall prefab
+	public GameObject water; //water prefab
+	public GameObject dock; //dock prefab
+	public GameObject boat; //boat prefab
 
 	public int radius = 21; //a third of the total width of the square
 	[Range(0.0001f, 1f)]
@@ -22,7 +25,7 @@ public class MazeGenerator2 : MonoBehaviour {
 	public int maxRoomSize = 10; //maximum room dimension
 
 	// Use this for initialization
-	public void Start () {
+	public override int[,] init () {
 		boardMap = new int[radius*3, radius*3];
 		largeGrid = new Tile[radius * 3, radius * 3]; //ensures that the large grid is a 3x inflation of the original grid
 		rooms = new Room[Random.Range (minRoomCount, maxRoomCount)]; //creates a randomly sized list of rooms
@@ -32,10 +35,11 @@ public class MazeGenerator2 : MonoBehaviour {
 		Debug.Log("mazegen initialized");	
 		GeneratePath ();
 		//StartCoroutine ("GeneratePath");
+		return boardMap;
 	}
 
 	//The entire algorithm. Recommend eventually moving this into several functions
-	public void GeneratePath () {
+	public int[,] GeneratePath () {
 		if (radius % 2 == 0) {
 			radius++; //if the user is dumb and makes the radius an even number, makes it odd to ensure the path generator doesn't look weird
 		}
@@ -142,7 +146,6 @@ public class MazeGenerator2 : MonoBehaviour {
 				//if it backtracks back to the beginning without finding a place to go, then the maze is completely generated
 				if (index == 0) {
 					finished = true;
-					print ("Complete!");
 				} else {
 					//update position
 					index--;
@@ -188,6 +191,7 @@ public class MazeGenerator2 : MonoBehaviour {
 				//print("Destroying " + grid[w,h].obj.name);
 				//DestroyImmediate (grid [w, h].obj);
 			}
+
 		}
 		//create a parent object to link all room tiles together and set up origin point
 		GameObject[] roomParents = new GameObject[rooms.Length];
@@ -199,7 +203,7 @@ public class MazeGenerator2 : MonoBehaviour {
 		//NOTE: This is not the best system. It is inefficient and makes it so it very often will not spawn the max number of rooms. If you have any ideas how to change it go for it
 		int iter = 0;
 		foreach (Room room in rooms) {
-			print ("Checking room " + iter);
+			//print ("Checking room " + iter);
 			bool isValid = true;
 			bool spawnRoom = true;
 			int tries = 0;
@@ -220,7 +224,7 @@ public class MazeGenerator2 : MonoBehaviour {
 				if (tries > 1000) {
 					isValid = true;
 					spawnRoom = false;
-					print("Could not find a valid location");
+					//print("Could not find a valid location");
 				}
 			} while (!isValid);
 			if (spawnRoom) {
@@ -246,6 +250,7 @@ public class MazeGenerator2 : MonoBehaviour {
 			}
 			iter++;
 		}
+
 		//DOCK GENERATION
 		//---------------------------------------------------------------------------------------------------------
 		for (int h = radius * 3 - 3; h < radius * 3; h++) {
@@ -255,22 +260,31 @@ public class MazeGenerator2 : MonoBehaviour {
 			}
 		}
 		for (int h = radius * 3; h < radius * 3 + 12; h++) {
-			for (int w = 0; w < radius * 3; w+= 8) {
-				Instantiate (floor, new Vector3 (w, h, 0), Quaternion.identity);
-				Instantiate (floor, new Vector3 (w+1, h, 0), Quaternion.identity);
-				Instantiate (floor, new Vector3 (w+2, h, 0), Quaternion.identity);
+			for (int w = 0; w < radius * 3; w += 8) {
+				Instantiate (dock, new Vector3 (w, h, 0), Quaternion.identity);
+				Instantiate (dock, new Vector3 (w + 1, h, 0), Quaternion.identity);
+				Instantiate (dock, new Vector3 (w + 2, h, 0), Quaternion.identity);
+				print (h);
+				if (h == 68) {
+					int rand = Random.Range (0, 2);
+					print ("Random: " + rand);
+					if (rand == 0) {
+						Instantiate(boat, new Vector3 (w + 5, h, 0), Quaternion.identity);
+					}
+				}
 				if (w + 3 < radius * 3)
-					Instantiate (wall, new Vector3 (w+3, h, 0), Quaternion.identity);
+					Instantiate (water, new Vector3 (w + 3, h, 0), Quaternion.identity);
 				if (w + 4 < radius * 3)
-					Instantiate (wall, new Vector3 (w+4, h, 0), Quaternion.identity);
+					Instantiate (water, new Vector3 (w + 4, h, 0), Quaternion.identity);
 				if (w + 5 < radius * 3)
-					Instantiate (wall, new Vector3 (w+5, h, 0), Quaternion.identity);
+					Instantiate (water, new Vector3 (w + 5, h, 0), Quaternion.identity);
 				if (w + 6 < radius * 3)
-					Instantiate (wall, new Vector3 (w+6, h, 0), Quaternion.identity);
+					Instantiate (water, new Vector3 (w + 6, h, 0), Quaternion.identity);
 				if (w + 7 < radius * 3)
-					Instantiate (wall, new Vector3 (w+7, h, 0), Quaternion.identity);
+					Instantiate (water, new Vector3 (w + 7, h, 0), Quaternion.identity);
 			}
 		}
+		return boardMap;
 	}
 }
 
@@ -310,3 +324,4 @@ public class Room {
 		tiles = new Tile[size.GetLength(0), size.GetLength(1)];
 	}
 }
+

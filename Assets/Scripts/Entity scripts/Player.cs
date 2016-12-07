@@ -22,7 +22,6 @@ namespace Completed
 		public Sprite humanBack;
 		public Sprite humanLeft;
 		public Sprite humanRight;
-		public Orientation orientation;
 		public Color original;
 		public GameObject indicator;
 
@@ -80,7 +79,7 @@ namespace Completed
 			}
 		}
 
-		public void UpdateSprite()
+		protected override void UpdateSprite()
 		{
 			Sprite sprite;
 			Color color;
@@ -124,8 +123,7 @@ namespace Completed
 				return;
 			} else if (Input.GetMouseButtonDown (0)) {
 				if (GameManager.instance.enemyClicked) {
-					
-					RangedAttack ();
+					Attack ();
 				}
 			}
             int horizontal = 0;
@@ -138,36 +136,62 @@ namespace Completed
             if (horizontal != 0 || vertical != 0 || spacebar)
 			{
 				actionText.text = "";
-                AttemptMove<Wall>(horizontal, vertical);
+                AttemptMove(horizontal, vertical);
             }
         }
 
-		protected override void AttemptMove<T>(int xDir, int yDir)
+		protected bool WillHitWall(int xDir, int yDir, out RaycastHit2D hit)
 		{
-			if (xDir > 0)
-				orientation = Orientation.East;
-			else if (xDir < 0)
-				orientation = Orientation.West;
-			else if (yDir > 0)
-				orientation = Orientation.North;
-			else
-				orientation = Orientation.South;
-			UpdateSprite ();
+			//Find movement points
+			Vector2 start = transform.position;
+			Vector2 end = start + new Vector2(xDir, yDir);
 
-			GameManager.instance.timeLeft--;
-			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
-			UpdateText ();
+			//BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
 
-            base.AttemptMove<T>(xDir, yDir);
 
-            RaycastHit2D hit;
 
-            CheckIfGameOver();
+			//Check if the move isn't blocked
+			//boxCollider.enabled = false;
+			hit = Physics2D.Linecast(end, start, blockingLayer);
+			//boxCollider.enabled = true;
 
-            GameManager.instance.playersTurn = false;
+
+			if (hit.transform != null) {
+				if (hit.transform.tag == "Wall") {
+					return true;
+				} else {
+					return false;
+				}
+			} else {
+				return false;
+			}
+		}
+
+		protected override void AttemptMove(int xDir, int yDir)
+		{
+			base.AttemptMove (xDir, yDir);
+
+			RaycastHit2D hit;
+			bool canMove = Move (xDir, yDir, out hit);
+
+			bool willHitWall = WillHitWall (xDir, yDir, out hit);
+
+			// Only reset turn if can move
+			if (!willHitWall) {
+				GameManager.instance.timeLeft--;
+				timeLeft = "Time Left: " + GameManager.instance.timeLeft;
+				UpdateText ();
+
+				CheckIfGameOver ();
+
+				GameManager.instance.playersTurn = false;
+			}
+
+			if (hit.transform != null && !canMove)
+				OnCantMove (hit.transform);
         }
 
-		protected void RangedAttack()
+		protected void Attack()
 		{
 			actionText.text += "You attacked an enemy!\n";
 			GameManager.instance.enemyClicked = false;
@@ -196,12 +220,33 @@ namespace Completed
             }
             else if (other.tag == "Item")
             {
-				GameManager.instance.print("Picked up "+pointsPerGold+" gold");
-				GameManager.instance.playerGoldPoints += pointsPerGold;
-				goldText = "Gold: " + GameManager.instance.playerGoldPoints;
-				String message = "+" + pointsPerGold + " Gold";
-				UpdateText ();
-                other.gameObject.SetActive(false);
+				int chance = UnityEngine.Random.Range (0, 2);
+				String message = "";
+				switch (chance) {
+				case 0:
+					GameManager.instance.print("Picked up "+pointsPerGold+" gold");
+					GameManager.instance.playerGoldPoints += pointsPerGold;
+					goldText = "Gold: " + GameManager.instance.playerGoldPoints;
+					message = "+" + pointsPerGold + " Gold";
+					UpdateText ();
+					other.gameObject.SetActive(false);
+					break;
+				case 1:
+					LoseHp (-20);
+					message = "+" + 20 + " Health";
+					UpdateText ();
+					other.gameObject.SetActive(false);
+					break;
+				default:
+					GameManager.instance.print("Picked up "+pointsPerGold+" gold");
+					GameManager.instance.playerGoldPoints += pointsPerGold;
+					goldText = "Gold: " + GameManager.instance.playerGoldPoints;
+					message = "+" + pointsPerGold + " Gold";
+					UpdateText ();
+					other.gameObject.SetActive(false);
+					break;
+				}
+
             }
         }
 
@@ -210,10 +255,15 @@ namespace Completed
 
         }
 
-        protected override void OnCantMove<T>(T component)
+        protected override void OnCantMove(Transform transform)
         {
-            Wall hitWall = component as Wall;
-
+			Character character = transform.GetComponent<Character> ();
+			if (character is Enemy) {
+				
+			} else if (character is Chest) {
+				Chest chest = (Chest)character;
+				chest.ObtainItem (this);
+			}
         }
 
         private void Restart()
@@ -225,7 +275,17 @@ namespace Completed
 		public void LoseHp(int loss)
 		{
 			this.CurrentHP -= loss;
-			String message = "-" + loss + " HP";
+			if (this.currentHP < 0) {
+				this.currentHP = 0;
+			} else if (this.currentHP > 100) {
+				this.currentHP = 100;
+			}
+			/*String message;
+			if (loss > 0) {
+				message = "-" + loss + " HP";
+			} else {
+				message = "+" + loss + " HP";
+			}*/
 			hpText = "HP: " + this.CurrentHP;
 			UpdateText ();
 			CheckIfGameOver();
