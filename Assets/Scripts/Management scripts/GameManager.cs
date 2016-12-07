@@ -15,7 +15,6 @@ namespace Completed
         public float levelStartDelay = 2f;                      
         public float turnDelay = 0.1f;                          
         public int playerGoldPoints = 100;
-		public int playerHp = 100;
 		public bool isWerewolf = false;
         public static GameManager instance = null;              
         [HideInInspector]

@@ -2,6 +2,7 @@
 using ItemSpace;
 using UnityEditor;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace Completed
 {
@@ -64,6 +65,8 @@ namespace Completed
 		public int RangedAttack(Character target) {
 			float distance = Mathf.Sqrt (Mathf.Pow (target.transform.position.x - this.transform.position.x, 2) + Mathf.Pow (target.transform.position.y - this.transform.position.y, 2));
 
+			//Weapon weap = (Weapon)(equippedItems.Get (ItemClass.Weapon));
+
 			// Placeholder weapon values
 			int weaponMin = 3;
 			int weaponMax = 5;
@@ -86,7 +89,8 @@ namespace Completed
 		/// <returns>The attack.</returns>
 		/// <param name="target">Target.</param>
 		public int MeleeAttack(Character target) {
-			Debug.Log ("melee attack");
+			//Weapon weap = (Weapon)(equippedItems.Get (ItemClass.Weapon));
+		
 			// Placeholder weapon values
 			int weaponMin = 3;
 			int weaponMax = 5;

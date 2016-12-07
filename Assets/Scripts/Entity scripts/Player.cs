@@ -103,6 +103,7 @@ namespace Completed
 		public void UpdateText(String message = "")
 		{
 			levelText = "Level: " + GameManager.instance.level;
+			hpText = "HP: " + CurrentHP;
 			displayText.text = timeLeft + " | " + goldText + " | " + hpText + " | " + levelText;
 			Vector3 scale = hpBar.transform.localScale;
 			scale.x = ((float)currentHP/(float)totalHP);
@@ -193,7 +194,7 @@ namespace Completed
         }
 
 		public void IncreaseSkill(int skill) {
-			int cost = 10 * (int)Math.Pow(2, GameManager.instance.level-1);
+			int cost = 100 * (int)Math.Pow(2, GameManager.instance.level-1);
 			if (cost > GameManager.instance.playerGoldPoints) {
 				GameManager.instance.print ("You don't have enough gold to level up");
 			} else {
@@ -270,8 +271,13 @@ namespace Completed
 					GameManager.instance.print ("You are already at maximum level for that skill.");
 				} else {
 					GameManager.instance.level += 1;
-					this.baseHP = (int) (this.baseHP * 1.1);
-					this.TotalHP = (int) (this.TotalHP * 1.1);
+					int currentHealthLoss = this.TotalHP - this.CurrentHP;
+
+					this.baseHP = (int) (this.baseHP + 20);
+					this.TotalHP = (int) (this.TotalHP + 20);
+
+					this.CurrentHP = this.TotalHP - currentHealthLoss;
+
 					AlterGold (-cost);
 					EndTurn ();
 				}
