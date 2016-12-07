@@ -15,7 +15,7 @@ namespace ItemSpace
 		private int range;
 
 		private int attackBonus, hpBonus;
-		private double rangedAttackMult, speedMult;
+		private double rangedAttackMult, meleeAttackMult, speedMult;
 
 		private static List<int> typeProbs = new List<int> (new [] {
 			50, 50
