@@ -18,15 +18,17 @@ using System.Collections;
 public class TabManager : MonoBehaviour {
 
     private int uiTab;
-    public GameObject[] tabs = new GameObject[4]; //This is best modified in the Manager Panel instead of here. Easier and simpler.
+    public GameObject[] tabs = new GameObject[5]; //This is best modified in the Manager Panel instead of here. Easier and simpler.
     public GameObject expander;
     public Sprite spr;
     private GameObject expandedTab;
+    private int opacity; //0 = 0%, 1 = 25%, 2 = 50%, 3 = 75%
 
     private bool currentExpansion = false;
 
 	void Start () {  //For init
         uiTab = 0;
+        opacity = 0;
         switchTabs(0);
 	}
 
@@ -162,5 +164,63 @@ public class TabManager : MonoBehaviour {
     {
         Debug.Log("Game Exit");
         Application.Quit();
+    }
+
+    public void opacityChange()
+    {
+        switch(opacity)
+        {
+            case 0:
+                opacity = 1;
+                changeAllOpacity(gameObject);
+                break;
+            case 1:
+                opacity = 2;
+                changeAllOpacity(gameObject);
+                break;
+            case 2:
+                opacity = 3;
+                changeAllOpacity(gameObject);
+                break;
+            case 3:
+                opacity = 0;
+                changeAllOpacity(gameObject);
+                break;
+
+
+        }
+    }
+
+    private void changeAllOpacity(GameObject UI)
+    {
+        var image = UI.GetComponent<Image>();
+        if(image != null)
+        {
+            switch(opacity)
+            {
+                case 0:
+                    Debug.Log("Alpha at 100%");
+                    image.color = new Color(image.color.r, image.color.g, image.color.b, 1.0f);
+                    break;
+                case 1:
+                    Debug.Log("Alpha at 75%");
+                    image.color = new Color(image.color.r, image.color.g, image.color.b, 0.75f);
+                    break;
+                case 2:
+                    Debug.Log("Alpha at 50%");
+                    image.color = new Color(image.color.r, image.color.g, image.color.b, 0.5f);
+                    break;
+                case 3:
+                    Debug.Log("Alpha at 25%");
+                    image.color = new Color(image.color.r, image.color.g, image.color.b, 0.25f);
+                    break;
+
+            }
+        }
+       foreach(Transform t in transform)
+        {
+            Debug.Log(t.gameObject.GetType());
+            changeAllOpacity(t.gameObject);
+        }
     }
 }
