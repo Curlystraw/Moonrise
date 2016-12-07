@@ -28,14 +28,24 @@ namespace Completed
 		public GameObject indicator;
 
 		// Skills
-		public int shoot = 1;
-		public int sneak = 1;
-		public int charm = 1;
-		public int dodge = 1;
-		public int bite = 1;
-		public int rage = 1;
-		public int growl = 1;
-		public int fortify = 1;
+		public int shoot;
+		public int sneak;
+		public int charm;
+		public int dodge;
+		public int bite;
+		public int rage;
+		public int growl;
+		public int fortify;
+
+		// Player Stats
+		/*
+		public double rangedDamage = 1.0; // multipliers
+		public double meleeDamage = 1.0;
+		public double rangedAccuracy = 0.9; // percentages
+		public double meleeAccuracy = 0.9;
+		public double rangedBlock = 0.1;
+		public double meleeBlock = 0.1;
+		*/
 
 		// Displays
 		public Text displayText;
@@ -69,6 +79,14 @@ namespace Completed
 			animator = GetComponent<Animator>();
 			hitbox = GetComponent<BoxCollider2D>();
 
+			this.shoot = 1;
+			this.sneak = 1;
+			this.charm = 1;
+			this.dodge = 1;
+			this.bite = 1;
+			this.rage = 1;
+			this.growl = 1;
+			this.fortify = 1;
 
 			//sightBlocks = LayerMask.NameToLayer("BlockingLayer");
 			//fogLayer = LayerMask.NameToLayer("Fog");
@@ -184,6 +202,8 @@ namespace Completed
 				case 1:
 					if (this.shoot < 8) {
 						this.shoot += 1;
+						this.rangedDamage *= 1.1;
+						this.rangedAccuracy *= 1.05;
 						GameManager.instance.print ("Upgraded shoot to level " + this.shoot + "!");
 						upgradedSkill = true;
 					}
@@ -191,14 +211,15 @@ namespace Completed
 				case 2:
 					if (this.sneak < 8) {
 						this.sneak += 1;
+						this.baseSneak += 1;
 						GameManager.instance.print ("Upgraded sneak to level " + this.sneak + "!");
 						upgradedSkill = true;
 					}
-					//this.sneak += 1;
 					break;
 				case 3:
 					if (this.charm < 8) {
 						this.charm += 1;
+						// TODO
 						GameManager.instance.print ("Upgraded charm to level " + this.charm + "!");
 						upgradedSkill = true;
 					}
@@ -206,6 +227,7 @@ namespace Completed
 				case 4:
 					if (this.dodge < 8) {
 						this.dodge += 1;
+						this.rangedBlock *= 1.1;
 						GameManager.instance.print ("Upgraded dodge to level " + this.dodge + "!");
 						upgradedSkill = true;
 					}
@@ -213,6 +235,8 @@ namespace Completed
 				case 5:
 					if (this.bite < 8) {
 						this.bite += 1;
+						this.meleeAccuracy *= 1.1;
+						this.meleeDamage *= 1.1;
 						GameManager.instance.print ("Upgraded bite to level " + this.bite + "!");
 						upgradedSkill = true;
 					}
@@ -220,6 +244,7 @@ namespace Completed
 				case 6:
 					if (this.rage < 8) {
 						this.rage += 1;
+						// TODO
 						GameManager.instance.print ("Upgraded rage to level " + this.rage + "!");
 						upgradedSkill = true;
 					}
@@ -227,6 +252,7 @@ namespace Completed
 				case 7:
 					if (this.growl < 8) {
 						this.growl += 1;
+						// TODO
 						GameManager.instance.print ("Upgraded growl to level " + this.growl + "!");
 						upgradedSkill = true;
 					}
@@ -234,6 +260,7 @@ namespace Completed
 				case 8:
 					if (this.fortify < 8) {
 						this.fortify += 1;
+						this.meleeBlock *= 1.1;
 						GameManager.instance.print ("Upgraded fortify to level " + this.fortify + "!");
 						upgradedSkill = true;
 					}
@@ -243,6 +270,8 @@ namespace Completed
 					GameManager.instance.print ("You are already at maximum level for that skill.");
 				} else {
 					GameManager.instance.level += 1;
+					this.baseHP = (int) (this.baseHP * 1.1);
+					this.TotalHP = (int) (this.TotalHP * 1.1);
 					AlterGold (-cost);
 					EndTurn ();
 				}
@@ -302,7 +331,6 @@ namespace Completed
 
 		protected void Attack()
 		{
-			actionText.text += "You attacked an enemy!\n";
 			GameManager.instance.enemyClicked = false;
 
 			EndTurn ();
@@ -356,7 +384,7 @@ namespace Completed
 			//SceneManager.LoadScene(SceneManager.GetActiveScene);
         }
 
-		public void LoseHp(int loss)
+		public override void LoseHp(int loss)
 		{
 			this.CurrentHP -= loss;
 			String message = "-" + loss + " HP";
@@ -379,7 +407,7 @@ namespace Completed
 
         private void CheckIfGameOver()
         {
-			if (GameManager.instance.playerGoldPoints <= 0 || this.CurrentHP <= 0)
+			if (GameManager.instance.timeLeft <= 0 || this.CurrentHP <= 0)
             {
                 GameManager.instance.GameOver();
             }
