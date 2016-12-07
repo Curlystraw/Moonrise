@@ -29,9 +29,8 @@ public static class ActualMarketGeneration {
 
 	static List<int[]> roadSpaces = new List<int[]>();
 
-	public static int[,] Start (GameObject _n, GameObject _b, GameObject _x, GameObject _i, GameObject _g, GameObject _a, GameObject _r, GameObject _c, GameObject _v, GameObject _h, GameObject _tBuilding1, GameObject _tBuilding2) {
+	public static int[,] Start (GameObject _n, GameObject _b, GameObject _x, GameObject _i, GameObject _g, GameObject _a, GameObject _r, GameObject _c, GameObject _v, GameObject _h, GameObject[] t_buildings) {
 		n = _n; b = _b; x = _x; iA = _i; g = _g; a = _a; rA = _r; cA = _c; v = _v; h = _h;
-		GameObject tBuilding1 = _tBuilding1, tBuilding2 = _tBuilding2;
 
 		MonoBehaviour.print (Mathf.Sign (1-1));
 		grid = new char[gridSizeX, gridSizeY];
@@ -139,20 +138,13 @@ public static class ActualMarketGeneration {
 					if(r > 0 && ("barc").Contains(grid[r-1,c].ToString())){
 						float rand = Random.Range(8,10);
 						//Occasionally select a building instead, removing extraneous tiles if necessary
-						if(rand < 8)
-							currentTile = h;
-						else{
-							if(rand == 8)
-								currentTile = tBuilding1;
-							else
-								currentTile = tBuilding2;
-							
-							if(r > 0)
-								GameObject.Destroy(tiles[r+1,c]);
+						currentTile = t_buildings[Random.Range(0, t_buildings.Length)];
+						if(r > 0)
+							GameObject.Destroy(tiles[r+1,c]);
 
-							offset = new Vector2(0f,0.5f);
-							tileMap[r,c] = 'n';
-						}
+						offset = new Vector2(0f,0.5f);
+						tileMap[r,c] = 'n';
+
 					}else{
 						currentTile = h;
 						tileMap[r,c] = 'w';
