@@ -218,8 +218,6 @@ namespace Completed
 			} else if (character is Chest) {
 				Chest chest = (Chest)character;
 				chest.ObtainItem (this);
-			} else if (character is Wall) {	// TODO: Walls are not Characters, must fix
-				
 			}
         }
 

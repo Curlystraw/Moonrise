@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ItemSpace;
 using UnityEditor;
 using UnityEngine;
@@ -136,6 +137,16 @@ namespace Completed
 		}
 
 		/// <summary>
+		/// Unequip the item and add it to the inventory.
+		/// </summary>
+		/// <param name="ic">Item class.</param>
+		public void UnequipItem(ItemClass ic)
+		{
+			Item unequipped = equippedItems.Unequip (ic);
+			AddItem (unequipped);
+		}
+
+		/// <summary>
 		/// Drops hp by loss
 		/// </summary>
 		/// <param name="loss">Loss.</param>
@@ -150,15 +161,6 @@ namespace Completed
 
 		protected virtual void KillObject()
 		{
-		}
-		/// <summary>
-		/// Unequip the item and add it to the inventory.
-		/// </summary>
-		/// <param name="ic">Item class.</param>
-		public void UnequipItem(ItemClass ic)
-		{
-			Item unequipped = equippedItems.Unequip (ic);
-			AddItem (unequipped);
 		}
 
 		#region properties	
@@ -243,21 +245,15 @@ namespace Completed
 			}
 		}
 
-		public EquippedItemSet EquippedItems {
+		public List<EquipItem> EquippedItems {
 			get {
-				return this.equippedItems;
-			}
-			set {
-				equippedItems = value;
+				return this.equippedItems.Items;
 			}
 		}
 
-		public Inventory Inventory {
+		public List<Item> Inventory {
 			get {
-				return this.inventory;
-			}
-			set {
-				inventory = value;
+				return this.inventory.Items;
 			}
 		}
 		#endregion

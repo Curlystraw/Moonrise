@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq; // for ToList()
 
 namespace ItemSpace
 {
@@ -56,9 +57,9 @@ namespace ItemSpace
 			return null;
 		}
 
-		public Dictionary<ItemClass, EquipItem> Items {
+		public List<EquipItem> Items {
 			get {
-				return items;
+				return items.Values.ToList();
 			}
 		}
 	}
