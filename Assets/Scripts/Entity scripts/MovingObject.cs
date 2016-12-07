@@ -65,6 +65,8 @@ namespace Completed
 		//Similar to move, but if a move fails due to a unit, strike the unit.
         protected virtual void AttemptMove(int xDir, int yDir)
         {
+			RaycastHit2D hit;
+			bool canMove = Move(xDir, yDir, out hit);
 			if (xDir > 0)
 				orientation = Orientation.East;
 			else if (xDir < 0)
