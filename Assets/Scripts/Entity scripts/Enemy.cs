@@ -122,7 +122,7 @@ namespace Completed
 			hitbox.enabled = false;
 			hit = Physics2D.Linecast(new Vector2(transform.position.x,transform.position.y),new Vector2(target.position.x,target.position.y), blockingLayer);
 			hitbox.enabled = true;
-			float range = sightRange-player.sneak;
+			float range = sightRange-player.baseSneak;
 			if(hit.transform == target && hit.distance <= range){
 				targetLoc = new Vector2(target.position.x,target.position.y);
 				if(path.Count == 0)

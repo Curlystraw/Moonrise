@@ -12,8 +12,10 @@ namespace Completed
         public int wallDamage = 1;
         public int pointsPerGold = 10;
         public float restartLevelDelay = 1f;
-		public int sneak = 4;
+		public int baseSneak = 4;
 		public float sightRange = 12f;
+
+		// Sprites
 		public Sprite werewolfFront;
 		public Sprite werewolfBack;
 		public Sprite werewolfLeft;
@@ -25,6 +27,17 @@ namespace Completed
 		public Color original;
 		public GameObject indicator;
 
+		// Skills
+		public int shoot = 1;
+		public int sneak = 1;
+		public int speech = 1;
+		public int dodge = 1;
+		public int bite = 1;
+		public int rage = 1;
+		public int growl = 1;
+		public int fortify = 1;
+
+		// Displays
 		public Text displayText;
 		public String timeLeft;
 		public String goldText;
@@ -125,7 +138,25 @@ namespace Completed
 				if (GameManager.instance.enemyClicked) {
 					Attack ();
 				}
+			} // Add skill points
+			else if (Input.GetKeyDown (KeyCode.Keypad1)) {
+				IncreaseSkill (1);
+			} else if (Input.GetKeyDown (KeyCode.Keypad2)) {
+				IncreaseSkill (2);
+			} else if (Input.GetKeyDown (KeyCode.Keypad3)) {
+				IncreaseSkill (3);
+			} else if (Input.GetKeyDown (KeyCode.Keypad4)) {
+				IncreaseSkill (4);
+			} else if (Input.GetKeyDown (KeyCode.Keypad5)) {
+				IncreaseSkill (5);
+			} else if (Input.GetKeyDown (KeyCode.Keypad6)) {
+				IncreaseSkill (6);
+			} else if (Input.GetKeyDown (KeyCode.Keypad7)) {
+				IncreaseSkill (7);
+			} else if (Input.GetKeyDown(KeyCode.Keypad8)) {
+				IncreaseSkill (8);
 			}
+				
             int horizontal = 0;
             int vertical = 0;
 
@@ -139,6 +170,45 @@ namespace Completed
                 AttemptMove(horizontal, vertical);
             }
         }
+
+		public void IncreaseSkill(int skill) {
+			int cost = GameManager.instance.level;
+			if (cost > GameManager.instance.playerGoldPoints) {
+				GameManager.instance.print ("You don't have enough gold to level up");
+			} else {
+				switch (skill)
+				{
+				case 1:
+					Debug.Log("adding shoot");
+					//this.shoot = this.shoot < 8 ? this.shoot + 1 : this.shoot;
+					break;
+				case 2:
+					//this.sneak += 1;
+					break;
+				case 3:
+					Console.WriteLine("Default case");
+					break;
+				case 4:
+
+					break;
+				case 5:
+
+					break;
+				case 6:
+
+					break;
+				case 7:
+					Debug.Log("adding 7");
+					break;
+				case 8:
+
+					break;
+				}
+
+
+
+			}
+		}
 
 		protected bool WillHitWall(int xDir, int yDir, out RaycastHit2D hit)
 		{
@@ -166,6 +236,8 @@ namespace Completed
 				return false;
 			}
 		}
+
+
 
 		protected override void AttemptMove(int xDir, int yDir)
 		{

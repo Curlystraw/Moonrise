@@ -26,7 +26,7 @@ namespace Completed
         private Text levelText, actionText;                                 
         private GameObject levelImage;                        
         private BoardManager boardScript;                       
-        private int level = 1;                                  
+        public int level = 1;                                  
         private List<Enemy> enemies;                          
         private bool enemiesMoving;                             
         private bool doingSetup = true;     
