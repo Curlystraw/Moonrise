@@ -47,9 +47,13 @@ public class MazeGenerator2 : MonoBehaviour {
 
 				//Generates a floor in a swiss cheese style (part of the algorithm), each floor tile is surrounded by 8 wall tiles
 				if ((h == 0 || h == radius - 1 || w == 0 || w == radius - 1) || !(h % 2 == 1 && w % 2 == 1)) {
-					grid [w, h].obj = Instantiate (wall,new Vector3 (w, h, 0), Quaternion.identity) as GameObject;
+					grid [w, h].obj = wall;
+					grid [w, h].obj.transform.position = new Vector3 (w, h, 0);
+					//Instantiate (wall,new Vector3 (w, h, 0), Quaternion.identity) as GameObject;
 				} else {
-					grid[w,h].obj = Instantiate (floor,new Vector3 (w, h, 0), Quaternion.identity) as GameObject;
+					grid [w, h].obj = floor;
+					grid [w, h].obj.transform.position = new Vector3(w, h, 0);
+					//Instantiate (floor,new Vector3 (w, h, 0), Quaternion.identity) as GameObject;
 					grid[w,h].passable = 0; //Mark as passable terrain
 				}
 			}
@@ -105,23 +109,31 @@ public class MazeGenerator2 : MonoBehaviour {
 				int direction = directions [Random.Range (0, directions.Count)];
 				//print ("Going direction " + direction);
 				if (direction == 0) {
-					Destroy (grid [position [0] - 1, position [1]].obj);
-					grid [position[0] - 1, position[1]].obj = Instantiate(floor, new Vector3(position[0] - 1, position[1], 0f), Quaternion.identity) as GameObject;
+					//Destroy (grid [position [0] - 1, position [1]].obj);
+					grid [position [0] - 1, position [1]].obj = floor;
+					grid [position [0] - 1, position [1]].obj.transform.position = new Vector3(position[0] - 1, position[1], 0f);
+					//Instantiate(floor, new Vector3(position[0] - 1, position[1], 0f), Quaternion.identity) as GameObject;
 					grid [position[0] - 1, position[1]].passable = 0;
 					position[0] -= 2;
 				} else if (direction == 1) {
-					Destroy (grid [position [0], position [1] + 1].obj);
-					grid [position[0], position[1] + 1].obj = Instantiate(floor, new Vector3(position[0], position[1] + 1, 0f), Quaternion.identity) as GameObject;
+					//Destroy (grid [position [0], position [1] + 1].obj);
+					grid [position [0], position [1] + 1].obj = floor;
+					grid [position [0], position [1] + 1].obj.transform.position = new Vector3(position[0], position[1] + 1, 0f);
+					//grid [position[0], position[1] + 1].obj = Instantiate(floor, new Vector3(position[0], position[1] + 1, 0f), Quaternion.identity) as GameObject;
 					grid [position[0], position[1] + 1].passable = 0;
 					position[1] += 2;
 				} else if (direction == 2) {
-					Destroy (grid [position [0] + 1, position [1]].obj);
-					grid [position[0] + 1, position[1]].obj = Instantiate(floor, new Vector3(position[0] + 1, position[1], 0f), Quaternion.identity) as GameObject;
+					//Destroy (grid [position [0] + 1, position [1]].obj);
+					grid [position [0] + 1, position [1]].obj = floor;
+					grid [position [0] + 1, position [1]].obj.transform.position = new Vector3(position[0] + 1, position[1], 0f);
+					//grid [position[0] + 1, position[1]].obj = Instantiate(floor, new Vector3(position[0] + 1, position[1], 0f), Quaternion.identity) as GameObject;
 					grid [position[0] + 1, position[1]].passable = 0;
 					position[0] += 2;
 				} else if (direction == 3) {
-					Destroy (grid [position [0], position [1] - 1].obj);
-					grid [position[0], position[1] - 1].obj = Instantiate(floor, new Vector3(position[0], position[1] - 1, 0f), Quaternion.identity) as GameObject;
+					//Destroy (grid [position [0], position [1] - 1].obj);
+					grid [position [0], position [1] - 1].obj = floor;
+					grid [position [0], position [1] - 1].obj.transform.position = new Vector3(position[0], position[1] - 1, 0f);
+					//grid [position[0], position[1] - 1].obj = Instantiate(floor, new Vector3(position[0], position[1] - 1, 0f), Quaternion.identity) as GameObject;
 					grid [position[0], position[1] - 1].passable = 0;
 					position[1] -= 2;
 				}
@@ -173,7 +185,8 @@ public class MazeGenerator2 : MonoBehaviour {
 					//yield return new WaitForSeconds (speed);
 				}
 				//destroy the original grid instantiations
-				Destroy (grid [w, h].obj);
+				//print("Destroying " + grid[w,h].obj.name);
+				//DestroyImmediate (grid [w, h].obj);
 			}
 		}
 		//create a parent object to link all room tiles together and set up origin point
@@ -211,7 +224,7 @@ public class MazeGenerator2 : MonoBehaviour {
 				}
 			} while (!isValid);
 			if (spawnRoom) {
-				for (int h = 0; h < room.tiles.GetLength (1); h++) {
+				for (int h = 1; h < room.tiles.GetLength (1); h++) {
 					for (int w = 1; w < room.tiles.GetLength (0); w++) {
 						room.tiles [w, h] = new Tile ();
 						Destroy (largeGrid [(int)roomParents [iter].transform.position.x + w, (int)roomParents [iter].transform.position.y + h].obj);
@@ -270,6 +283,9 @@ public class Tile {
 	public Tile () {
 		passable = 1;
 		position = new int[2];
+		visited = false;
+		passable = 0;
+		obj = new GameObject ();
 	}
 
 	public Tile (GameObject pf, int[] pos, int pass) {
