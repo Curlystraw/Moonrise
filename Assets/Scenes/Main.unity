@@ -262,6 +262,10 @@ MonoBehaviour:
   inventoryGrid: {fileID: 984573160}
   itemObjPrefab: {fileID: 114000012673350092, guid: e0b05ecf3d7d444f6a2d9c6f4a15d95e,
     type: 2}
+  equippedGrid: {fileID: 1638028945}
+  inventoryGrid: {fileID: 984573160}
+  itemObjPrefab: {fileID: 114000012673350092, guid: e0b05ecf3d7d444f6a2d9c6f4a15d95e,
+    type: 2}
 --- !u!1001 &375036325
 Prefab:
   m_ObjectHideFlags: 0
