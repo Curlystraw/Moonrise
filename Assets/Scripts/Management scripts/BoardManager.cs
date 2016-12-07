@@ -142,10 +142,11 @@ public class BoardManager : MonoBehaviour, SerialOb {
 		switch(area){
 		case areas.Market:
 			int entry = 0;
-			for(int y = 0; y < boardMap.GetLength(1); y++){
+			Debug.Log(boardMap.GetLength(0));
+			for(int y = 0; y < boardMap.GetLength(0); y++){
 				int[] start = new int[2];
 				start[1] = 0;
-				if(boardMap[y,0] == 0){
+				if(boardMap[0,y] == 0){
 					entry++;
 					if(entry == 2){
 						start[0] = y;

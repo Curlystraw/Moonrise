@@ -18,7 +18,6 @@ namespace Completed
         public float levelStartDelay = 2f;                      
         public float turnDelay = 0.1f;                          
         public int playerGoldPoints = 100;
-		public int playerHp = 100;
 		public bool isWerewolf = false;
         public static GameManager instance = null;              
         [HideInInspector]
@@ -28,8 +27,8 @@ namespace Completed
 
         private Text levelText, actionText;                                 
         private GameObject levelImage;                        
-        private BoardManager boardScript;                       
-        private int level = 1;                                  
+        private BoardManager boardScript;   
+        public int level = 1;                                  
         private List<Enemy> enemies;
 		private Player player;
         private bool enemiesMoving;                             
@@ -142,8 +141,8 @@ namespace Completed
 					for (y = -1; y < boardScript.boardMap.GetLength(1) + 1; y++)
 					{
 
-						GameObject f = Instantiate(boardScript.fog, new Vector2(x,y), Quaternion.identity) as GameObject;
-						f.transform.SetParent(this.transform);
+						//GameObject f = Instantiate(boardScript.fog, new Vector2(x,y), Quaternion.identity) as GameObject;
+						//f.transform.SetParent(this.transform);
 					}
 				}
 

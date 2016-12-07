@@ -44,7 +44,7 @@ public static class ActualMarketGeneration {
 	
 		for (int r = 0; r < gridSizeX; r ++) {
 			for (int c = 0; c < gridSizeY; c++) {
-				boardMap[r,c] = 1;
+				boardMap[c,r] = 1;
 				grid[r,c] = 'n';
 				if (r % 3 == 0)
 					bigGrid[r/3,c/3] = 'n';
@@ -89,49 +89,49 @@ public static class ActualMarketGeneration {
 				switch(grid[r, c]) {
 				case 'n': //solid tile
 					currentTile = n;
-					boardMap[r,c] = 1;
+					boardMap[c,r] = 1;
 					tileMap[r,c] = 'w';
 					break;
 				case 'b': //market tile
 					currentTile = b;
-					boardMap[r,c] = 0;
+					boardMap[c,r] = 0;
 					tileMap[r,c] = 'f';
 					break;
 				case 'x': //solid tile
 					currentTile = x;
-					boardMap[r,c] = 1;
+					boardMap[c,r] = 1;
 					tileMap[r,c] = 'w';
 					//fill(255, 0, 0);
 					break;
 				case 'i': //solid tile
 					currentTile = iA;
-					boardMap[r,c] = 1;
+					boardMap[c,r] = 1;
 					tileMap[r,c] = 'w';
 					//fill(150, 0, 150);
 					break;
 				case 'g': //gateway tile/market tile
 					currentTile = g;
-					boardMap[r,c] = 0;
+					boardMap[c,r] = 0;
 					tileMap[r,c] = 'f';
 					break;
 				case 'a': //alley/road tile
 					currentTile = a;
-					boardMap[r,c] = 0;
+					boardMap[c,r] = 0;
 					tileMap[r,c] = 'f';
 					break;
 				case 'r': //road tile
 					currentTile = rA;
-					boardMap[r,c] = 0;
+					boardMap[c,r] = 0;
 					tileMap[r,c] = 'f';
 					break;
 				case 'c': //road tile
 					currentTile = cA;
-					boardMap[r,c] = 0;
+					boardMap[c,r] = 0;
 					tileMap[r,c] = 'f';
 					break;
 				case 'v': //Vertical walls
 					currentTile = v;
-					boardMap[r,c] = 1;
+					boardMap[c,r] = 1;
 					tileMap[r,c] = 'w';
 					//fill(0, 255, 0);
 					break;
@@ -157,12 +157,12 @@ public static class ActualMarketGeneration {
 						currentTile = h;
 						tileMap[r,c] = 'w';
 					}
-					boardMap[r,c] = 1;
+					boardMap[c,r] = 1;
 					//fill(0, 0, 255);
 					break;
 				default:
 					currentTile = b;
-					boardMap[r,c] = 0;
+					boardMap[c,r] = 0;
 					tileMap[r,c] = 'f';
 					break;
 				}
