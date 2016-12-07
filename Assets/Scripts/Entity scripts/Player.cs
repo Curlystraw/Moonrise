@@ -30,7 +30,7 @@ namespace Completed
 		// Skills
 		public int shoot = 1;
 		public int sneak = 1;
-		public int speech = 1;
+		public int charm = 1;
 		public int dodge = 1;
 		public int bite = 1;
 		public int rage = 1;
@@ -43,6 +43,7 @@ namespace Completed
 		public String goldText;
 		public String hpText;
 		public Text actionText;
+		public String levelText;
 
 		private BoxCollider2D hitbox;	//hitbox for the object - used for raycast tests?
         private Animator animator;
@@ -62,6 +63,7 @@ namespace Completed
 			timeLeft = "Time Left: " + GameManager.instance.timeLeft;
 			goldText = "Gold: " + GameManager.instance.playerGoldPoints;
 			hpText = "HP: " + this.CurrentHP;
+			levelText = "Level: " + GameManager.instance.level;
 			UpdateText ();
 		
 			animator = GetComponent<Animator>();
@@ -82,7 +84,8 @@ namespace Completed
 
 		public void UpdateText(String message = "")
 		{
-			displayText.text = timeLeft + " | " + goldText + " | " + hpText;
+			levelText = "Level: " + GameManager.instance.level;
+			displayText.text = timeLeft + " | " + goldText + " | " + hpText + " | " + levelText;
 			Vector3 scale = hpBar.transform.localScale;
 			scale.x = ((float)currentHP/(float)totalHP);
 			hpBar.transform.localScale = scale;
@@ -139,21 +142,21 @@ namespace Completed
 					Attack ();
 				}
 			} // Add skill points
-			else if (Input.GetKeyDown (KeyCode.Keypad1)) {
+			else if (Input.GetKeyDown (KeyCode.Keypad1) || Input.GetKeyDown (KeyCode.Alpha1)) {
 				IncreaseSkill (1);
-			} else if (Input.GetKeyDown (KeyCode.Keypad2)) {
+			} else if (Input.GetKeyDown (KeyCode.Keypad2) || Input.GetKeyDown (KeyCode.Alpha2)) {
 				IncreaseSkill (2);
-			} else if (Input.GetKeyDown (KeyCode.Keypad3)) {
+			} else if (Input.GetKeyDown (KeyCode.Keypad3) || Input.GetKeyDown (KeyCode.Alpha3)) {
 				IncreaseSkill (3);
-			} else if (Input.GetKeyDown (KeyCode.Keypad4)) {
+			} else if (Input.GetKeyDown (KeyCode.Keypad4) || Input.GetKeyDown (KeyCode.Alpha4)) {
 				IncreaseSkill (4);
-			} else if (Input.GetKeyDown (KeyCode.Keypad5)) {
+			} else if (Input.GetKeyDown (KeyCode.Keypad5) || Input.GetKeyDown (KeyCode.Alpha5)) {
 				IncreaseSkill (5);
-			} else if (Input.GetKeyDown (KeyCode.Keypad6)) {
+			} else if (Input.GetKeyDown (KeyCode.Keypad6) || Input.GetKeyDown (KeyCode.Alpha6)) {
 				IncreaseSkill (6);
-			} else if (Input.GetKeyDown (KeyCode.Keypad7)) {
+			} else if (Input.GetKeyDown (KeyCode.Keypad7) || Input.GetKeyDown (KeyCode.Alpha7)) {
 				IncreaseSkill (7);
-			} else if (Input.GetKeyDown(KeyCode.Keypad8)) {
+			} else if (Input.GetKeyDown (KeyCode.Keypad8) || Input.GetKeyDown (KeyCode.Alpha8)) {
 				IncreaseSkill (8);
 			}
 				
@@ -172,41 +175,77 @@ namespace Completed
         }
 
 		public void IncreaseSkill(int skill) {
-			int cost = GameManager.instance.level;
+			int cost = 10 * (int)Math.Pow(2, GameManager.instance.level-1);
 			if (cost > GameManager.instance.playerGoldPoints) {
 				GameManager.instance.print ("You don't have enough gold to level up");
 			} else {
-				switch (skill)
-				{
+				bool upgradedSkill = false;
+				switch (skill) {
 				case 1:
-					Debug.Log("adding shoot");
-					//this.shoot = this.shoot < 8 ? this.shoot + 1 : this.shoot;
+					if (this.shoot < 8) {
+						this.shoot += 1;
+						GameManager.instance.print ("Upgraded shoot to level " + this.shoot + "!");
+						upgradedSkill = true;
+					}
 					break;
 				case 2:
+					if (this.sneak < 8) {
+						this.sneak += 1;
+						GameManager.instance.print ("Upgraded sneak to level " + this.sneak + "!");
+						upgradedSkill = true;
+					}
 					//this.sneak += 1;
 					break;
 				case 3:
-					Console.WriteLine("Default case");
+					if (this.charm < 8) {
+						this.charm += 1;
+						GameManager.instance.print ("Upgraded charm to level " + this.charm + "!");
+						upgradedSkill = true;
+					}
 					break;
 				case 4:
-
+					if (this.dodge < 8) {
+						this.dodge += 1;
+						GameManager.instance.print ("Upgraded dodge to level " + this.dodge + "!");
+						upgradedSkill = true;
+					}
 					break;
 				case 5:
-
+					if (this.bite < 8) {
+						this.bite += 1;
+						GameManager.instance.print ("Upgraded bite to level " + this.bite + "!");
+						upgradedSkill = true;
+					}
 					break;
 				case 6:
-
+					if (this.rage < 8) {
+						this.rage += 1;
+						GameManager.instance.print ("Upgraded rage to level " + this.rage + "!");
+						upgradedSkill = true;
+					}
 					break;
 				case 7:
-					Debug.Log("adding 7");
+					if (this.growl < 8) {
+						this.growl += 1;
+						GameManager.instance.print ("Upgraded growl to level " + this.growl + "!");
+						upgradedSkill = true;
+					}
 					break;
 				case 8:
-
+					if (this.fortify < 8) {
+						this.fortify += 1;
+						GameManager.instance.print ("Upgraded fortify to level " + this.fortify + "!");
+						upgradedSkill = true;
+					}
 					break;
 				}
-
-
-
+				if (!upgradedSkill) {
+					GameManager.instance.print ("You are already at maximum level for that skill.");
+				} else {
+					GameManager.instance.level += 1;
+					AlterGold (-cost);
+					EndTurn ();
+				}
 			}
 		}
 
@@ -217,8 +256,6 @@ namespace Completed
 			Vector2 end = start + new Vector2(xDir, yDir);
 
 			//BoxCollider2D boxCollider = GetComponent<BoxCollider2D>();
-
-
 
 			//Check if the move isn't blocked
 			//boxCollider.enabled = false;
@@ -292,12 +329,8 @@ namespace Completed
             }
             else if (other.tag == "Item")
             {
-				GameManager.instance.print("Picked up "+pointsPerGold+" gold");
-				GameManager.instance.playerGoldPoints += pointsPerGold;
-				goldText = "Gold: " + GameManager.instance.playerGoldPoints;
-				String message = "+" + pointsPerGold + " Gold";
-				UpdateText ();
-                other.gameObject.SetActive(false);
+				AlterGold (pointsPerGold);
+				other.gameObject.SetActive(false);
             }
         }
 
@@ -332,12 +365,16 @@ namespace Completed
 			CheckIfGameOver();
 		}
 
-        public void LoseGold(int loss)
-        {
-			GameManager.instance.playerGoldPoints -= loss;
-			String message = "-" + loss + " Gold";
+        public void AlterGold(int gain)
+		{
+			GameManager.instance.playerGoldPoints += gain;
+			if (gain < 0) {
+				GameManager.instance.print(gain + " gold");
+			} else if (gain > 0) {
+				GameManager.instance.print("Picked up " + gain + " gold");
+			}
 			goldText = "Gold: " + GameManager.instance.playerGoldPoints;
-			UpdateText (message);
+			UpdateText ();
         }
 
         private void CheckIfGameOver()
