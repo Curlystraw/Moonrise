@@ -35,7 +35,7 @@ namespace Completed
 	
 			//Check if the move isn't blocked
             boxCollider.enabled = false;
-			hit = Physics2D.Linecast(start, end, blockingLayer);
+            hit = Physics2D.Linecast(start, end, impassable);
             boxCollider.enabled = true;
 
 			//If the move is not blocked, move with animation
