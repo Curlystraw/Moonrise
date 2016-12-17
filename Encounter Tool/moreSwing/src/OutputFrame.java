@@ -6,7 +6,7 @@ public class OutputFrame
 	//JFrame home;
 	JTextArea text = new JTextArea();
 	JButton back = new JButton("Close");
-	JScrollPane scroll;
+	JScrollBar scroll;
 	
 	public OutputFrame()
 	{
@@ -22,9 +22,8 @@ public class OutputFrame
 			setWords("");
 			setVisible(false);
 		});
-//		scroll = new JScrollPane(text);
-//		this.home = home;
-//		this.home.add(scroll,BorderLayout.CENTER);
+		scroll = new JScrollBar(JScrollBar.VERTICAL, 30, 40, 0, 300);
+		
 	}
 	
 	public void setWords(String text)

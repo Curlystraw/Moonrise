@@ -167,4 +167,11 @@ class DialogSet
 		this();
 		this.IDNum = id;
 	}
+	
+	DialogSet(int id, String designation)
+	{
+		this(id);
+		this.designation = designation;
+		design = new JLabel(designation);
+	}
 }

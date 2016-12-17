@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
 
 
 import two.Two;
@@ -20,6 +21,7 @@ class Three extends JFrame
 	//  11/02/16	Version 3.4		3.4
 	//  11/04/16	Version 3.5		3.5 ***THIS IS THE PRE-CRUNCH VERSION***
 	//	11/04/16	Version 3.6		3.6 ***THIS IS THE POST-CRUNCH VERSION***
+	//  12/16/16	Version 3.7		3.7
 	
 	//I've done some math (counting) and we need 40 frames.
 	//That means (at my calculations) we need like 683 separate parts of the xml file.
@@ -50,7 +52,8 @@ class Three extends JFrame
 	JTextField name = new JTextField("Name the encounter.");  //Encounter naming text field
 	JLabel flagLabel = new JLabel("List the zone(s) in which the encounter can occur. Please separate multiples with a comma.");
 	JTextField flags = new JTextField();
-	JTree tree = new JTree(); //Tree for navigation (does not contribute to final string)
+	 //Tree for navigation is down in the initializeNav method (does not contribute to final string)
+	String[] designations = new String[40];
 	JList list; //List of flags for the entire encounter (contributes a list as part no. 3 of the xml **Not yet implemented**)
 	JButton crEnc = new JButton("Create Encounter"); //Button to "create the encounter" that actually just puts all the things together in a string and displays it
 	JButton quit = new JButton("Quit"); //Button to leave
@@ -164,9 +167,59 @@ class Three extends JFrame
 			//TODO: set up how all the strings come together. The method should make aggregateOutput a collection (in order) of everything. Should be long but simple.
 			//Actually I think it's done, as long as we do the formatting for xml in the actions themselves, which should be easier to effectively customize.
 			//That's not entirely true.
+			String nothing = ""; //makes a string to compare to	
+			parts[0] = "Encounter name: " + name.getText(); // no if statement here because a writer should always name their encounter. Geez.
+			parts[1] = "Encounter flags: " + flags.getText(); // same as line before-- every writer should have at least one flag.
+			for (DialogSet set : frames)
+			{
+				if (set.name.getText().equals("Dialog name") == false)
+				{
+					parts[3 + (set.IDNum * 17) + 1] = "Frame " + set.designation + " Dialogue title: " + set.initializeTXT[0].getText();
+				}
+				if (set.initializeTXT[1].getText().equals("Describe the Dialog") == false)
+				{
+					parts[3 + (set.IDNum * 17) + 2] = "Frame " + set.designation + " Dialogue Description: " + set.initializeTXT[1].getText();
+				}
+				if (set.initializeTXT[2].getText().equals("Option 1") == false)
+				{
+					parts[3 + (set.IDNum * 17) + 3] = "Frame " + set.designation + " Option 1: " + set.initializeTXT[2].getText();
+				}
+				if (set.initializeTXT[3].getText().equals("Option 2") == false)
+				{
+					parts[3 + (set.IDNum * 17) + 8] = "Frame " + set.designation + " Option 2: " + set.initializeTXT[3].getText();
+				}
+				if (set.initializeTXT[4].getText().equals("Option 3") == false)
+				{
+					parts[3 + (set.IDNum * 17) + 13] = "Frame " + set.designation + " Option 3: " + set.initializeTXT[4].getText();
+				}
+				if (set.initializeReactTXT[0].getText().equals("How much...") == false)
+				{
+					parts[3 + (set.IDNum * 17) + 5] = "Frame " + set.designation + " Option 1 requirement amount: " + set.initializeReactTXT[0].getText();
+				}
+				if (set.initializeReactTXT[1].getText().equals("How much...") == false)
+				{
+					parts[3 + (set.IDNum * 17) + 10] = "Frame " + set.designation + " Option 2 requirement amount: " + set.initializeReactTXT[1].getText();
+				}
+				if (set.initializeReactTXT[2].getText().equals("How much...") == false)
+				{
+					parts[3 + (set.IDNum * 17) + 15] = "Frame " + set.designation + " Option 3 requirement amount: " + set.initializeReactTXT[2].getText();
+				}
+				if (set.initializeReactTXT[3].getText().equals("Reward") == false)
+				{
+					parts[3 + (set.IDNum * 17) + 7] = "Frame " + set.designation + " Option 1 ends dialog. Reward: " + set.initializeReactTXT[3].getText();
+				}
+				if (set.initializeReactTXT[4].getText().equals("Reward") == false)
+				{
+					parts[3 + (set.IDNum * 17) + 12] = "Frame " + set.designation + " Option 2 ends dialog. Reward: " + set.initializeReactTXT[4].getText();
+				}
+				if (set.initializeReactTXT[5].getText().equals("Reward") == false)
+				{
+					parts[3 + (set.IDNum * 17) + 15] = "Frame " + set.designation + " Option 3 ends dialog. Reward: " + set.initializeReactTXT[5].getText();
+				}
+			}
+			
 			for (int i = 0; i < parts.length; i++) //go through all the parts of the "parts" array
 			{
-				String nothing = ""; //makes a string to compare to
 				if (parts[i].equals(nothing) == false) //make sure each part isn't nothing
 				{
 					aggregateOutput += parts[i] + "\n"; //then add it to the aggregate output
@@ -175,13 +228,26 @@ class Three extends JFrame
 			//this method assumes parts is ordered correctly, which I think it is, but, you know, you never know.
 		}
 	
-	void initializeNav() //Both of these are far from done
+	void initializeNav() 
 	{
 		
 //		add(tree);
 //		tree.setLocation(3000, 1000);
-//		tree.setSize(400, 800);
+//		tree.setSize(400, 800);	
 //		tree.setVisible(true);
+		
+		JList tree = new JList(designations);
+		tree.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tree.setLayoutOrientation(JList.VERTICAL);
+		tree.setVisibleRowCount(-1);
+		JScrollPane scroller = new JScrollPane(tree);
+		tree.addListSelectionListener((ListSelectionEvent e) -> {
+			if (e.getValueIsAdjusting() == false)
+			{
+				changeSets(frames[activeFrame], frames[tree.getSelectedIndex()]);
+				activeFrame = tree.getSelectedIndex();
+			}
+		});
 		
 		//for some reason adding a useless label really helps it all come together.
 		JLabel x = new JLabel();
@@ -189,7 +255,7 @@ class Three extends JFrame
 		x.setSize(10, 10);
 		add(x);
 		
-		drop(7*HEIGHT/10, 11*WIDTH/40, HEIGHT/5, 3*WIDTH/5, true, tree);
+		drop(7*HEIGHT/10, 9*WIDTH/40, HEIGHT/5, 27*WIDTH/40, true, tree);
 		//make a tree and put it in here (I think this one works now but at first I hadn't fixed the method so it wouldn't work)
 	}
 	
@@ -436,8 +502,9 @@ class Three extends JFrame
 					}
 				}
 			}
+			designations[i] = designation;
 			
-			frames[i] = new DialogSet(designation); //initializes the variable (FINALLY)
+			frames[i] = new DialogSet(i, designation); //initializes the variable (FINALLY)
 			dropFrame(frames[i], false); //drops it in because now this method works
 			addActions(frames[i]); //these two methods are kickass and make it so easy to write this program
 		}
@@ -557,19 +624,19 @@ class Three extends JFrame
 		//So, if someone chose a certain dialog option, the next frame's dialog description would sorta be the response.
 		set.initializeTXT[0].addActionListener((ActionEvent event) ->{
 			parts[3 + (set.IDNum * 17) + 1]/* this math was super hard to figure out */ = "";
-			parts[3 + (set.IDNum * 17) + 1]/* this math was super hard to figure out */ = "Frame " + set.designation + "Dialogue title: " + set.initializeTXT[0].getText(); 
+			parts[3 + (set.IDNum * 17) + 1]/* this math was super hard to figure out */ = " Frame " + set.designation + " Dialogue title: " + set.initializeTXT[0].getText(); 
 		});
 		set.initializeTXT[1].addActionListener((ActionEvent event) ->{
 			parts[3 + (set.IDNum * 17) + 2] = "";
-			parts[3 + (set.IDNum * 17) + 2] = "Frame " + set.designation + "Dialogue description: " + set.initializeTXT[1].getText(); 
+			parts[3 + (set.IDNum * 17) + 2] = "Frame " + set.designation + " Dialogue description: " + set.initializeTXT[1].getText(); 
 		});
 		set.initializeTXT[2].addActionListener((ActionEvent event) ->{
 			parts[3 + (set.IDNum * 17) + 3] = "";
-			parts[3 + (set.IDNum * 17) + 3] = "Frame " + set.designation + "Option 1 text: " + set.initializeTXT[2].getText(); 
+			parts[3 + (set.IDNum * 17) + 3] = "Frame " + set.designation + " Option 1 text: " + set.initializeTXT[2].getText(); 
 		});
 			set.initializeDD[0].addActionListener((ActionEvent event) ->{
 				parts[3 + (set.IDNum * 17) + 4] = "";
-				parts[3 + (set.IDNum * 17) + 4] = "Frame " + set.designation + "Option 1 requirement: " + set.reqs[set.initializeDD[0].getSelectedIndex()];
+				parts[3 + (set.IDNum * 17) + 4] = "Frame " + set.designation + " Option 1 requirement: " + set.reqs[set.initializeDD[0].getSelectedIndex()];
 				boolean notDone = true;
 				for (int i = 0; i < set.listofDDReqs.length; i++)
 				{
@@ -595,11 +662,11 @@ class Three extends JFrame
 			});
 				set.initializeReactTXT[0].addActionListener((ActionEvent event) ->{
 					parts[3 + (set.IDNum * 17) + 5] = "";
-					parts[3 + (set.IDNum * 17) + 5] = "Frame " + set.designation + "Option 1 requirement qualifier: " + set.initializeReactTXT[0].getText();
+					parts[3 + (set.IDNum * 17) + 5] = "Frame " + set.designation + " Option 1 requirement qualifier: " + set.initializeReactTXT[0].getText();
 				});
 				set.initializeReactDD[0].addActionListener((ActionEvent event) ->{
 					parts[3 + (set.IDNum * 17) + 6] = "";
-					parts[3 + (set.IDNum * 17) + 6] = "Frame " + set.designation + "Option 1 requirement amount: " + set.reactReqs[set.initializeDD[0].getSelectedIndex()][set.initializeReactDD[0].getSelectedIndex()];
+					parts[3 + (set.IDNum * 17) + 6] = "Frame " + set.designation + " Option 1 requirement amount: " + set.reactReqs[set.initializeDD[0].getSelectedIndex()][set.initializeReactDD[0].getSelectedIndex()];
 				});
 					set.initializeToggle[0].addActionListener((ActionEvent event) -> {
 						if (set.initializeReactTXT[3].isVisible())
@@ -615,15 +682,15 @@ class Three extends JFrame
 					});
 					set.initializeReactTXT[3].addActionListener((ActionEvent event) ->{
 						parts[3 + (set.IDNum * 17) + 7] = "";
-						parts[3 + (set.IDNum * 17) + 7] = "Frame " + set.designation + "Option 1 ends dialog. Reward: " + set.initializeReactTXT[3].getText();
+						parts[3 + (set.IDNum * 17) + 7] = "Frame " + set.designation + " Option 1 ends dialog. Reward: " + set.initializeReactTXT[3].getText();
 					});			
 		set.initializeTXT[3].addActionListener((ActionEvent event) ->{
 			parts[3 + (set.IDNum * 17) + 8] = "";
-			parts[3 + (set.IDNum * 17) + 8] = "Frame " + set.designation + "Option 2 text: " + set.initializeTXT[3].getText();
+			parts[3 + (set.IDNum * 17) + 8] = "Frame " + set.designation + " Option 2 text: " + set.initializeTXT[3].getText();
 		});
 			set.initializeDD[1].addActionListener((ActionEvent event) ->{
 				parts[3 + (set.IDNum * 17) + 9] = "";
-				parts[3 + (set.IDNum * 17) + 9] = "Frame " + set.designation + "Option 2 requirement: " + set.reqs[set.initializeDD[1].getSelectedIndex()];
+				parts[3 + (set.IDNum * 17) + 9] = "Frame " + set.designation + " Option 2 requirement: " + set.reqs[set.initializeDD[1].getSelectedIndex()];
 				boolean notDone = true;
 				for (int i = 0; i < set.listofDDReqs.length; i++)
 				{
@@ -649,11 +716,11 @@ class Three extends JFrame
 			});
 				set.initializeReactTXT[1].addActionListener((ActionEvent event) ->{
 					parts[3 + (set.IDNum * 17) + 10] = "";
-					parts[3 + (set.IDNum * 17) + 10] = "Frame " + set.designation + "Option 2 requirement qualifier: " + set.initializeReactTXT[1].getText();
+					parts[3 + (set.IDNum * 17) + 10] = "Frame " + set.designation + " Option 2 requirement qualifier: " + set.initializeReactTXT[1].getText();
 				});
 				set.initializeReactDD[1].addActionListener((ActionEvent event) ->{
 					parts[3 + (set.IDNum * 17) + 11] = "";
-					parts[3 + (set.IDNum * 17) + 11] = "Frame " + set.designation + "Option 2 requirement amount: " + set.reactReqs[set.initializeDD[1].getSelectedIndex()][set.initializeReactDD[1].getSelectedIndex()];
+					parts[3 + (set.IDNum * 17) + 11] = "Frame " + set.designation + " Option 2 requirement amount: " + set.reactReqs[set.initializeDD[1].getSelectedIndex()][set.initializeReactDD[1].getSelectedIndex()];
 				});
 					set.initializeToggle[1].addActionListener((ActionEvent event) -> {
 						if (set.initializeReactTXT[4].isVisible())
@@ -669,15 +736,15 @@ class Three extends JFrame
 					});
 					set.initializeReactTXT[4].addActionListener((ActionEvent event) ->{
 						parts[3 + (set.IDNum * 17) + 12] = "";
-						parts[3 + (set.IDNum * 17) + 12] = "Frame " + set.designation + "Option 2 ends dialog. Reward: " + set.initializeReactTXT[4].getText();
+						parts[3 + (set.IDNum * 17) + 12] = "Frame " + set.designation + " Option 2 ends dialog. Reward: " + set.initializeReactTXT[4].getText();
 					});		
 		set.initializeTXT[4].addActionListener((ActionEvent event) ->{
 			parts[3 + (set.IDNum * 17) + 13] = "";
-			parts[3 + (set.IDNum * 17) + 13] = "Frame " + set.designation + "Option 3 text: " + set.initializeTXT[4].getText();
+			parts[3 + (set.IDNum * 17) + 13] = "Frame " + set.designation + " Option 3 text: " + set.initializeTXT[4].getText();
 		});
 			set.initializeDD[2].addActionListener((ActionEvent event) ->{
 				parts[3 + (set.IDNum * 17) + 14] = "";
-				parts[3 + (set.IDNum * 17) + 14] = "Frame " + set.designation + "Option 3 requirement: " + set.reqs[set.initializeDD[2].getSelectedIndex()];
+				parts[3 + (set.IDNum * 17) + 14] = "Frame " + set.designation + " Option 3 requirement: " + set.reqs[set.initializeDD[2].getSelectedIndex()];
 				boolean notDone = true;
 				for (int i = 0; i < set.listofDDReqs.length; i++)
 				{
@@ -703,11 +770,11 @@ class Three extends JFrame
 			});
 				set.initializeReactTXT[2].addActionListener((ActionEvent event) ->{
 					parts[3 + (set.IDNum * 17) + 15] = "";
-					parts[3 + (set.IDNum * 17) + 15] = "Frame " + set.designation + "Option 3 requirement qualifier: " + set.initializeReactTXT[2].getText();
+					parts[3 + (set.IDNum * 17) + 15] = "Frame " + set.designation + " Option 3 requirement qualifier: " + set.initializeReactTXT[2].getText();
 				});
 				set.initializeReactDD[2].addActionListener((ActionEvent event) ->{
 					parts[3 + (set.IDNum * 17) + 16] = "";
-					parts[3 + (set.IDNum * 17) + 16] = "Frame " + set.designation + "Option 3 requirement amount: " + set.reactReqs[set.initializeDD[2].getSelectedIndex()][set.initializeReactDD[2].getSelectedIndex()];
+					parts[3 + (set.IDNum * 17) + 16] = "Frame " + set.designation + " Option 3 requirement amount: " + set.reactReqs[set.initializeDD[2].getSelectedIndex()][set.initializeReactDD[2].getSelectedIndex()];
 				});
 					set.initializeToggle[2].addActionListener((ActionEvent event) -> {
 						if (set.initializeReactTXT[5].isVisible())
@@ -723,7 +790,7 @@ class Three extends JFrame
 					});
 					set.initializeReactTXT[5].addActionListener((ActionEvent event) ->{
 						parts[3 + (set.IDNum * 17) + 17] = "";
-						parts[3 + (set.IDNum * 17) + 17] = "Frame " + set.designation + "Option 3 ends dialog. Reward: " + set.initializeReactTXT[5].getText();
+						parts[3 + (set.IDNum * 17) + 17] = "Frame " + set.designation + " Option 3 ends dialog. Reward: " + set.initializeReactTXT[5].getText();
 					});
 	}
 	
