@@ -31,11 +31,11 @@ class DialogSet
 	String numbers;
 	int numReqs;
 	int[] numReactReqs;
-	String[] reqs = {"HasItem", "Currency", "Health", "Time", "Speech", "Growl", "Werewolf-ness", "dayTime", "none"}; //THIS IS AN ATTEMPT TO MAKE ACTUAL REQS
+	String[] reqs = {"unselected", "none", "HasItem", "Currency", "Health", "Time", "Speech", "Growl", "Werewolf-ness", "dayTime"}; //THIS IS AN ATTEMPT TO MAKE ACTUAL REQS
 	
 		//So far the next two arrays don't really work with the method used in the constructor below
-	String[] listofDDReqs = {"Speech", "Growl", "Werewolf-ness", "dayTime"}; //This helps differentiate which Combo Box choices make any combo boxes
-	String[] listofBinaries = {"Werewolf-ness", "dayTime"}; //This helps differentiate which Combo Box choices make small combo boxes
+	String[] listofDDReqs = {"none", "Speech", "Growl", "Werewolf-ness", "dayTime"}; //This helps differentiate which Combo Box choices make any combo boxes
+	String[] listofBinaries = {"none", "Werewolf-ness", "dayTime"}; //This helps differentiate which Combo Box choices make small combo boxes
 		//int reqDivide;
 	String[][] reactReqs; 
 	String designation; //This is so DialogSets can be called by name in Three
@@ -61,7 +61,7 @@ class DialogSet
 			req3 = new JComboBox(reqs);
 		
 		//initializing reactReqs
-		reactReqs = new String[reqs.length][4];
+		reactReqs = new String[reqs.length][5];
 //		for (int i = 0; i < reqs.length; i++)
 //		{
 //			for (int j = 0; j < listofDDReqs.length; j++)
@@ -94,18 +94,22 @@ class DialogSet
 		reactReqs[2][0] = "null";
 		reactReqs[3][0] = "null";
 		
-		reactReqs[4][0] = "Speech 1";
-		reactReqs[4][1] = "Speech 2";
-		reactReqs[4][2] = "Speech 3";
-		reactReqs[4][3] = "Speech 4";
-		reactReqs[5][0] = "Growl 1";
-		reactReqs[5][1] = "Growl 2";
-		reactReqs[5][2] = "Growl 3";
-		reactReqs[5][3] = "Growl 4";
-		reactReqs[6][0] = "Human";
-		reactReqs[6][1] = "Werewolf";
-		reactReqs[7][0] = "Day";
-		reactReqs[7][1] = "Night";
+		reactReqs[4][0] = "none";
+		reactReqs[4][1] = "Speech 1";
+		reactReqs[4][2] = "Speech 2";
+		reactReqs[4][3] = "Speech 3";
+		reactReqs[4][4] = "Speech 4";
+		reactReqs[5][0] = "none";
+		reactReqs[5][1] = "Growl 1";
+		reactReqs[5][2] = "Growl 2";
+		reactReqs[5][3] = "Growl 3";
+		reactReqs[5][4] = "Growl 4";
+		reactReqs[6][0] = "none";
+		reactReqs[6][1] = "Human";
+		reactReqs[6][2] = "Werewolf";
+		reactReqs[7][0] = "none";
+		reactReqs[7][1] = "Day";
+		reactReqs[7][2] = "Night";
 			
 			//reactive boxes -----do later? Like, not in a procrastinate-y way, but just have them be defined if the right reqs are picked? Literally later?
 				//reactive text

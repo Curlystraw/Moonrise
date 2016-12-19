@@ -22,19 +22,58 @@ class Three extends JFrame
 	//  11/04/16	Version 3.5		3.5 ***THIS IS THE PRE-CRUNCH VERSION***
 	//	11/04/16	Version 3.6		3.6 ***THIS IS THE POST-CRUNCH VERSION***
 	//  12/16/16	Version 3.7		3.7
+	//	12/18/16	Version 3.8		3.8 ***Christmas Update***
+		//	Version 3.8 includes implementation of XML coding, and a working navigation list
 	
 	//I've done some math (counting) and we need 40 frames.
-	//That means (at my calculations) we need like 683 separate parts of the xml file.
+	//That means (at my calculations) we need like 683 separate parts of the String file.
+	//We only need 603 pieces for the XML because I'm more efficient in version 3.8
 	//Even so, it still works.
 	
-	/* ...........___________..._________.....__...___............__...___......__......___.........________......
-	 * ........../____  ____/../___  ___/..../  \./   \........../  \./   \.....\  \.../  /......../  ____  \.....
-	 * ............../ /........../ /......./ /\ V /\  |......../ /\ V /\  |.....\  \./  /......../  /..../  |....
-	 * ............./ /........../ /......./ /..\ /..| |......./ /..\ /..| |......\  V  /......../  /____/  /.....
-	 * ............/ /........../ /......./ /....V...| |....../ /....V...| |.......|  ,/......../  ________/......
-	 * .....__..../ /........../ /......./ /........./ /...../ /........./ /....../  /........./  /...............
-	 * .....\ \__/ /.......___/ /___..../ /........./ /...../ /........./ /....../  /........./  /....__..........
-	 * ......\____/......./________/.../_/........./_/...../_/........./_/....../__/........./__/..../_/..........
+	/* ...........___________..._________.....__...___............__...___......__......___.............________......
+	 * ........../____  ____/../___  ___/..../  \./   \........../  \./   \.....\  \.../  /............/  ____  \.....
+	 * ............../ /........../ /......./ /\ V /\  |......../ /\ V /\  |.....\  \./  /............/  /..../  |....
+	 * ............./ /........../ /......./ /..\ /..| |......./ /..\ /..| |......\  V  /............/  /____/  /.....
+	 * ............/ /........../ /......./ /....V...| /....../ /....V...| /.......|  ,/............/  ________/......
+	 * .....__..../ /........../ /......./ /......../ /....../ /......../ /......./  /............./  /...............
+	 * .....\ \__/ /.......___/ /___..../ /......../ /....../ /......../ /......./  /............./  /....__..........
+	 * ......\____/......./________/.../_/......../_/....../_/......../_/......./__/............./__/..../_/..........
+	 */
+	
+	
+	// I have three more hours on this flight, and I've already finished the preliminary xml integration, so here's some more ASCii art
+	/*                            _____     _______      ______                  *            *       *                                          *
+	 *       * |                 /     \   /       \    /   *  \           *                               *                                    / \
+	 *       _\|/_       *       |      | /   *     |  |        |             *           *        *                                           /_ -O
+	 *        /|\                |      | |         | /        /                   *             *                                            /__-J_\
+	 *         |                /      / /         / /        /      *                       *       *                                       O_~-   __\
+	 *              *                 |/          |/    *     |                        *                   *                                /-J     __\
+	 *                         *     /           /           /                               _            *                                /~-     O __\
+	 *      *                       /      *    /   *       /    _       o____     o____    / \    |        *                            _/__ --      __O_
+	 *                  *          |           |           |    / \      /   /     /   /   /   |  /     *                               /__     J-      __\
+	 *         *                   /          /           /    /  /     /   /     /   /   /   /  /| *                                   _/__ O    ~--  __\_
+	 *                            /  *       /    *      /     \_/     /   /     /   /   /   /  / |       *                            /__       O   -J  __\
+	 *                  *        |          |           |   ___/\__/__/   (__/__/   (__//    \_/  /          *                           O____       __-__\
+	 *       *                                       *                              *          __/___/                                        | J  J|
+	 *                          *                *                           *                /  |                                            |__|__|
+	 *            *                      *                        *              *           |   /                              (lol the only JTree in this program)
+	 *                     *                         *                                *       \_/
+	 *                 __________  *         ___                           *                *
+	 *                /          \          /   \                    *           *                          *
+	 *               /            |        |     |    *                  *                 |       *
+	 *              /            /         /     |          *                     *       /                           *
+	 *             |      *               /      |              *        *                |                                *
+	 *            /                       \    _/                                         /     _       *
+	 *           /                        |  _/         *                            _____|-----               *
+	 *          /           *             |_/___                                  _--     /                                    *
+	 *         /                        _///    \                                        /                               *
+	 *        |    *                 __/ /       |                  0                    |         __  __   __        ___
+	 *        |                         /       /        o____               |\          |        /  |/  | /  |      /   \         |\
+	 *        |              /\        |       |         /   /      |        | \         |       /  //   //   /     |     |        | \
+	 *        |               /        /       /        /   /      /|       /   \       /|      /   |    |    |    /      /       /   \
+	 *         \             /        /       /        /   /     _/ /      /    /     _/ /     /   /     /    /    |      |      /    /
+	 *          \___________/        |        \____/__/   (__/__/   \__/__/\___/__/__/   \___//    |     |    \__/_/\____/\__/__/\___/__/
+	 *   
 	 */
 		
 	//Output stuff
@@ -54,7 +93,7 @@ class Three extends JFrame
 	JTextField flags = new JTextField();
 	 //Tree for navigation is down in the initializeNav method (does not contribute to final string)
 	String[] designations = new String[40];
-	JList list; //List of flags for the entire encounter (contributes a list as part no. 3 of the xml **Not yet implemented**)
+	JList list; //List of flags for the entire encounter (contributes a list as part no. 3 of the xml **Not yet implemented**) and it turns out it's not necessary for 3.8
 	JButton crEnc = new JButton("Create Encounter"); //Button to "create the encounter" that actually just puts all the things together in a string and displays it
 	JButton quit = new JButton("Quit"); //Button to leave
 	
@@ -67,9 +106,12 @@ class Three extends JFrame
 	DialogSet[] frames;
 	
 	//aggregateOutput is what should be the final output- put together with all the pieces from the parts array
+	//xmlOutput is what te XML file should read- put together from all the pieces from the parts array, and then translated
 	String aggregateOutput;
+	String xmlOutput;
 	//This array should have an index for which method provides info.
 	String parts[];
+	String xmlparts[];
 	
 	
 	//The Constructor should be split up
@@ -81,6 +123,11 @@ class Three extends JFrame
 		for (int i = 0; i < parts.length; i++)
 		{
 			parts[i] = "";
+		}
+		xmlparts = new String[603];
+		for (int i = 0; i < xmlparts.length; i++)
+		{
+			xmlparts[i] = "";
 		}
 		activeFrame = 0;
 		frames = new DialogSet[40]; //I've done the math. We need (at most) 40 frames to incorporate everything
@@ -116,11 +163,12 @@ class Three extends JFrame
 		quit.addActionListener((ActionEvent event)-> {System.exit(0);}); //quits
 		//runs the create-a-string algorithm
 		crEnc.addActionListener((ActionEvent event)->{
-			setUpString(); //this is the method for that
+			setUpXML(); //this is the method for that
 //			JOptionPane.showMessageDialog(null, aggregateOutput); //THIS WHOLE THING DOESN'T WORK
 //			//this last line will be unnecessary when the string is translated to xml, but we could still use it so writers can check their work
 			frame.setWords(aggregateOutput);
 			frame.setVisible(true);
+			System.out.print(xmlOutput);
 		});
 		
 		//In the final version, this functionality can exist but shouldn't be the only way to navigate
@@ -164,12 +212,11 @@ class Three extends JFrame
 		//Gonna indent methods that have to do with initializeStuff()
 		void setUpString()
 		{
-			//TODO: set up how all the strings come together. The method should make aggregateOutput a collection (in order) of everything. Should be long but simple.
-			//Actually I think it's done, as long as we do the formatting for xml in the actions themselves, which should be easier to effectively customize.
-			//That's not entirely true.
 			String nothing = ""; //makes a string to compare to	
 			parts[0] = "Encounter name: " + name.getText(); // no if statement here because a writer should always name their encounter. Geez.
-			parts[1] = "Encounter flags: " + flags.getText(); // same as line before-- every writer should have at least one flag.
+			xmlparts[0] = "<encounterName> " + name.getText() + "</encounterName>";
+			parts[1] = "Encounter flags: " + flags.getText(); // same as line before-- every writer should have at least one flag.		
+			xmlparts[1] = "<flags> \n <areas> " + flags.getText() + "</areas> \n </flags>";
 			for (DialogSet set : frames)
 			{
 				if (set.name.getText().equals("Dialog name") == false)
@@ -227,6 +274,100 @@ class Three extends JFrame
 			}
 			//this method assumes parts is ordered correctly, which I think it is, but, you know, you never know.
 		}
+		
+		
+		void setUpXML()
+		{
+			setUpString();
+			String nothing = ""; //makes a string to compare to	
+			xmlparts[0] = "<encounterName> " + name.getText() + "</encounterName>"; // for the xml code to work, people need to have at least an encounter name
+			if (flags.getText().equals(nothing) == false)
+			{
+				xmlparts[1] = "<flags> \n <areas> " + flags.getText() + "</areas> \n </flags>";
+			}
+			for (DialogSet set : frames)
+			{
+				String introStr = "<dialog> \n <dialogpath>" + set.IDNum * 4 + "</dialogpath>";
+				if (set.name.getText().equals("Dialog name") == false)
+				{
+					xmlparts[3 + (set.IDNum *15) + 2] = introStr + " <dialogname>" + set.initializeTXT[0].getText() + "</dialogname>";
+				}
+				if (set.initializeTXT[1].getText().equals("Describe the Dialog") == false)
+				{
+					xmlparts[3 + (set.IDNum *15) + 3] = "<text>" + set.initializeTXT[1].getText() + "</text>";
+				}
+				if (set.initializeTXT[2].getText().equals("Option 1") == false)
+				{
+					xmlparts[3 + (set.IDNum *15) + 4] = "<option> \n <optionNum>1</optionNum> \n <text>" + set.initializeTXT[2].getText() + "</text>";
+				}
+				if (set.initializeTXT[3].getText().equals("Option 2") == false)
+				{
+					xmlparts[3 + (set.IDNum *15) + 7] = "<option> \n <optionNum>2</optionNum> \n <text>" + set.initializeTXT[2].getText() + "</text>";
+				}
+				if (set.initializeTXT[4].getText().equals("Option 3") == false)
+				{
+					xmlparts[3 + (set.IDNum *15) + 10] = "<option> \n <optionNum>3</optionNum> \n <text>" + set.initializeTXT[2].getText() + "</text>";
+				}
+				if (set.initializeReactTXT[0].getText().equals("How much...") == false)
+				{
+					xmlparts[3 + (set.IDNum *15) + 6] = "<amount>" + set.initializeReactTXT[0].getText() + "</amount> \n </requirement> \n </option>";
+				}
+				if (set.initializeReactDD[0].getSelectedIndex() != 0)
+				{
+					xmlparts[3 + (set.IDNum *15) + 6] = "<amount>" + set.reactReqs[set.initializeReactDD[0].getSelectedIndex()] + "</amount> \n </requirement> \n </option>";
+				}
+				if (set.initializeReactTXT[1].getText().equals("How much...") == false)
+				{
+					xmlparts[3 + (set.IDNum *15) + 9] = "<amount>" + set.initializeReactTXT[1].getText() + "</amount> \n </requirement> \n </option>";
+				}
+				if (set.initializeReactDD[1].getSelectedIndex() != 0)
+				{
+					xmlparts[3 + (set.IDNum *15) + 9] = "<amount>" + set.reactReqs[set.initializeReactDD[1].getSelectedIndex()] + "</amount> \n </requirement> \n </option>";
+				}
+				if (set.initializeReactTXT[2].getText().equals("How much...") == false)
+				{
+					xmlparts[3 + (set.IDNum *15) + 12] = "<amount>" + set.initializeReactTXT[2].getText() + "</amount> \n </requirement> \n </option>";
+				}
+				if (set.initializeReactDD[2].getSelectedIndex() != 0)
+				{
+					xmlparts[3 + (set.IDNum *15) + 12] = "<amount>" + set.reactReqs[set.initializeReactDD[2].getSelectedIndex()] + "</amount> \n </requirement> \n </option>";
+				}
+				if (set.reqs[set.initializeDD[0].getSelectedIndex()].equals("unselected") == false)
+				{
+					xmlparts[3 + (set.IDNum * 15) + 5] = "<requirement> \n <name>" + set.reqs[set.initializeDD[0].getSelectedIndex()] + "</name>";
+				}
+				if (set.reqs[set.initializeDD[1].getSelectedIndex()].equals("unselected") == false)
+				{
+					xmlparts[3 + (set.IDNum * 15) + 8] = "<requirement> \n <name>" + set.reqs[set.initializeDD[1].getSelectedIndex()] + "</name>";
+				}
+				if (set.reqs[set.initializeDD[2].getSelectedIndex()].equals("unselected") == false)
+				{
+					xmlparts[3 + (set.IDNum * 15) + 11] = "<requirement> \n <name>" + set.reqs[set.initializeDD[2].getSelectedIndex()] + "</name>";
+				}
+				
+				if (set.initializeReactTXT[3].getText().equals("Reward") == false)
+				{
+					xmlparts[3 + (set.IDNum * 15) + 13] = "<dialog> \n <dialogpath>" + (set.IDNum * 4 + 1) + "</dialogpath> \n <text> " + set.initializeReactTXT[3] + "</text> \n </dialog>";
+				}
+				if (set.initializeReactTXT[4].getText().equals("Reward") == false)
+				{
+					xmlparts[3 + (set.IDNum * 15) + 14] = "<dialog> \n <dialogpath>" + (set.IDNum * 4 + 2) + "</dialogpath> \n <text> " + set.initializeReactTXT[4] + "</text> \n </dialog>";
+				}
+				if (set.initializeReactTXT[5].getText().equals("Reward") == false)
+				{
+					xmlparts[3 + (set.IDNum * 15) + 15] = "<dialog> \n <dialogpath>" + (set.IDNum * 4 + 3) + "</dialogpath> \n <text> " + set.initializeReactTXT[5] + "</text> \n </dialog>";
+				}
+			}
+			
+			for (int i = 0; i < xmlparts.length; i++)
+			{
+				if (xmlparts[i].equals(nothing) == false)
+				{
+					xmlOutput += xmlparts[i] + "\n";
+				}
+			}
+			
+		}
 	
 	void initializeNav() 
 	{
@@ -236,7 +377,7 @@ class Three extends JFrame
 //		tree.setSize(400, 800);	
 //		tree.setVisible(true);
 		
-		JList tree = new JList(designations);
+		JList tree = new JList(designations); //so it's not really a tree, but rather a list
 		tree.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		tree.setLayoutOrientation(JList.VERTICAL);
 		tree.setVisibleRowCount(-1);
@@ -245,7 +386,9 @@ class Three extends JFrame
 			if (e.getValueIsAdjusting() == false)
 			{
 				changeSets(frames[activeFrame], frames[tree.getSelectedIndex()]);
+				updateTree(activeFrame);
 				activeFrame = tree.getSelectedIndex();
+				
 			}
 		});
 		
@@ -258,6 +401,14 @@ class Three extends JFrame
 		drop(7*HEIGHT/10, 9*WIDTH/40, HEIGHT/5, 27*WIDTH/40, true, tree);
 		//make a tree and put it in here (I think this one works now but at first I hadn't fixed the method so it wouldn't work)
 	}
+		
+		void updateTree(int index)
+		{
+			if (frames[index].initializeTXT[0].getText().equals("Dialog name") == false)
+			{
+				designations[index] = frames[index].designation + " " + frames[index].initializeTXT[0].getText();
+			}
+		}
 	
 	void initializeFlags() //Both of these are far from done
 	{
